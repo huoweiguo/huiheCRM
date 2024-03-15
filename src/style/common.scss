@@ -1,0 +1,41 @@
+.mr20 {
+  margin-right: 20px;
+}
+.mr10 {
+  margin-right: 10px;
+}
+.mb20 {
+  margin-bottom: 20px;
+}
+.mb50 {
+  margin-bottom: 50px;
+}
+.mt40 {
+  margin-top: 40px;
+}
+.pl140 {
+  padding-left: 140px;
+}
+.fright {
+  display: flex;
+  justify-content: flex-end;
+}
+.el-header {
+  --el-header-padding: 0px !important;
+  --el-header-height: 100px !important;
+}
+.el-aside {
+  height: calc(100vh - 100px);
+}
+.form-box {
+  height: calc(100vh - 380px);
+  overflow-y: scroll;
+}
+.el-main {
+  --el-main-padding: 0px !important;
+}
+
+.h3_title {
+  font-size: 16px;
+  font-weight: bold;
+}

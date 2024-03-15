@@ -1,0 +1,137 @@
+<template>
+  <el-form ref="ruleFormRef" class="mb20" :model="seacrhForm" label-width="90" :inline="true">
+    <el-form-item label="项目编号" prop="projectId">
+      <el-input v-model="seacrhForm.projectId" placeholder="请输入项目编号" />
+    </el-form-item>
+    <el-form-item label="项目名称" prop="projectName">
+      <el-input v-model="seacrhForm.projectName" placeholder="请输入项目名称" />
+    </el-form-item>
+    <el-form-item label="项目进度" prop="projectProgress">
+      <el-input v-model="seacrhForm.projectProgress" placeholder="请输入项目进度" />
+    </el-form-item>
+    <el-form-item label="商务" prop="business">
+      <el-input v-model="seacrhForm.business" placeholder="请输入所属商务" />
+    </el-form-item>
+    <el-form-item label="项目经理" prop="pm">
+      <el-input v-model="seacrhForm.pm" placeholder="请输入项目经理" />
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="search">搜索</el-button>
+      <el-button @click="resetForm(ruleFormRef)">重置</el-button>
+    </el-form-item>
+  </el-form>
+
+  <div class="fright mb20"><el-button type="primary" @click="goProgram">项目录入</el-button></div>
+  <el-table :data="tableData" class="mb20" border style="width: 100%">
+    <el-table-column label="序号" width="60" align="center">
+      <template #default="scope">
+        <span>{{ scope.$index + 1 + (seacrhForm.pageNum - 1) * seacrhForm.pageSize }} </span>
+      </template>
+    </el-table-column>
+    <el-table-column prop="id" label="项目编号" align="center" />
+    <el-table-column prop="projectName" label="项目名称" align="center" />
+    <el-table-column prop="projectAddress" label="项目地址" align="center" />
+    <el-table-column prop="contractAmount" label="签约金额" align="center" />
+    <el-table-column label="项目进度" align="center">
+      <template #default="scope">
+        {{ projectSchedule[scope.row.projectProgress - 1].label }}
+      </template>
+    </el-table-column>
+    <el-table-column prop="business" label="商务" align="center" />
+    <el-table-column prop="pm" label="项目经理" align="center" />
+    <el-table-column label="操作" align="center" fixed="right" width="180">
+      <template #default="scope">
+        <el-button link type="primary" size="small" @click="visibleUpdate(JSON.stringify(scope.row.id))">编辑</el-button>
+        <el-button link type="primary" size="small" @click="deleteItem(JSON.stringify(scope.row.id))">删除</el-button>
+        <el-button link type="primary" size="small" @click="goCompute(JSON.stringify(scope.row.id))">项目汇算</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+  <div class="fright"><el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" @change="changeTable" /></div>
+  <!--编辑项目-->
+  <el-dialog v-model="dialogVisible" title="编辑项目跟进" width="900" @close="closeData">
+    <Program :isModify="true" :ids="ids" @visibleEmit="visibleEmit" />
+  </el-dialog>
+</template>
+
+<script setup lang="ts">
+import { ref, reactive, onMounted } from 'vue'
+import { useProgramStore } from '@/store/program'
+import { projectSchedule } from '@/utils/fixedData'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import type { FormInstance } from 'element-plus'
+import Program from './components/Program.vue'
+import router from '@/router'
+const tableData = ref([])
+const ruleFormRef = ref<FormInstance>()
+const useProgram = useProgramStore()
+const totalNum = ref<number>(1)
+const dialogVisible = ref<boolean>(false)
+const ids = ref<string>('')
+const seacrhForm = reactive({
+  projectId: '',
+  projectName: '',
+  projectProgress: '',
+  business: '',
+  pm: '',
+  pageSize: 10,
+  pageNum: 1
+})
+const goProgram = () => {
+  router.push('/projectManager/projectInput')
+}
+const search = () => {
+  seacrhForm.pageNum = 1
+  getProgramList()
+}
+const goCompute = (id: string) => {
+  router.push(`/projectManager/projectComputed/${id}`)
+}
+const changeTable = (current: number) => {
+  seacrhForm.pageNum = current
+  getProgramList()
+}
+const visibleUpdate = (pid: string) => {
+  ids.value = pid
+  dialogVisible.value = true
+}
+const deleteItem = (id: string) => {
+  ElMessageBox.confirm('确定要删除该人员吗?').then(() => {
+    useProgram.deleteProgramItem(id).then(res => {
+      if (res.data.code === 200) {
+        ElMessage.success('删除成功')
+        getProgramList()
+      } else {
+        ElMessage.error(res.data.msg)
+      }
+    })
+  })
+}
+const closeData = () => {
+  ids.value = '-1'
+}
+const visibleEmit = () => {
+  dialogVisible.value = false
+  ids.value = '-1'
+  getProgramList()
+}
+
+const resetForm = (ruleFormRef: FormInstance | undefined) => {
+  if (!ruleFormRef) return
+  ruleFormRef.resetFields()
+}
+
+const getProgramList = () => {
+  useProgram.getProgramList(seacrhForm).then(res => {
+    if (res.data.code === 200) {
+      tableData.value = res.data.rows
+      totalNum.value = res.data.total
+    }
+  })
+}
+onMounted(() => {
+  getProgramList()
+})
+</script>
+
+<style scoped></style>
