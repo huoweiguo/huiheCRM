@@ -368,8 +368,6 @@ const submitForm = async (ruleFormRef: FormInstance | undefined) => {
   await ruleFormRef.validate((valid, fields) => {
     if (valid) {
       console.log('submit!')
-    } else {
-      console.log('error submit!', fields)
     }
   })
 }
