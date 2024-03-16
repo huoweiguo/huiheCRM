@@ -31,6 +31,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => {
     if (response.data.code === 401) {
+      ElMessage.closeAll()
       ElMessage.error('登录超时，请重新登录')
       localStorage.removeItem('token')
       localStorage.removeItem('userInfo')

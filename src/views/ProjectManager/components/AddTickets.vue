@@ -8,18 +8,10 @@
         <el-input v-model="recommend.billAmount" placeholder="请输入开票金额" />
       </el-form-item>
       <el-form-item label="上传图片">
-        <el-upload
-          v-model:file-list="billImage"
-          multiple
-          method="post"
-          :headers="headersObj"
-          :action="uploadUrl"
-          list-type="picture-card"
-          :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemove"
-          :on-success="handleSuccessImage"
-        >
-          <el-icon><Plus /></el-icon>
+        <el-upload v-model:file-list="billImage" multiple method="post" :headers="headersObj" :action="uploadUrl" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-success="handleSuccessImage">
+          <el-icon>
+            <Plus />
+          </el-icon>
         </el-upload>
 
         <el-dialog v-model="dialogVisible">
@@ -132,6 +124,7 @@ const handleSuccess: UploadProps['onSuccess'] = (response: any, uploadFile: Uplo
     billAnnex.value = arr
     recommend.billAnnex = arr
   } else if (response.code === 401) {
+    ElMessage.closeAll()
     ElMessage.error('登录超时，请重新登录')
     setTimeout(() => {
       router.push('/login')
@@ -150,6 +143,7 @@ const handleSuccessImage: UploadProps['onSuccess'] = (response: any, uploadFile:
     billImage.value = arr
     recommend.billImage = arr
   } else if (response.code === 401) {
+    ElMessage.closeAll()
     ElMessage.error('登录超时，请重新登录')
     setTimeout(() => {
       router.push('/login')
@@ -170,6 +164,7 @@ const handlePictureCardPreview: UploadProps['onPreview'] = uploadFile => {
   .el-upload-list--picture-card {
     --el-upload-list-picture-card-size: 78px;
   }
+
   .el-upload--picture-card {
     --el-upload-picture-card-size: 78px;
   }
