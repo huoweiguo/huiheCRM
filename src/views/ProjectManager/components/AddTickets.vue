@@ -1,14 +1,25 @@
 <template>
   <div class="upload-form">
     <el-form ref="ruleFormRef" :model="recommend" :rules="rules" label-width="120px" :inline="true">
-      <el-form-item label="开票日期" prop="billDate">
-        <el-date-picker v-model="recommend.billDate" type="date" placeholder="请选择开票日期" style="width: 192px"></el-date-picker>
+      <el-form-item :label="`${typetxt}日期`" prop="billDate">
+        <el-date-picker v-model="recommend.billDate" type="date" :placeholder="`请选择${typetxt}日期`" style="width: 192px" value-format="YYYY-MM-DD"></el-date-picker>
       </el-form-item>
-      <el-form-item label="开票金额" prop="billAmount">
-        <el-input v-model="recommend.billAmount" placeholder="请输入开票金额" />
+      <el-form-item :label="`${typetxt}金额`" prop="billAmount">
+        <el-input v-model="recommend.billAmount" :placeholder="`请输入${typetxt}金额`" />
       </el-form-item>
       <el-form-item label="上传图片">
-        <el-upload v-model:file-list="billImage" multiple method="post" :headers="headersObj" :action="uploadUrl" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-success="handleSuccessImage">
+        <el-upload
+          v-model:file-list="billImage"
+          multiple
+          method="post"
+          list-type="picture-card"
+          :limit="1"
+          :headers="headersObj"
+          :action="uploadUrl"
+          :on-preview="handlePictureCardPreview"
+          :on-remove="handleRemove"
+          :on-success="handleSuccessImage"
+        >
           <el-icon>
             <Plus />
           </el-icon>
@@ -58,19 +69,17 @@ interface RuleForm {
   billDate: string
   billAmount: string
 }
+
 const router = useRouter()
 const billImage = ref<UploadUserFile[]>([])
 const billAnnex = ref<UploadUserFile[]>([])
 const dialogImageUrl = ref('')
 const dialogVisible = ref<boolean>(false)
 const ruleFormRef = ref<FormInstance>()
-const headersObj = ref({
-  Authorization: `Bearer ${localStorage.getItem('token')}`
-})
-const emits = defineEmits(['openTicket', 'receiveTicket', 'receiveCash', 'payCash'])
-const props = defineProps({
-  tickType: String
-})
+const headersObj = ref({ Authorization: `Bearer ${localStorage.getItem('token')}` })
+const emits = defineEmits(['change'])
+const props = defineProps({ tickType: String })
+const typetxt = ['开票', '收票', '收款', '付款'][props.tickType - 1]
 const recommend = reactive<RuleBill>({
   billDate: '',
   billAmount: '',
@@ -82,29 +91,15 @@ const addition = async (ruleFormRef: FormInstance | undefined) => {
   if (!ruleFormRef) return
   await ruleFormRef.validate(valid => {
     if (valid) {
-      switch (props.tickType) {
-        case '1':
-          emits('openTicket', recommend)
-          break
-        case '2':
-          emits('receiveTicket', recommend)
-          break
-        case '3':
-          emits('receiveCash', recommend)
-          break
-        case '4':
-          emits('payCash', recommend)
-          break
-        default:
-      }
+      emits('change', recommend)
       console.log(recommend)
     }
   })
 }
 
 const rules = reactive<FormRules<RuleForm>>({
-  billDate: [{ required: true, message: '请选择开票日期' }],
-  billAmount: [{ required: true, message: '请输入开票金额' }]
+  billDate: [{ required: true, message: `请选择${typetxt}日期` }],
+  billAmount: [{ required: true, message: `请输入${typetxt}金额` }]
 })
 
 const handleRemove: UploadProps['onRemove'] = (file, uploadFiles) => {

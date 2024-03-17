@@ -2,13 +2,13 @@
   <div class="table-panes">
     <el-tabs v-model="activeName" type="border-card">
       <el-tab-pane label="智能+影院项目汇算表" name="first">
-        <IntelligentCinema />
+        <IntelligentCinema :type="props.type" category="1" />
       </el-tab-pane>
       <el-tab-pane label="灯具项目汇算表" name="second">
-        <IntelligentCinema />
+        <IntelligentCinema :type="props.type" category="2" />
       </el-tab-pane>
       <el-tab-pane label="计算公式" name="third">
-        <ComputePane />
+        <ComputePane :type="type" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -21,6 +21,9 @@ import IntelligentCinema from './IntelligentCinema.vue'
 import { useProgramStore } from '@/store/program'
 import { useRoute } from 'vue-router'
 import { useRoleStore } from '@/store/role'
+
+const props = defineProps(['type'])
+
 const activeName = ref<string>('first')
 const useProgram = useProgramStore()
 const route = useRoute()

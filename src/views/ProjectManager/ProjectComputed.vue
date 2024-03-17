@@ -4,12 +4,12 @@
   </div>
   <el-tabs v-model="editableTabsValue" type="card" class="demo-tabs" closable @tab-remove="removeTab">
     <el-tab-pane v-for="item in editableTabs" :key="item.name" :label="item.title" :name="item.name">
-      <component :is="item.component"></component>
+      <component :is="item.component" :type="item.type"></component>
     </el-tab-pane>
   </el-tabs>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, shallowRef } from 'vue'
 import ProjectLayoutPane from './components/ProjectLayoutPane.vue'
 
 const editableTabsValue = ref('1')
@@ -17,12 +17,14 @@ const editableTabs = ref([
   {
     title: '签约合同清单',
     name: '1',
-    component: ProjectLayoutPane
+    type: 1,
+    component: shallowRef(ProjectLayoutPane)
   },
   {
     title: '最终汇算',
     name: '2',
-    component: ProjectLayoutPane
+    type: 1,
+    component: shallowRef(ProjectLayoutPane)
   }
 ])
 let tabIndex = editableTabs.value.length
@@ -33,7 +35,8 @@ const addTab = (targetName: string) => {
   editableTabs.value.push({
     title: `增减项${newTabName}`,
     name: newTabName,
-    component: ProjectLayoutPane
+    type: 2,
+    component: shallowRef(ProjectLayoutPane)
   })
   editableTabsValue.value = newTabName
 }
