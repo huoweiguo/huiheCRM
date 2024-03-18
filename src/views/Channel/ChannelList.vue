@@ -89,8 +89,9 @@ const changeTable = (current: number) => {
 // 提单项目查看
 const open = (id: string) => {
   useChannel.queryChannelOrder(id).then(res => {
+  console.log(res.data);
     if (res.data.code === 200) {
-      const message = res.data.msg != '' && res.data.msg == 'null' ? res.data.msg : '用户未录入'
+      const message = res.data.msg || '用户未录入'
       ElMessageBox.alert(`${message}`, '提单项目', {
         dangerouslyUseHTMLString: true
       })
@@ -103,7 +104,7 @@ const open = (id: string) => {
 const maintenance = (id: string) => {
   useChannel.queryMaintenance(id).then(res => {
     if (res.data.code === 200) {
-      const message = res.data.msg != '' ? res.data.msg : '用户未录入'
+      const message = res.data.msg || '用户未录入'
       ElMessageBox.alert(`${message}`, '维护情况', {
         dangerouslyUseHTMLString: true
       })

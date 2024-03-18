@@ -29,7 +29,7 @@
       <el-input v-model="ruleForm.construction" />
     </el-form-item>
     <el-form-item label="预计签单日期" prop="contractDate">
-      <el-input v-model="ruleForm.contractDate" />
+      <el-date-picker v-model="ruleForm.contractDate" type="datetime" placeholder="请选择预计签单日期" style="width: 170px" value-format="YYYY-MM-DD hh:mm:ss"></el-date-picker>
     </el-form-item>
     <el-form-item label="项目面积" prop="projectArea">
       <el-input v-model="ruleForm.projectArea" />

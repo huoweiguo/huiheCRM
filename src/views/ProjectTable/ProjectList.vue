@@ -105,7 +105,7 @@ const visibleEmit = () => {
 const open = (id: string) => {
   useProject.queryTrace(id).then(res => {
     if (res.data.code === 200) {
-      const message = res.data.msg != '' && res.data.msg == 'null' ? res.data.msg : '用户未录入'
+      const message = res.data.data || '用户未录入'
       ElMessageBox.alert(`${message}`, '维护情况', {
         dangerouslyUseHTMLString: true
       })

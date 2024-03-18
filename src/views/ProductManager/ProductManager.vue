@@ -23,7 +23,17 @@
   </el-form>
   <div class="mb20">
     <el-button type="primary" @click="router.push('/productManager/addProduct')">添加产品</el-button>
-    <el-button type="primary" @click="search">导入</el-button>
+    <el-upload
+      style="display: inline-block; margin-left: 20px;"
+      method="post" 
+      :limit="1"
+      :auto-upload="false"
+      :on-change="changeFile"
+      :show-file-list="false"
+      accept=".xlsx, .xls"
+    >
+      <el-button type="primary">导入</el-button>
+    </el-upload>
   </div>
 
   <el-table :data="tableData" class="mb20" v-loading="loading" border style="width: 100%">
@@ -98,9 +108,35 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type { FormInstance } from 'element-plus'
+import type { UploadProps, UploadUserFile, UploadFile, UploadFiles, FormRules, FormInstance } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useProductStore } from '@/store/product'
+
+const changeFile = (uploadFile: UploadFile, uploadFiles: UploadFiles) => {
+  console.log(1,uploadFile);
+  const formData = new FormData()
+  formData.append('file', uploadFile.raw, uploadFile.name)
+  useProduct.importProducts(formData).then(res => {
+    if (res.data.code === 200) {
+      ElMessage.success('上传成功')
+      getProductList()
+    } else {
+      ElMessage.error(res.data.msg)
+    }
+  })
+  // if (response.code === 200) {
+  //   console.log(2,uploadFile);
+  // } else if (response.code === 401) {
+  //   ElMessage.closeAll()
+  //   ElMessage.error('登录超时，请重新登录')
+  //   setTimeout(() => {
+  //     router.push('/login')
+  //   })
+  // } else {
+  //   ElMessage.error(response.msg)
+  // }
+}
+
 const router = useRouter()
 const useProduct = useProductStore()
 const dialogVisible = ref<boolean>(false)
@@ -211,6 +247,7 @@ const changeTable = (current: number) => {
   seacrForm.pageNum = current
   getProductList()
 }
+
 </script>
 
 <style lang="scss" scoped></style>

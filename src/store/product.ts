@@ -36,10 +36,14 @@ export const useProductStore = defineStore('product', () => {
   const editItem = (data: RuleProduct) => {
     return http.put('/product', data)
   }
+  const importProducts = (data: any) => {
+    return http.post('/product/import', data)
+  }
   return {
     editItem,
     createItem,
     getProductList,
-    deleteItem
+    deleteItem,
+    importProducts
   }
 })

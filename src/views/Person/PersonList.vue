@@ -49,7 +49,7 @@
       </template>
     </el-table-column>
   </el-table>
-  <div class="fright"><el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" @change="changeTable" /></div>
+  <div class="fright"><el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" v-model:current-page="seacrhForm.pageNum" @change="changeTable" /></div>
 
   <!--添加人员-->
   <el-dialog v-model="dialogVisible" :title="isModify ? '编辑人员' : '添加人员'" width="450">
@@ -172,7 +172,7 @@ const createPerson = () => {
       dialogVisible.value = false
       getUserList()
     } else {
-      ElMessage.error(res.data.mes)
+      ElMessage.error(res.data.msg)
     }
   })
 }
@@ -185,7 +185,7 @@ const modifyUser = () => {
       dialogVisible.value = false
       getUserList()
     } else {
-      ElMessage.error(res.data.mes)
+      ElMessage.error(res.data.msg)
     }
   })
 }

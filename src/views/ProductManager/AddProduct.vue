@@ -22,7 +22,7 @@
       <el-input v-model="ruleForm.unitPriceIncludingTax" placeholder="请输入含税成本单价" />
     </el-form-item>
     <el-form-item label="未税成本单价" prop="unitPriceExcludingTax">
-      <el-input v-model="ruleForm.unitPriceExcludingTax" placeholder="请输入未含税成本单价" />
+      <el-input v-model="ruleForm.unitPriceExcludingTax" placeholder="请输入未含税成本单价" disabled />
     </el-form-item>
   </el-form>
   <div style="padding-left: 120px">
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { useProductStore } from '@/store/product'
 const ruleFormRef = ref<FormInstance>()
@@ -59,6 +59,13 @@ const ruleForm = reactive<RuleForm>({
   unitPriceExcludingTax: ''
 })
 const rules = reactive<FormRules<RuleForm>>({})
+
+watch(
+  () => ruleForm.unitPriceIncludingTax,
+  newVal => {
+    ruleForm.unitPriceExcludingTax = newVal/1.13
+  }
+)
 
 // 保存表单
 const submitForm = async (ruleFormRef: FormInstance | undefined) => {
