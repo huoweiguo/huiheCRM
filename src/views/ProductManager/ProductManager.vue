@@ -112,7 +112,7 @@ import type { UploadProps, UploadUserFile, UploadFile, UploadFiles, FormRules, F
 import { useRouter } from 'vue-router'
 import { useProductStore } from '@/store/product'
 
-const changeFile = (uploadFile: UploadFile, uploadFiles: UploadFiles) => {
+const changeFile = (uploadFile: UploadFile | Boolean | any, uploadFiles: UploadFiles) => {
   console.log(1,uploadFile);
   const formData = new FormData()
   formData.append('file', uploadFile.raw, uploadFile.name)

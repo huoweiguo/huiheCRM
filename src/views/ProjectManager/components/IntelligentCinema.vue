@@ -353,7 +353,7 @@ const ruleForm = reactive({
   bill: []
 })
 
-const openTicket = data => {
+const openTicket = (data:any) => {
   console.log(data, 'open')
   tableData.value = data
   visiableTicket.value = false
