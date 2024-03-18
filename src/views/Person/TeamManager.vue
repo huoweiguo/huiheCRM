@@ -27,7 +27,7 @@
       </template>
     </el-table-column>
   </el-table>
-  <div class="fright"><el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" @change="changeTable" /></div>
+  <div class="fright"><el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" v-model:current-page="seacrhForm.pageNum" @change="changeTable" /></div>
 
   <!--添加团队-->
   <el-dialog v-model="dialogVisible" :title="isModify ? '编辑团队' : '添加团队'" width="450">
@@ -65,7 +65,10 @@ const totalNum = ref<number>(1)
 const ruleFormRef = ref<FormInstance>()
 const teamFormRef = ref<FormInstance>()
 const isModify = ref<boolean>(false)
-const search = () => {}
+const search = () => {
+  seacrhForm.pageNum = 1
+  getTeamList()
+}
 const resetForm = (ruleFormRef: FormInstance | undefined) => {
   if (!ruleFormRef) return
   ruleFormRef.resetFields()
