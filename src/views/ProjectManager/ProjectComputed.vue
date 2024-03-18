@@ -2,8 +2,8 @@
   <div style="margin-bottom: 20px">
     <el-button type="primary" @click="addTab(editableTabsValue)"> 添加增减项 </el-button>
   </div>
-  <el-tabs v-model="editableTabsValue" type="card" class="demo-tabs" closable @tab-remove="removeTab">
-    <el-tab-pane v-for="item in editableTabs" :key="item.name" :label="item.title" :name="item.name">
+  <el-tabs v-model="editableTabsValue" type="card" class="demo-tabs" @tab-remove="removeTab">
+    <el-tab-pane v-for="item in editableTabs" :key="item.name" :label="item.title" :name="item.name" :closable="item.type!=1">
       <component :is="item.component" :type="item.type"></component>
     </el-tab-pane>
   </el-tabs>
