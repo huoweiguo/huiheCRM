@@ -61,6 +61,7 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
 const props = defineProps(['form'])
+const emit = defineEmits(['changeItem'])
 
 const ruleForm = reactive({
   num1: 0,
@@ -92,6 +93,10 @@ watch(
   },
   { deep: true }
 )
+
+const iptChange = (key: String, value: string | number) => {
+  emit('changeItem',key,value)
+}
 </script>
 
 <style lang="less" scoped></style>

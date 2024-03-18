@@ -28,9 +28,16 @@ export const useProgramStore = defineStore(
     const saleLevel = () => {
       return http.get('/projectSettlement/statistic')
     }
-    const getProjectSettle = (data: string) => {
-      return http.getUrl('/projectSettlement', data)
+    const getProjectSettle = (data: RuleSearch) => {
+      return http.get('/projectSettlement', data)
     }
+    const updateProjectSettle = (data: RuleSearch) => {
+      return http.post('/projectSettlement', data)
+    }
+    const deleteProjectSettle = (data: string) => {
+      return http.delete('/projectSettlement',data)
+    }
+
     return {
       saleTeam,
       getProgramList,
@@ -39,7 +46,9 @@ export const useProgramStore = defineStore(
       getProgramDetail,
       deleteProgramItem,
       saleLevel,
-      getProjectSettle
+      getProjectSettle,
+      updateProjectSettle,
+      deleteProjectSettle
     }
   },
   { persist: true }

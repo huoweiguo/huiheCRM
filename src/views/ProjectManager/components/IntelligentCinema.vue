@@ -49,7 +49,6 @@
       <Tuijian v-model:form="ruleForm.popularize"></Tuijian>
 
       <!--开票-->
-      {{ bill1 }}
       <Kaipiao v-model:form="bill1"></Kaipiao>
 
       <!--收票-->
@@ -69,13 +68,13 @@
       <Luru v-model:form="ruleForm.product"></Luru>
 
       <!--未含税-->
-      <Shui v-model:form="ruleForm"></Shui>
+      <Shui :form="ruleForm" @changeItem="changeItem"></Shui>
 
       <!-- 其他税费 -->
       <Qita v-model:form="ruleForm.cost"></Qita>
 
       <!--商务-->
-      <Shangwu v-model:form="ruleForm"></Shangwu>
+      <Shangwu :form="ruleForm" @changeItem="changeItem"></Shangwu>
     </el-form>
 
     <div style="padding-left: 120px">
@@ -150,6 +149,7 @@ const submitForm = async (ruleFormRef: FormInstance | undefined) => {
       bill4.value.bill?.length > 0 && ruleForm.bill.push(bill4.value)
 
       console.log('submit!', ruleForm)
+      
     }
   })
 }
@@ -158,6 +158,11 @@ const submitForm = async (ruleFormRef: FormInstance | undefined) => {
 const resetForm = (ruleFormRef: FormInstance | undefined) => {
   if (!ruleFormRef) return
   ruleFormRef.resetFields()
+}
+
+
+const changeItem = (key:String,val:any)=>{
+  ruleForm[key] = val
 }
 </script>
 

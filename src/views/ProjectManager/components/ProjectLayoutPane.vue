@@ -44,12 +44,9 @@ const getSalesTeam = () => {
     }
   })
 }
-const getProjectSettle = () => {
-  useProgram.getProjectSettle(ids.value).then(res => {})
-}
+
 onMounted(() => {
   getSalesTeam()
-  getProjectSettle()
 
   useRole.queryUserByType({ type: '1' }).then(res => {
     if (res.data.code === 200) {
