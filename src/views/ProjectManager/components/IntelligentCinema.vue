@@ -88,6 +88,7 @@
 import { ref, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import type { FormInstance } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { useProgramStore } from '@/store/program'
 import { useRoleStore } from '@/store/role'
 
@@ -101,7 +102,7 @@ import Shui from './blocks/Shui.vue'
 import Shangwu from './blocks/Shangwu.vue'
 import Qita from './blocks/Qita.vue'
 
-const props = defineProps(['type', 'category'])
+const props = defineProps(['proTabData', 'category'])
 
 const ruleFormRef = ref<FormInstance>()
 const useProgram = useProgramStore()
@@ -109,11 +110,10 @@ const useRole = useRoleStore()
 const route = useRoute()
 
 const ruleForm = reactive({
-  id: 0,
   projectId: route.params.id,
   category: props.category, // 1、智能+影院项目汇算 2、灯具项目汇算
-  type: props.type, // 1、初始项目 2、增减项目
-  settleName: '',
+  type: props.proTabData.type, // 1、初始项目 2、增减项目
+  settleName: props.proTabData.settleName,
   contractAmount: '',
   saleGroup: '',
   productRate: '',
@@ -149,9 +149,28 @@ const submitForm = async (ruleFormRef: FormInstance | undefined) => {
       bill4.value.bill?.length > 0 && ruleForm.bill.push(bill4.value)
 
       console.log('submit!', ruleForm)
-      
+      submitData(ruleForm)
     }
   })
+}
+
+// 提交数据
+const submitData = async (data: any) => {
+  if (props.proTabData.id) data.id = props.proTabData.id
+
+  let res: any = ''
+  // 如果ID存在修改，否则新增
+  if (props.proTabData.id) {
+    res = await useProgram.updateProjectSettle(data)
+  } else {
+    res = await useProgram.addProjectSettle(data)
+  }
+
+  if (res.data.code === 200) {
+    ElMessage.success('保存成功')
+  } else {
+    ElMessage.error(res.data.msg)
+  }
 }
 
 // 重置表单
@@ -160,8 +179,7 @@ const resetForm = (ruleFormRef: FormInstance | undefined) => {
   ruleFormRef.resetFields()
 }
 
-
-const changeItem = (key:String,val:any)=>{
+const changeItem = (key: String, val: any) => {
   ruleForm[key] = val
 }
 </script>

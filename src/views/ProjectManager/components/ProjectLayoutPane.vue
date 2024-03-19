@@ -2,13 +2,13 @@
   <div class="table-panes">
     <el-tabs v-model="activeName" type="border-card">
       <el-tab-pane label="智能+影院项目汇算表" name="first">
-        <IntelligentCinema :type="props.type" category="1" />
+        <IntelligentCinema :proTabData="props.proTabData" category="1" />
       </el-tab-pane>
       <el-tab-pane label="灯具项目汇算表" name="second">
-        <IntelligentCinema :type="props.type" category="2" />
+        <IntelligentCinema :proTabData="props.proTabData" category="2" />
       </el-tab-pane>
       <el-tab-pane label="计算公式" name="third">
-        <ComputePane :type="type" />
+        <ComputePane :proTabData="props.proTabData" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -22,7 +22,7 @@ import { useProgramStore } from '@/store/program'
 import { useRoute } from 'vue-router'
 import { useRoleStore } from '@/store/role'
 
-const props = defineProps(['type'])
+const props = defineProps(['proTabData'])
 
 const activeName = ref<string>('first')
 const useProgram = useProgramStore()

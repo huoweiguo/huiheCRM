@@ -31,14 +31,14 @@ export const useProgramStore = defineStore(
     const getProjectSettleList = (data: RuleSearch) => {
       return http.get('/projectSettlement/list', data)
     }
-    const getProjectSettDetail = (id: String | Number) => {
+    const getProjectSettleDetail = (id: String | Number) => {
       return http.get(`/projectSettlement/${id}`)
     }
-    const getProjectSettle = (data: RuleSearch) => {
-      return http.get('/projectSettlement', data)
+    const addProjectSettle = (data: RuleSearch) => {
+      return http.post('/projectSettlement', data)
     }
     const updateProjectSettle = (data: RuleSearch) => {
-      return http.post('/projectSettlement', data)
+      return http.put('/projectSettlement', data)
     }
     const deleteProjectSettle = (data: string) => {
       return http.delete('/projectSettlement', data)
@@ -53,8 +53,8 @@ export const useProgramStore = defineStore(
       deleteProgramItem,
       saleLevel,
       getProjectSettleList,
-      getProjectSettDetail,
-      getProjectSettle,
+      getProjectSettleDetail,
+      addProjectSettle,
       updateProjectSettle,
       deleteProjectSettle
     }
