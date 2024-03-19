@@ -19,28 +19,56 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const useProgram = useProgramStore()
 
-useProgram.getProjectSettleList({ projectId: route.params.id, pageSize: 1, pageNum: 100 }).then(d => {
-  console.log(d)
-})
-
-const editableTabsValue = ref('签约合同清单')
-const editableTabs = ref([
+let tabs = [
   {
+    id: '',
     settleName: '签约合同清单',
+    category: '',
     type: 1
   },
   {
+    id: '',
     settleName: '最终汇算',
+    category: '',
     type: 1
   }
-])
-let tabIndex = editableTabs.value.length
+]
+const editableTabsValue = ref(tabs[0].settleName)
+const editableTabs = ref([] as any)
+let tabIndex = 0
+
+useProgram.getProjectSettleList({ projectId: route.params.id, pageSize: 1, pageNum: 100 }).then(d => {
+  if (d.data.code == 200 && d.data.rows) {
+    console.log(1, d.data)
+
+    d.data.rows.forEach((e: any) => {
+      let hasname = false
+      tabs.forEach((item, index) => {
+        if (e.settleName == item.settleName) {
+          hasname = true
+          tabs[index] = e
+        }
+      })
+
+      if (!hasname) {
+        tabs.push(e)
+      }
+    })
+  }
+
+  console.log(2, tabs)
+
+  editableTabs.value = tabs
+  tabIndex = editableTabs.value.length
+})
 
 const addTab = (targetName: string) => {
   console.log(targetName)
   const newTabName = `增减项${++tabIndex}`
   editableTabs.value.push({
+    id: '',
     settleName: newTabName,
+    category: '',
     type: 2
   })
   editableTabsValue.value = newTabName

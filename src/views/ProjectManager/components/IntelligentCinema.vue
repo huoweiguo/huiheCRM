@@ -109,7 +109,7 @@ const useProgram = useProgramStore()
 const useRole = useRoleStore()
 const route = useRoute()
 
-const ruleForm = reactive({
+const ruleForm = ref({
   projectId: route.params.id,
   category: props.category, // 1、智能+影院项目汇算 2、灯具项目汇算
   type: props.proTabData.type, // 1、初始项目 2、增减项目
@@ -136,20 +136,33 @@ const bill2 = ref({})
 const bill3 = ref({})
 const bill4 = ref({})
 
+// 获取详情
+console.log(0, props.category, props.proTabData.category)
+
+if (props.proTabData.id && props.proTabData.category == props.category) {
+  console.log(111)
+
+  useProgram.getProjectSettleDetail(props.proTabData.id).then(d => {
+    if (d.data.code == 200) {
+      ruleForm.value = Object.assign({}, ruleForm.value, d.data.data)
+    }
+  })
+}
+
 // 保存表单
 const submitForm = async (ruleFormRef: FormInstance | undefined) => {
   if (!ruleFormRef) return
   await ruleFormRef.validate((valid, fields) => {
     if (valid) {
       // 合并项目汇算票据/支付信息
-      ruleForm.bill = []
-      bill1.value.bill?.length > 0 && ruleForm.bill.push(bill1.value)
-      bill2.value.bill?.length > 0 && ruleForm.bill.push(bill2.value)
-      bill3.value.bill?.length > 0 && ruleForm.bill.push(bill3.value)
-      bill4.value.bill?.length > 0 && ruleForm.bill.push(bill4.value)
+      ruleForm.value.bill = []
+      bill1.value.bill?.length > 0 && ruleForm.value.bill.push(bill1.value)
+      bill2.value.bill?.length > 0 && ruleForm.value.bill.push(bill2.value)
+      bill3.value.bill?.length > 0 && ruleForm.value.bill.push(bill3.value)
+      bill4.value.bill?.length > 0 && ruleForm.value.bill.push(bill4.value)
 
-      console.log('submit!', ruleForm)
-      submitData(ruleForm)
+      console.log('submit!', ruleForm.value)
+      submitData(ruleForm.value)
     }
   })
 }

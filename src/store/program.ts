@@ -44,6 +44,10 @@ export const useProgramStore = defineStore(
       return http.delete('/projectSettlement', data)
     }
 
+    // 修改项目计算公式
+    const editFunction = (data: string) => {
+      return http.delete('/projectSettlement/editFunction', data)
+    }
     return {
       saleTeam,
       getProgramList,
@@ -56,7 +60,8 @@ export const useProgramStore = defineStore(
       getProjectSettleDetail,
       addProjectSettle,
       updateProjectSettle,
-      deleteProjectSettle
+      deleteProjectSettle,
+      editFunction
     }
   },
   { persist: true }
