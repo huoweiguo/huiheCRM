@@ -24,12 +24,16 @@ export const useProjectStore = defineStore('project', () => {
   const queryTrace = (data: string) => {
     return http.getUrl('/projectTrace/trace', data)
   }
+  const importProject = (data: any) => {
+    return http.post('/project/import', data)
+  }
   return {
     queryProjectList,
     createProject,
     deletProject,
     updateProject,
     getProjectDetail,
-    queryTrace
+    queryTrace,
+    importProject
   }
 })

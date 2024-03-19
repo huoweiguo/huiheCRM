@@ -24,7 +24,13 @@
     </el-form-item>
   </el-form>
 
-  <div class="fright mb20"><el-button type="primary" @click="goProgram">项目录入</el-button></div>
+  <div class="mb20">
+    <el-button type="primary" @click="goProgram">项目录入</el-button>
+    <el-upload style="display: inline-block; margin-left: 20px" method="post" :limit="1" :auto-upload="false" :on-change="changeFile" :show-file-list="false" accept=".xlsx, .xls">
+      <el-button type="primary">导入</el-button>
+    </el-upload>
+  </div>
+
   <el-table :data="tableData" class="mb20" border style="width: 100%">
     <el-table-column label="序号" width="60" align="center">
       <template #default="scope">
@@ -62,14 +68,31 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { useProgramStore } from '@/store/program'
+import { useProjectStore } from '@/store/project'
 import { projectSchedule } from '@/utils/fixedData'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type { FormInstance } from 'element-plus'
 import Program from './components/Program.vue'
 import router from '@/router'
+import type { UploadProps, UploadUserFile, UploadFile, UploadFiles, FormRules, FormInstance } from 'element-plus'
+
+const changeFile = (uploadFile: UploadFile | Boolean | any, uploadFiles: UploadFiles) => {
+  console.log(1, uploadFile)
+  const formData = new FormData()
+  formData.append('file', uploadFile.raw, uploadFile.name)
+  useProject.importProject(formData).then(res => {
+    if (res.data.code === 200) {
+      ElMessage.success('上传成功')
+      getProgramList()
+    } else {
+      ElMessage.error(res.data.msg)
+    }
+  })
+}
+
 const tableData = ref([])
 const ruleFormRef = ref<FormInstance>()
 const useProgram = useProgramStore()
+const useProject = useProjectStore()
 const totalNum = ref<number>(1)
 const dialogVisible = ref<boolean>(false)
 const ids = ref<string>('')
