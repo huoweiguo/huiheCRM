@@ -48,7 +48,9 @@
       </template>
     </el-table-column>
   </el-table>
-  <div class="fright"><el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" @change="changeTable" /></div>
+  <div class="fright">
+    <el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" v-model:current-page="seacrhForm.pageNum" @change="changeTable" />
+  </div>
 
   <!--编辑渠道跟进-->
   <el-dialog v-model="dialogVisible" title="编辑项目跟进" width="900" @close="closeData">
@@ -89,7 +91,7 @@ const changeTable = (current: number) => {
 // 提单项目查看
 const open = (id: string) => {
   useChannel.queryChannelOrder(id).then(res => {
-  console.log(res.data);
+    console.log(res.data)
     if (res.data.code === 200) {
       const message = res.data.msg || '用户未录入'
       ElMessageBox.alert(`${message}`, '提单项目', {

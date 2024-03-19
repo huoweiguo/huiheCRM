@@ -51,7 +51,7 @@
       </template>
     </el-table-column>
   </el-table>
-  <div class="fright"><el-pagination small background layout="prev, pager, next" :total="totalNum" @change="changeTable" /></div>
+  <div class="fright"><el-pagination small background layout="prev, pager, next" :total="totalNum" @change="changeTable" v-model:current-page="seacrhForm.pageNum" /></div>
 
   <!--编辑项目跟进-->
   <el-dialog v-model="dialogVisible" title="编辑项目跟进" width="900" @close="closeData">
