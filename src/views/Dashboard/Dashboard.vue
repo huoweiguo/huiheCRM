@@ -19,7 +19,9 @@
       <el-table-column prop="business" label="商务" align="center" />
       <el-table-column prop="pm" label="项目经理" align="center" />
     </el-table>
-    <div class="fright"><el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" @change="changeTable" /></div>
+    <div class="fright">
+      <el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" v-model:current-page="seacrhForm.pageNum" @change="changeTable" />
+    </div>
   </div>
 </template>
 

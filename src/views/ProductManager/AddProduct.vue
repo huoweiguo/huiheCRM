@@ -62,8 +62,8 @@ const rules = reactive<FormRules<RuleForm>>({})
 
 watch(
   () => ruleForm.unitPriceIncludingTax,
-  (newVal:any) => {
-    ruleForm.unitPriceExcludingTax = (newVal/1.13).toString()
+  (newVal: any) => {
+    ruleForm.unitPriceExcludingTax = (newVal / 1.13).toFixed(2)
   }
 )
 

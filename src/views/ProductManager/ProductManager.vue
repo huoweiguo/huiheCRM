@@ -23,15 +23,7 @@
   </el-form>
   <div class="mb20">
     <el-button type="primary" @click="router.push('/productManager/addProduct')">添加产品</el-button>
-    <el-upload
-      style="display: inline-block; margin-left: 20px;"
-      method="post" 
-      :limit="1"
-      :auto-upload="false"
-      :on-change="changeFile"
-      :show-file-list="false"
-      accept=".xlsx, .xls"
-    >
+    <el-upload style="display: inline-block; margin-left: 20px" method="post" :limit="1" :auto-upload="false" :on-change="changeFile" :show-file-list="false" accept=".xlsx, .xls">
       <el-button type="primary">导入</el-button>
     </el-upload>
   </div>
@@ -66,7 +58,9 @@
       </template>
     </el-table-column>
   </el-table>
-  <div class="fright"><el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrForm.pageSize" @change="changeTable" /></div>
+  <div class="fright">
+    <el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrForm.pageSize" v-model:current-page="seacrForm.pageNum" @change="changeTable" />
+  </div>
 
   <!--修改产品-->
   <el-dialog v-model="dialogVisible" title="编辑" width="450" :before-close="handleClose">
@@ -93,7 +87,7 @@
         <el-input v-model="productForm.unitPriceIncludingTax" autocomplete="off" placeholder="请输入含税成本单价" style="width: 260px" />
       </el-form-item>
       <el-form-item label="未税成本单价" :label-width="100">
-        <el-input v-model="productForm.unitPriceExcludingTax" autocomplete="off" placeholder="请输入未税成本单价" style="width: 260px" />
+        <el-input v-model="productForm.unitPriceExcludingTax" autocomplete="off" placeholder="未税成本单价" style="width: 260px" disabled />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -106,14 +100,14 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { UploadProps, UploadUserFile, UploadFile, UploadFiles, FormRules, FormInstance } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useProductStore } from '@/store/product'
 
 const changeFile = (uploadFile: UploadFile | Boolean | any, uploadFiles: UploadFiles) => {
-  console.log(1,uploadFile);
+  console.log(1, uploadFile)
   const formData = new FormData()
   formData.append('file', uploadFile.raw, uploadFile.name)
   useProduct.importProducts(formData).then(res => {
@@ -163,6 +157,14 @@ const totalNum = ref(0)
 const loading = ref(false)
 const tableData = ref([])
 const ruleFormRef = ref<FormInstance>()
+
+watch(
+  () => productForm.unitPriceIncludingTax,
+  (newVal: any) => {
+    productForm.unitPriceExcludingTax = (newVal / 1.13).toFixed(2)
+  }
+)
+
 const search = () => {
   seacrForm.pageNum = 1
   getProductList()
@@ -247,7 +249,6 @@ const changeTable = (current: number) => {
   seacrForm.pageNum = current
   getProductList()
 }
-
 </script>
 
 <style lang="scss" scoped></style>

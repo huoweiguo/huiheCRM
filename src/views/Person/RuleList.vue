@@ -23,7 +23,9 @@
       </template>
     </el-table-column>
   </el-table>
-  <div class="fright"><el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" @change="changeTable" /></div>
+  <div class="fright">
+    <el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" v-model:current-page="seacrhForm.pageNum" @change="changeTable" />
+  </div>
 
   <!--添加人员-->
   <el-dialog v-model="dialogVisible" title="添加角色" width="450" :before-close="handleClose">

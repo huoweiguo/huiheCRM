@@ -7,11 +7,10 @@
       <el-input v-model="seacrhForm.projectName" placeholder="请输入项目名称" />
     </el-form-item>
     <el-form-item label="项目进度" prop="projectProgress">
-      <el-select v-model="seacrhForm.projectProgress" placeholder="请选择项目进度" clearable style="width: 150px;">
+      <el-select v-model="seacrhForm.projectProgress" placeholder="请选择项目进度" clearable style="width: 150px">
         <el-option label="全部" value="" />
         <el-option v-for="item in projectSchedule" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
-      
     </el-form-item>
     <el-form-item label="商务" prop="business">
       <el-input v-model="seacrhForm.business" placeholder="请输入所属商务" />
@@ -51,7 +50,9 @@
       </template>
     </el-table-column>
   </el-table>
-  <div class="fright"><el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" @change="changeTable" /></div>
+  <div class="fright">
+    <el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" v-model:current-page="seacrhForm.pageNum" @change="changeTable" />
+  </div>
   <!--编辑项目-->
   <el-dialog v-model="dialogVisible" title="编辑项目跟进" width="900" @close="closeData">
     <Program :isModify="true" :ids="ids" @visibleEmit="visibleEmit" />
