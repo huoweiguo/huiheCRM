@@ -113,19 +113,12 @@ onMounted(() => {
 })
 
 // 保存表单
-const submitForm = async (ruleFormRef: FormInstance | undefined) => {
-  if (!ruleFormRef) return
-  await ruleFormRef.validate((valid, fields) => {
-    if (valid) {
-      useCompute.modifyCompute({ cinema, light }).then(res => {
-        if (res.data.code === 200) {
-          ElMessage.success('保存计算公式成功')
-        } else {
-          ElMessage.error(res.data.msg)
-        }
-      })
+const submitForm = () => {
+  useCompute.modifyCompute({ cinema, light }).then(res => {
+    if (res.data.code === 200) {
+      ElMessage.success('保存计算公式成功')
     } else {
-      console.log('error submit!', fields)
+      ElMessage.error(res.data.msg)
     }
   })
 }
