@@ -137,17 +137,11 @@ const bill3 = ref({})
 const bill4 = ref({})
 
 // 获取详情
-console.log(0, props.category, props.proTabData.category)
-
-if (props.proTabData.id && props.proTabData.category == props.category) {
-  console.log(111)
-
-  useProgram.getProjectSettleDetail(props.proTabData.id).then(d => {
-    if (d.data.code == 200) {
-      ruleForm.value = Object.assign({}, ruleForm.value, d.data.data)
-    }
-  })
-}
+useProgram.getProjectSettleDetail(props.proTabData.id).then(d => {
+  if (d.data.code == 200) {
+    ruleForm.value = Object.assign({}, ruleForm.value, d.data.data)
+  }
+})
 
 // 保存表单
 const submitForm = async (ruleFormRef: FormInstance | undefined) => {
@@ -170,6 +164,7 @@ const submitForm = async (ruleFormRef: FormInstance | undefined) => {
 // 提交数据
 const submitData = async (data: any) => {
   if (props.proTabData.id) data.id = props.proTabData.id
+  data.category = props.category
 
   let res: any = ''
   // 如果ID存在修改，否则新增
