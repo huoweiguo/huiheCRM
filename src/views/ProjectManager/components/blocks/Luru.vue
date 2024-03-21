@@ -22,33 +22,33 @@
           <el-table-column prop="unitPriceIncludingTax" label="含税成本单价" width="120" />
           <el-table-column label="税金合计" width="120">
             <template #default="scope">
-              <b>{{ scope.row.totalTaxes.toFixed(2) }}</b>
+              <b>{{ scope.row.totalTaxes?.toFixed(2) }}</b>
             </template>
           </el-table-column>
           <el-table-column label="未税成本单价" width="120">
             <template #default="scope">
-              <b>{{ scope.row.unitPriceExcludingTax2.toFixed(2) }}</b>
+              <b>{{ scope.row.unitPriceExcludingTax2?.toFixed(2) }}</b>
             </template>
           </el-table-column>
           <el-table-column label="未税成本总价" width="120">
             <template #default="scope">
-              <b>{{ scope.row.totalCostExcludingTax.toFixed(2) }}</b>
+              <b>{{ scope.row.totalCostExcludingTax?.toFixed(2) }}</b>
             </template>
           </el-table-column>
           <el-table-column label="含税成本总价" width="120">
             <template #default="scope">
-              <b>{{ scope.row.totalCostIncludingTax.toFixed(2) }}</b>
+              <b>{{ scope.row.totalCostIncludingTax?.toFixed(2) }}</b>
             </template>
           </el-table-column>
           <el-table-column label="系统总价" width="120">
             <template #default="scope">
-              <b>{{ scope.row.systemTotalPrice.toFixed(2) }}</b>
+              <b>{{ scope.row.systemTotalPrice?.toFixed(2) }}</b>
             </template>
           </el-table-column>
           <el-table-column prop="quantitySoldOut" label="已出货数量" width="120" />
           <el-table-column label="操作" fixed="right">
             <template #default="scope">
-              <el-button type="text" size="small" @click="delrow(scope.$index)">删除</el-button>
+              <el-button type="primary" link size="small" @click="delrow(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -177,8 +177,8 @@ const handleSelectionChange = (val: []) => {
 
 const onSelect = () => {
   let arr = selectList.value.map(item => ({
+    ...item,
     productId: item.id,
-
     productNum: 1,
 
     // 税金合计=含税成本单价/1.13*0.13*数量
@@ -194,12 +194,12 @@ const onSelect = () => {
     totalCostIncludingTax: item.unitPriceIncludingTax * (item.productNum || 1),
 
     // 系统总价=系统单价*数量
-    systemTotalPrice: item.systemUnitPrice * (item.productNum || 1),
-
-    ...item
+    systemTotalPrice: item.systemUnitPrice * (item.productNum || 1)
   }))
 
-  tableData.value = Object.assign(tableData.value, arr)
+  tableData.value = Object.assign([], tableData.value, arr)
+  console.log(111, tableData.value)
+
   emit('update:form', tableData.value)
   visible.value = false
 }

@@ -52,7 +52,14 @@ export const useProgramStore = defineStore(
     const editFunction = (data: RuleSearch) => {
       return http.put('/projectSettlement/editFunction', data)
     }
+
+    // 最终汇算
+    const getSettlementReduce = (data: RuleSearch) => {
+      return http.get('/projectSettlement/settlementReduce', data)
+    }
+
     return {
+      getSettlementReduce,
       saleTeam,
       getProgramList,
       createProgram,

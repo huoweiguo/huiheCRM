@@ -51,7 +51,7 @@ watch(
       ruleForm.num1 = value
         .map(d => d.totalCostExcludingTax)
         .reduce((p, c) => p + c, 0)
-        .toFixed(2)
+        ?.toFixed(2)
   },
   { deep: true }
 )

@@ -161,7 +161,7 @@ const ruleFormRef = ref<FormInstance>()
 watch(
   () => productForm.unitPriceIncludingTax,
   (newVal: any) => {
-    productForm.unitPriceExcludingTax = (newVal / 1.13).toFixed(2)
+    productForm.unitPriceExcludingTax = (newVal / 1.13)?.toFixed(2)
   }
 )
 

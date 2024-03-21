@@ -11,7 +11,7 @@
           <el-table-column prop="remark" label="其他成本备注" />
           <el-table-column label="操作" fixed="right">
             <template #default="scope">
-              <el-button type="text" size="small" @click="delrow(scope.$index)">删除</el-button>
+              <el-button type="primary" link size="small" @click="delrow(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -25,7 +25,7 @@
           <el-input v-model="ruleForm.amount" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="记录日期" prop="recordDate">
-          <el-date-picker v-model="ruleForm.recordDate" type="date" :placeholder="`请选择记录日期`" style="width: 192px" value-format="YYYY-MM-DD"></el-date-picker>
+          <el-date-picker v-model="ruleForm.recordDate" type="datetime" :placeholder="`请选择记录日期`" style="width: 192px" value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
         </el-form-item>
         <el-form-item label="其他成本图片" class="upload-form">
           <el-upload
@@ -96,6 +96,8 @@ const ruleForm = reactive({
   costImage: '',
   remark: ''
 })
+
+tableData.value = props.form
 
 const delrow = (index: number) => {
   tableData.value.splice(index, 1)

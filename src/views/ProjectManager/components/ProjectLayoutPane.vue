@@ -8,7 +8,7 @@
         <IntelligentCinema v-if="editableTabsValue === item.settleName" :proTabData="item" :category="props.category" @save="getList"></IntelligentCinema>
       </el-tab-pane>
       <el-tab-pane label="最终汇算" name="最终汇算">
-        <FinalSettlement v-if="editableTabsValue == '最终汇算'"></FinalSettlement>
+        <FinalSettlement v-if="editableTabsValue == '最终汇算'" :category="props.category"></FinalSettlement>
       </el-tab-pane>
     </el-tabs>
   </div>

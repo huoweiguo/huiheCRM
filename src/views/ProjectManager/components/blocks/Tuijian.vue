@@ -16,7 +16,7 @@
           <el-table-column prop="paidPaidAmount" label="已付推广费金额" />
           <el-table-column label="操作">
             <template #default="scope">
-              <el-button type="text" size="small" @click="delrow(scope.$index)">删除</el-button>
+              <el-button type="primary" link size="small" @click="delrow(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -45,7 +45,7 @@
           <el-input v-model="ruleForm.paidPromotionRatio" placeholder="请输入已付推广费比例" />
         </el-form-item>
         <el-form-item label="已付推广费日期" prop="paidDate">
-          <el-date-picker v-model="paidDate" type="date" placeholder="请选择已付推广费日期" style="width: 192px"></el-date-picker>
+          <el-date-picker v-model="paidDate" type="datetime" placeholder="请选择已付推广费日期" style="width: 192px"></el-date-picker>
         </el-form-item>
         <el-form-item label="已付推广费金额" prop="paidPaidAmount">
           <el-input v-model="ruleForm.paidPaidAmount" placeholder="请输入已付推广费金额" />
@@ -83,6 +83,8 @@ const ruleForm = reactive({
   paidDate: '',
   remark: ''
 })
+
+tableData.value = props.form
 
 function isEmpty(obj: object): boolean {
   return Object.keys(obj).every(key => {

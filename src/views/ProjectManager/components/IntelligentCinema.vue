@@ -1,36 +1,36 @@
 <template>
-  <div class="form-box">
+  <div class="form-box" v-if="loadingd">
     <el-form ref="ruleFormRef" :model="ruleForm" label-width="140px" :inline="true" status-icon>
-      <el-form-item label="签约金额" prop="contractAmount">
-        <el-input v-model="ruleForm.contractAmount" placeholder="请输入签约金额，保留2位小数" />
-      </el-form-item>
-      <el-form-item label="销售团队">
-        <el-select v-model="ruleForm.saleGroup" class="m-2" placeholder="请选择销售团队" style="width: 192px">
-          <el-option v-for="item in useProgram.saleTeam" :key="item.id" :label="item.name" :value="item.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="商务">
+      <div>
+        <el-form-item label="签约金额" prop="contractAmount">
+          <el-input v-model="ruleForm.contractAmount" placeholder="请输入签约金额，保留2位小数" />
+        </el-form-item>
+        <el-form-item label="销售团队">
+          <el-select v-model="ruleForm.saleGroup" class="m-2" placeholder="请选择销售团队" style="width: 192px">
+            <el-option v-for="item in useProgram.saleTeam" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <!-- <el-form-item label="商务">
         <el-select multiple class="m-2" placeholder="请选择商务" style="width: 192px">
           <el-option v-for="item in useRole.businessList" :key="item.userId" :label="item.nickName" :value="item.userId" />
         </el-select>
-      </el-form-item>
-      <el-form-item label="灯具销售">
+      </el-form-item> -->
+        <!-- <el-form-item label="灯具销售">
         <el-select multiple class="m-2" placeholder="请选择灯具销售" style="width: 192px">
           <el-option v-for="item in useRole.lightSalesList" :key="item.userId" :label="item.nickName" :value="item.userId" />
         </el-select>
-      </el-form-item>
-      <el-form-item label="项目经理">
+      </el-form-item> -->
+        <!-- <el-form-item label="项目经理">
         <el-select multiple class="m-2" placeholder="请选择项目经理" style="width: 192px">
           <el-option v-for="item in useRole.projectManagerList" :key="item.userId" :label="item.nickName" :value="item.userId" />
         </el-select>
-      </el-form-item>
-      <el-form-item label="灯具项目经理">
+      </el-form-item> -->
+        <!-- <el-form-item label="灯具项目经理">
         <el-select multiple class="m-2" placeholder="请选择灯具项目经理" style="width: 192px">
           <el-option v-for="item in useRole.lightProjectManagerList" :key="item.userId" :label="item.nickName" :value="item.userId" />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
 
-      <div>
         <el-form-item label="产品开票比例" prop="productRate">
           <el-input v-model="ruleForm.productRate" placeholder="请输入产品开票比例"></el-input>
         </el-form-item>
@@ -107,6 +107,7 @@ const props = defineProps(['proTabData', 'category'])
 const emit = defineEmits(['save'])
 
 const loading = ref(false)
+const loadingd = ref(false)
 const ruleFormRef = ref<FormInstance>()
 const useProgram = useProgramStore()
 const useRole = useRoleStore()
@@ -141,8 +142,24 @@ const bill4 = ref({})
 
 // 获取详情
 useProgram.getProjectSettleDetail(props.proTabData.id).then(d => {
+  loadingd.value = true
   if (d.data.code == 200) {
     ruleForm.value = Object.assign({}, ruleForm.value, d.data.data)
+
+    ruleForm.value.bill.forEach((item: any) => {
+      if (item.type == 1) {
+        bill1.value = item || {}
+      }
+      if (item.type == 2) {
+        bill2.value = item || {}
+      }
+      if (item.type == 3) {
+        bill3.value = item || {}
+      }
+      if (item.type == 4) {
+        bill4.value = item || {}
+      }
+    })
   }
 })
 

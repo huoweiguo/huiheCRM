@@ -2,7 +2,7 @@
   <div class="upload-form">
     <el-form ref="ruleFormRef" :model="recommend" :rules="rules" label-width="120px" :inline="true">
       <el-form-item :label="`${typetxt}日期`" prop="billDate">
-        <el-date-picker v-model="recommend.billDate" type="date" :placeholder="`请选择${typetxt}日期`" style="width: 192px" value-format="YYYY-MM-DD"></el-date-picker>
+        <el-date-picker v-model="recommend.billDate" type="datetime" :placeholder="`请选择${typetxt}日期`" style="width: 192px" value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
       </el-form-item>
       <el-form-item :label="`${typetxt}金额`" prop="billAmount">
         <el-input v-model="recommend.billAmount" :placeholder="`请输入${typetxt}金额`" />
@@ -61,8 +61,8 @@ interface RuleUpload {
 interface RuleBill {
   billDate: string
   billAmount: string
-  billImage: RuleUpload[]
-  billAnnex: RuleUpload[]
+  billImage: string
+  billAnnex: string
   remark: string
 }
 interface RuleForm {
@@ -83,8 +83,8 @@ const typetxt = ['开票', '收票', '收款', '付款'][props.tickType - 1]
 const recommend = reactive<RuleBill>({
   billDate: '',
   billAmount: '',
-  billImage: [],
-  billAnnex: [],
+  billImage: '',
+  billAnnex: '',
   remark: ''
 })
 const addition = async (ruleFormRef: FormInstance | undefined) => {
@@ -117,7 +117,7 @@ const handleSuccess: UploadProps['onSuccess'] = (response: any, uploadFile: Uplo
       arr = [...arr, { name: v.response.data.fileName as string, url: v.response.data.url as string, id: v.response.data.ossId }]
     })
     billAnnex.value = arr
-    recommend.billAnnex = arr
+    recommend.billAnnex = arr.map(d => d.id).join(',')
   } else if (response.code === 401) {
     ElMessage.closeAll()
     ElMessage.error('登录超时，请重新登录')
@@ -136,7 +136,7 @@ const handleSuccessImage: UploadProps['onSuccess'] = (response: any, uploadFile:
       arr = [...arr, { name: v.response.data.fileName as string, url: v.response.data.url as string, id: v.response.data.ossId }]
     })
     billImage.value = arr
-    recommend.billImage = arr
+    recommend.billImage = arr.map(d => d.id).join(',')
   } else if (response.code === 401) {
     ElMessage.closeAll()
     ElMessage.error('登录超时，请重新登录')

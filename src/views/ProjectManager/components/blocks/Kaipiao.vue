@@ -10,7 +10,7 @@
           <el-table-column prop="billAmount" label="开票金额" />
           <el-table-column label="操作">
             <template #default="scope">
-              <el-button type="text" size="small" @click="delrow(scope.$index)">删除</el-button>
+              <el-button type="primary" link size="small" @click="delrow(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -32,6 +32,8 @@ const emit = defineEmits(['update:form'])
 const props = defineProps(['form'])
 const visible = ref(false)
 const tableData = ref([] as any)
+
+tableData.value = props.form.bill || []
 
 const delrow = (index: number) => {
   tableData.value.splice(index, 1)
