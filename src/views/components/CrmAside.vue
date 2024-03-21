@@ -7,17 +7,23 @@
             <el-icon><DataAnalysis /></el-icon>
             <span>工作台</span>
           </el-menu-item>
-          <el-sub-menu v-for="attr in menuRouts" :index="attr.path" :key="attr.path">
-            <template #title>
-              <el-icon><Folder /></el-icon>
-              <span>{{ attr.meta?.title }}</span>
-            </template>
-            <template v-for="item in attr.children" :key="attr.path + item.path">
-              <el-menu-item :index="attr.path + '/' + item.path" v-if="item.meta?.hidden !== true || item.meta?.hidden === undefined" @click="goLink(attr.path + '/' + item.path)">
-                {{ item.meta?.title }}
-              </el-menu-item>
-            </template>
-          </el-sub-menu>
+          <template v-for="attr in menuRouts" :key="attr.path">
+            <el-sub-menu v-if="attr.meta?.hidden !== true || attr.meta?.hidden === undefined" :index="attr.path">
+              <template #title>
+                <el-icon><Folder /></el-icon>
+                <span>{{ attr.meta?.title }}</span>
+              </template>
+              <template v-for="item in attr.children" :key="attr.path + item.path">
+                <el-menu-item
+                  :index="attr.path + '/' + item.path"
+                  v-if="item.meta?.hidden !== true || item.meta?.hidden === undefined"
+                  @click="goLink((attr.path == '/' ? attr.path : attr.path + '/') + item.path)"
+                >
+                  {{ item.meta?.title }}
+                </el-menu-item>
+              </template>
+            </el-sub-menu>
+          </template>
         </el-menu>
       </el-col>
     </el-row>
@@ -28,6 +34,13 @@
 import { ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import { menuRouts } from '@/router/index'
+
+// import { useLoginStore } from '@/store/login'
+// const { getRouters } = useLoginStore()
+// const menuRouts = ref([] as any)
+// getRouters().then(res => {
+//   menuRouts.value = res.data.data || []
+// })
 
 const menuActive = ref<string>('/productManager/productList')
 const router = useRouter()

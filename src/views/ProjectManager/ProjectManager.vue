@@ -43,7 +43,7 @@
     <el-table-column prop="contractAmount" label="签约金额" align="center" />
     <el-table-column label="项目进度" align="center">
       <template #default="scope">
-        {{ projectSchedule[scope.row.projectProgress - 1].label }}
+        {{ projectSchedule[scope.row.projectProgress - 1]?.label }}
       </template>
     </el-table-column>
     <el-table-column prop="business" label="商务" align="center" />

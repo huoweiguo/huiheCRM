@@ -3,7 +3,6 @@
     <div style="margin-bottom: 10px; text-align: right">
       <el-button type="primary" @click="addTab(editableTabsValue)"> 添加增减项 </el-button>
     </div>
-    {{ editableTabs }}
     <el-tabs v-model="editableTabsValue" type="border-card" class="demo-tabs" @tab-remove="removeTab">
       <el-tab-pane v-for="item in editableTabs" :key="item.settleName" :label="item.settleName" :name="item.settleName" :closable="true">
         <IntelligentCinema v-if="editableTabsValue === item.settleName" :proTabData="item" :category="props.category" @save="getList"></IntelligentCinema>
@@ -32,7 +31,7 @@ let tabs: any[] = []
 let tabIndex = 0
 
 const getList = () => {
-  useProgram.getProjectSettleList({ projectId: route.params.id, pageSize: 100, pageNum: 1 }).then(d => {
+  useProgram.getProjectSettleList({ projectId: route.params.id, category: props.category, pageSize: 100, pageNum: 1 }).then(d => {
     if (d.data.code == 200 && d.data.rows && d.data.rows.length > 0) {
       tabs = d.data.rows
     } else {
