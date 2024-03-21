@@ -31,7 +31,7 @@
 
       <!--推荐-->
       <el-form-item label="推荐">
-        {{ ruleForm.popularize }}
+        <!-- {{ ruleForm.popularize }} -->
         <el-table :data="ruleForm.popularize" border style="width: 100%">
           <el-table-column prop="referrersType" label="推荐人类型" />
           <el-table-column prop="referrersName" label="推荐人姓名" />
@@ -46,7 +46,7 @@
 
       <!--开票-->
       <el-form-item label="开票">
-        {{ ruleForm.bill }}
+        <!-- {{ ruleForm.bill }} -->
         <template v-for="(item, index) in ruleForm.bill" :key="index">
           <el-table :data="item.bill" border style="width: 100%">
             <el-table-column prop="billDate" :label="`${['', '开票', '收票', '收款', '付款'][item.type]}日期`" />
@@ -58,7 +58,7 @@
 
       <!--产品录入-->
       <el-form-item label="产品录入">
-        {{ ruleForm.product }}
+        <!-- {{ ruleForm.product }} -->
         <el-table :data="ruleForm.product" border style="width: 100%">
           <el-table-column label="序号" width="60" align="center" fixed="left">
             <template #default="scope">
@@ -107,7 +107,7 @@
 
       <!--员工-->
       <el-form-item label="员工">
-        {{ ruleForm.employee }}
+        <!-- {{ ruleForm.employee }} -->
       </el-form-item>
 
       <!-- 其他税费 -->
