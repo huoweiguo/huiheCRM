@@ -40,8 +40,8 @@ export const useProgramStore = defineStore(
     const updateProjectSettle = (data: RuleSearch) => {
       return http.put('/projectSettlement', data)
     }
-    const deleteProjectSettle = (data: string) => {
-      return http.delete('/projectSettlement', data)
+    const deleteProjectSettle = (id: string) => {
+      return http.delete('/projectSettlement', id)
     }
 
     const getFunctions = (data: RuleSearch) => {

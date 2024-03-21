@@ -78,7 +78,7 @@
     </el-form>
 
     <div style="padding-left: 120px">
-      <el-button type="primary" @click="submitForm(ruleFormRef)">保存</el-button>
+      <el-button type="primary" @click="submitForm(ruleFormRef)" :loading="loading">保存</el-button>
       <el-button @click="resetForm(ruleFormRef)">重置</el-button>
     </div>
   </div>
@@ -104,6 +104,9 @@ import Qita from './blocks/Qita.vue'
 
 const props = defineProps(['proTabData', 'category'])
 
+const emit = defineEmits(['save'])
+
+const loading = ref(false)
 const ruleFormRef = ref<FormInstance>()
 const useProgram = useProgramStore()
 const useRole = useRoleStore()
@@ -167,6 +170,8 @@ const submitData = async (data: any) => {
   data.category = props.category
 
   let res: any = ''
+  loading.value = true
+
   // 如果ID存在修改，否则新增
   if (props.proTabData.id) {
     res = await useProgram.updateProjectSettle(data)
@@ -176,9 +181,11 @@ const submitData = async (data: any) => {
 
   if (res.data.code === 200) {
     ElMessage.success('保存成功')
+    emit('save')
   } else {
     ElMessage.error(res.data.msg)
   }
+  loading.value = false
 }
 
 // 重置表单
