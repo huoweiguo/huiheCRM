@@ -124,6 +124,7 @@ const ruleForm = ref({
   productAmount: '',
   serviceRate: '',
   serviceAmount: '',
+  //
   taxFreePrice: '',
   promotionalPaymentsImage: '',
   operatingExpenseRatio: '',

@@ -16,13 +16,13 @@
       <el-input v-model="ruleForm.num5" />
     </el-form-item>
     <el-form-item label="总推广费">
-      <el-input v-model="ruleForm.num6" />
+      <el-input v-model="ruleForm.num6" @input="iptChange('promotionExpenses', $event)" />
     </el-form-item>
     <el-form-item label="运营费用率">
       <el-input v-model="ruleForm.num7" />
     </el-form-item>
     <el-form-item label="运营费用">
-      <el-input v-model="ruleForm.num8" disabled />
+      <el-input v-model="ruleForm.num8" @input="iptChange('operatingExpenseRatio', $event)" />
     </el-form-item>
   </div>
 </template>

@@ -1,43 +1,43 @@
 <template>
   <div>
     <el-form-item label="商务提成率">
-      <el-input v-model="ruleForm.num1" disabled />
+      <el-input v-model="ruleForm.num1" />
     </el-form-item>
     <el-form-item label="商务提成">
       <el-input v-model="ruleForm.num2" disabled />
     </el-form-item>
     <el-form-item label="销售副总提成率">
-      <el-input v-model="ruleForm.num3" disabled />
+      <el-input v-model="ruleForm.num3" />
     </el-form-item>
     <el-form-item label="销售副总提成">
       <el-input v-model="ruleForm.num4" disabled />
     </el-form-item>
     <el-form-item label="销售总监提成率">
-      <el-input v-model="ruleForm.num5" disabled />
+      <el-input v-model="ruleForm.num5" />
     </el-form-item>
     <el-form-item label="销售总监提成">
       <el-input v-model="ruleForm.num6" disabled />
     </el-form-item>
     <el-form-item label="项目经理提成率">
-      <el-input v-model="ruleForm.num7" disabled />
+      <el-input v-model="ruleForm.num7" />
     </el-form-item>
     <el-form-item label="项目经理提成">
       <el-input v-model="ruleForm.num8" disabled />
     </el-form-item>
     <el-form-item label="项目总监提成率">
-      <el-input v-model="ruleForm.num9" disabled />
+      <el-input v-model="ruleForm.num9" />
     </el-form-item>
     <el-form-item label="项目总监提成">
       <el-input v-model="ruleForm.num10" disabled />
     </el-form-item>
     <el-form-item label="深化提成率">
-      <el-input v-model="ruleForm.num11" disabled />
+      <el-input v-model="ruleForm.num11" />
     </el-form-item>
     <el-form-item label="深化提成">
       <el-input v-model="ruleForm.num12" disabled />
     </el-form-item>
     <el-form-item label="安装调试员提成率">
-      <el-input v-model="ruleForm.num13" disabled />
+      <el-input v-model="ruleForm.num13" />
     </el-form-item>
     <el-form-item label="安装调试员提成">
       <el-input v-model="ruleForm.num14" disabled />
@@ -99,6 +99,23 @@ watch(
 const iptChange = (key: String, value: string | number) => {
   emit('changeItem', key, value)
 }
+
+import { useProgramStore } from '@/store/program'
+const useProgram = useProgramStore()
+
+// 获取计算公司
+useProgram.getFunction({ projectId: props.form.projectId, type: props.form.type }).then(res => {
+  if (res.data.code === 200) {
+    let data = res.data.data
+    ruleForm.num1 = data.businessExpenseRatio
+    ruleForm.num3 = data.saleAgmExpenseRatio
+    ruleForm.num5 = data.sdExpenseRatio
+    ruleForm.num7 = data.pmExpenseRatio
+    ruleForm.num9 = data.pdExpenseRatio
+    ruleForm.num11 = data.deepenExpenseRatio
+    ruleForm.num13 = data.commissionerExpenseRatio
+  }
+})
 </script>
 
 <style lang="less" scoped></style>

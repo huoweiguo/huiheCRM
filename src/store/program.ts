@@ -44,6 +44,9 @@ export const useProgramStore = defineStore(
       return http.delete('/projectSettlement', id)
     }
 
+    const getFunction = (data: RuleSearch) => {
+      return http.get('/projectSettlement/function', data)
+    }
     const getFunctions = (data: RuleSearch) => {
       return http.get('/projectSettlement/functions', data)
     }
@@ -73,6 +76,7 @@ export const useProgramStore = defineStore(
       updateProjectSettle,
       deleteProjectSettle,
       getFunctions,
+      getFunction,
       editFunction
     }
   },
