@@ -37,6 +37,12 @@ export const useRoleStore = defineStore(
     const deleteRoleById = (data: string) => {
       return http.delete('/role', data)
     }
+    const addRole = (data: userRule) => {
+      return http.post('/role', data)
+    }
+    const editRole = (data: userRule) => {
+      return http.put('/role', data)
+    }
     const getTeamList = (data: userRule) => {
       return http.get('/department/list', data)
     }
@@ -53,6 +59,8 @@ export const useRoleStore = defineStore(
       return http.get('/user/filterUserByType', data)
     }
     return {
+      editRole,
+      addRole,
       businessList,
       scheduleList,
       lightSalesList,

@@ -9,7 +9,7 @@
     </el-form-item>
   </el-form>
   <div class="mb20">
-    <el-button type="primary" @click="dialogVisible = true">添加角色</el-button>
+    <el-button type="primary" @click="(personRole.name = ''), (personRole.roles = []), ((dialogVisible = true), (isedit = false))">添加角色</el-button>
   </div>
 
   <el-table :data="tableData" class="mb20" border style="width: 100%">
@@ -18,7 +18,7 @@
     <el-table-column prop="createTime" label="创建时间" align="center" />
     <el-table-column label="操作" align="center" fixed="right" width="180">
       <template #default="scope">
-        <el-button link type="primary" size="small">编辑</el-button>
+        <el-button link type="primary" size="small" @click="editRole(scope.row)">编辑</el-button>
         <el-button link type="primary" size="small" @click="deleteRole(scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
@@ -28,19 +28,23 @@
   </div>
 
   <!--添加人员-->
-  <el-dialog v-model="dialogVisible" title="添加角色" width="450" :before-close="handleClose">
+  <el-dialog v-model="dialogVisible" :title="isedit ? '编辑角色' : '添加角色'" width="450" :before-close="handleClose">
     <el-form ref="ruleFormRef" v-model="personRole">
       <el-form-item label="角色名称" :label-width="100" prop="name">
         <el-input v-model="personRole.name" autocomplete="off" style="width: 260px" />
       </el-form-item>
+      {{ personRole }}
       <el-form-item label="角色权限" :label-width="100" prop="roles">
-        <label class="label-role" v-for="item in roleList" :key="item.value"><input type="checkbox" v-model="personRole.roles" :value="item.value" /> {{ item.label }}</label>
+        <label class="label-role" v-for="item in roleList" :key="item.value">
+          <input type="checkbox" v-model="personRole.roles" :value="item.value" />
+          {{ item.label }}
+        </label>
       </el-form-item>
     </el-form>
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="savePerson"> 保存 </el-button>
+        <el-button type="primary" @click="savePerson" :loading="loading"> 保存 </el-button>
       </div>
     </template>
   </el-dialog>
@@ -60,6 +64,8 @@ const seacrhForm = reactive({
   orderByColumn: '',
   isAsc: ''
 })
+const loading = ref<Boolean>(false)
+const isedit = ref<Boolean>(false)
 const totalNum = ref<number>(1)
 const tableData = ref([])
 const useRole = useRoleStore()
@@ -99,6 +105,13 @@ const handleClose = (done: () => void) => {
     })
 }
 
+const editRole = (row: any) => {
+  isedit.value = true
+  dialogVisible.value = true
+  personRole.name = row.name
+  personRole.roles = row.roles
+}
+
 const deleteRole = (id: string) => {
   ElMessageBox.confirm('确定要删除该人员吗?').then(() => {
     useRole.deleteRoleById(id).then(res => {
@@ -111,7 +124,19 @@ const deleteRole = (id: string) => {
     })
   })
 }
-const savePerson = () => {}
+const savePerson = () => {
+  loading.value = true
+  useRole.addRole(personRole).then(res => {
+    loading.value = false
+    if (res.data.code === 200) {
+      ElMessage.success('添加角色成功')
+      dialogVisible.value = false
+      getRoleList()
+    } else {
+      ElMessage.error(res.data.msg)
+    }
+  })
+}
 const changeTable = (current: number) => {
   seacrhForm.pageNum = current
   getRoleList()
