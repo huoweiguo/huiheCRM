@@ -58,7 +58,15 @@ export const useRoleStore = defineStore(
     const queryUserByType = (data: userRule) => {
       return http.get('/user/filterUserByType', data)
     }
+    const getMenuTreeById = (roleId: string) => {
+      return http.get(`/role/menuTree/${roleId}`)
+    }
+    const getMenuTree = () => {
+      return http.get(`/role/menuTree/`)
+    }
     return {
+      getMenuTreeById,
+      getMenuTree,
       editRole,
       addRole,
       businessList,

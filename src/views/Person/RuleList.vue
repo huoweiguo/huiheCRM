@@ -9,7 +9,7 @@
     </el-form-item>
   </el-form>
   <div class="mb20">
-    <el-button type="primary" @click="(personRole.name = ''), (personRole.roles = []), ((dialogVisible = true), (isedit = false))">添加角色</el-button>
+    <el-button type="primary" @click="addRole">添加角色</el-button>
   </div>
 
   <el-table :data="tableData" class="mb20" border style="width: 100%">
@@ -33,10 +33,9 @@
       <el-form-item label="角色名称" :label-width="100" prop="name">
         <el-input v-model="personRole.name" autocomplete="off" style="width: 260px" />
       </el-form-item>
-      {{ personRole }}
       <el-form-item label="角色权限" :label-width="100" prop="roles">
         <label class="label-role" v-for="item in roleList" :key="item.value">
-          <input type="checkbox" v-model="personRole.roles" :value="item.value" />
+          <input type="checkbox" v-model="personRole.menus" :value="item.value" />
           {{ item.label }}
         </label>
       </el-form-item>
@@ -84,14 +83,16 @@ interface RoleList {
   value: number | string
 }
 interface PersonRule {
+  id: string
   name: string
-  roles: []
+  menus: []
 }
 const roleList = ref<RoleList[]>(roleListSchame)
 // 添加角色
-const personRole = reactive<PersonRule>({
+const personRole = ref<PersonRule>({
+  id: '',
   name: '',
-  roles: []
+  menus: []
 })
 const dialogVisible = ref<Boolean>(false)
 
@@ -105,11 +106,26 @@ const handleClose = (done: () => void) => {
     })
 }
 
+const addRole = () => {
+  personRole.value.id = ''
+  personRole.value.name = ''
+  personRole.value.menus = []
+  dialogVisible.value = true
+  isedit.value = false
+}
+
 const editRole = (row: any) => {
   isedit.value = true
   dialogVisible.value = true
-  personRole.name = row.name
-  personRole.roles = row.roles
+  personRole.value.id = row.id
+  personRole.value.name = row.name
+  useRole.getMenuTreeById(row.id).then(res => {
+    if (res.data.code === 200) {
+      personRole.value.menus = res.data.data.map((item: any) => {
+        return item.id
+      })
+    }
+  })
 }
 
 const deleteRole = (id: string) => {
@@ -126,10 +142,12 @@ const deleteRole = (id: string) => {
 }
 const savePerson = () => {
   loading.value = true
-  useRole.addRole(personRole).then(res => {
+  const api = isedit.value ? useRole.updateTeam : useRole.addRole
+
+  api(personRole.value).then(res => {
     loading.value = false
     if (res.data.code === 200) {
-      ElMessage.success('添加角色成功')
+      ElMessage.success('保存成功')
       dialogVisible.value = false
       getRoleList()
     } else {
@@ -152,9 +170,11 @@ const getRoleList = () => {
 onMounted(() => {
   getRoleList()
   // 查询可用角色
-  useRole.queryAvailableRole().then(res => {
+  useRole.getMenuTree().then(res => {
     if (res.data.code === 200) {
-      console.log(res)
+      roleList.value = res.data.data.map((item: any) => {
+        return { label: item.label, value: item.id }
+      })
     }
   })
 })
