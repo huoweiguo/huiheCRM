@@ -49,8 +49,8 @@ watch(
     //监听多个源用数组传入
     if (value)
       ruleForm.num1 = value
-        .map(d => d.totalCostExcludingTax)
-        .reduce((p, c) => p + c, 0)
+        .map((d: { totalCostExcludingTax: any }) => d.totalCostExcludingTax)
+        .reduce((p: any, c: any) => p + c, 0)
         ?.toFixed(2)
   },
   { deep: true }
