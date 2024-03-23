@@ -22,13 +22,13 @@
       <el-input v-model="ruleForm.num7" />
     </el-form-item>
     <el-form-item label="运营费用">
-      <el-input v-model="ruleForm.num8" @input="iptChange('operatingExpenseRatio', $event)" />
+      <el-input v-model="ruleForm.num8" disabled @input="iptChange('operatingExpenseRatio', $event)" />
     </el-form-item>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, onMounted } from 'vue'
 const props = defineProps(['form'])
 const emit = defineEmits(['changeItem'])
 
@@ -43,10 +43,16 @@ const ruleForm = reactive({
   num8: 0
 })
 
+onMounted(() => {
+  ruleForm.num2 = props.form.taxFreePrice
+  ruleForm.num6 = props.form.promotionExpenses
+  ruleForm.num8 = props.form.operatingExpenseRatio
+})
+
+// 未税成本总价
 watch(
   () => props.form.product,
   value => {
-    //监听多个源用数组传入
     if (value)
       ruleForm.num1 = value
         .map((d: { totalCostExcludingTax: any }) => d.totalCostExcludingTax)
@@ -54,6 +60,23 @@ watch(
         ?.toFixed(2)
   },
   { deep: true }
+)
+
+// 净价
+watch(
+  () => [props.form.contractAmount, ruleForm.num6],
+  (value, oldValue) => {
+    value[0] = value[0] || 0
+    ruleForm.num3 = (value[0] - value[1]).toFixed(2)
+  }
+)
+
+// 净折扣价
+watch(
+  () => [ruleForm.num2, ruleForm.num3],
+  (value, oldValue) => {
+    ruleForm.num4 = (value[0] / value[1]).toFixed(2)
+  }
 )
 
 const iptChange = (key: String, value: string | number) => {

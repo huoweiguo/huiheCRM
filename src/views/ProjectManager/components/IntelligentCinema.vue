@@ -67,11 +67,11 @@
       <!--产品录入-->
       <Luru v-model:form="ruleForm.product"></Luru>
 
-      <!--未含税-->
-      <Shui :form="ruleForm" @changeItem="changeItem"></Shui>
-
       <!-- 其他税费 -->
       <Qita v-model:form="ruleForm.cost"></Qita>
+
+      <!--未含税-->
+      <Shui :form="ruleForm" @changeItem="changeItem"></Shui>
 
       <!--商务-->
       <Shangwu :form="ruleForm" @changeItem="changeItem"></Shangwu>
@@ -212,8 +212,9 @@ const resetForm = (ruleFormRef: FormInstance | undefined) => {
   ruleFormRef.resetFields()
 }
 
+// 监听赋值
 const changeItem = (key: String, val: any) => {
-  ruleForm[key] = val
+  ruleForm.value[key] = val
 }
 </script>
 
