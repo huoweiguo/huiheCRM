@@ -54,10 +54,12 @@ watch(
   () => props.form.product,
   value => {
     if (value)
-      ruleForm.num1 = value
-        .map((d: { totalCostExcludingTax: any }) => d.totalCostExcludingTax)
-        .reduce((p: any, c: any) => p + c, 0)
-        ?.toFixed(2)
+      ruleForm.num1 = parseFloat(
+        value
+          .map((d: { totalCostExcludingTax: any }) => d.totalCostExcludingTax)
+          .reduce((p: any, c: any) => p + c, 0)
+          ?.toFixed(2)
+      )
   },
   { deep: true }
 )
@@ -67,7 +69,7 @@ watch(
   () => [props.form.contractAmount, ruleForm.num6],
   (value, oldValue) => {
     value[0] = value[0] || 0
-    ruleForm.num3 = (value[0] - value[1]).toFixed(2)
+    ruleForm.num3 = parseFloat((value[0] - value[1]).toFixed(2))
   }
 )
 
@@ -75,7 +77,7 @@ watch(
 watch(
   () => [ruleForm.num2, ruleForm.num3],
   (value, oldValue) => {
-    ruleForm.num4 = (value[0] / value[1]).toFixed(2)
+    ruleForm.num4 = parseFloat((value[0] / value[1]).toFixed(2))
   }
 )
 

@@ -19,7 +19,7 @@
 
     <!--添加收款-->
     <el-dialog v-model="visible" title="添加收款" width="750" align-center destroy-on-close>
-      <AddTickets tickType="3" @change="change" />
+      <AddTickets :tickType="3" @change="change" />
     </el-dialog>
   </div>
 </template>

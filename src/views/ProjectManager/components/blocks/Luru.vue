@@ -175,8 +175,11 @@ const handleSelectionChange = (val: []) => {
   selectList.value = val
 }
 
+interface itemType {
+  [propName: string]: any
+}
 const onSelect = () => {
-  let arr = selectList.value.map(item => ({
+  let arr = selectList.value.map((item: itemType) => ({
     ...item,
     productId: item.id,
     productNum: 1,
@@ -198,7 +201,6 @@ const onSelect = () => {
   }))
 
   tableData.value = Object.assign([], tableData.value, arr)
-  console.log(111, tableData.value)
 
   emit('update:form', tableData.value)
   visible.value = false

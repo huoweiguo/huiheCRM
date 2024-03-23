@@ -67,7 +67,7 @@ const removeTab = (targetName: string) => {
   const tabs = editableTabs.value
   let activeName = editableTabsValue.value
   if (activeName === targetName) {
-    tabs.forEach((tab, index) => {
+    tabs.forEach((tab: { settleName: string }, index: number) => {
       if (tab.settleName === targetName) {
         const nextTab = tabs[index + 1] || tabs[index - 1]
         if (nextTab) {
@@ -80,13 +80,13 @@ const removeTab = (targetName: string) => {
     ElMessageBox.confirm('确定删除？')
       .then(() => {
         editableTabsValue.value = activeName
-        editableTabs.value = tabs.filter(tab => tab.settleName !== targetName)
+        editableTabs.value = tabs.filter((tab: { settleName: string }) => tab.settleName !== targetName)
         delProject(targetName)
       })
       .catch(() => {})
   } else {
     editableTabsValue.value = activeName
-    editableTabs.value = tabs.filter(tab => tab.settleName !== targetName)
+    editableTabs.value = tabs.filter((tab: { settleName: string }) => tab.settleName !== targetName)
   }
 }
 

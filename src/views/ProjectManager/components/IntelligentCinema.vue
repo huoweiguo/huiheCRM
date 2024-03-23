@@ -113,6 +113,13 @@ const useProgram = useProgramStore()
 const useRole = useRoleStore()
 const route = useRoute()
 
+interface FormValue {
+  [key: string]: any
+}
+interface BillValue {
+  [key: string]: any
+}
+
 const ruleForm = ref({
   projectId: route.params.id,
   category: props.category, // 1、智能+影院项目汇算 2、灯具项目汇算
@@ -136,10 +143,10 @@ const ruleForm = ref({
   cost: []
 })
 
-const bill1 = ref({})
-const bill2 = ref({})
-const bill3 = ref({})
-const bill4 = ref({})
+const bill1 = ref({} as BillValue)
+const bill2 = ref({} as BillValue)
+const bill3 = ref({} as BillValue)
+const bill4 = ref({} as BillValue)
 
 // 获取详情
 useProgram.getProjectSettleDetail(props.proTabData.id).then(d => {
@@ -171,10 +178,10 @@ const submitForm = async (ruleFormRef: FormInstance | undefined) => {
     if (valid) {
       // 合并项目汇算票据/支付信息
       ruleForm.value.bill = []
-      bill1.value.bill?.length > 0 && ruleForm.value.bill.push(bill1.value)
-      bill2.value.bill?.length > 0 && ruleForm.value.bill.push(bill2.value)
-      bill3.value.bill?.length > 0 && ruleForm.value.bill.push(bill3.value)
-      bill4.value.bill?.length > 0 && ruleForm.value.bill.push(bill4.value)
+      bill1.value.bill?.length > 0 && (ruleForm.value.bill as any[]).push(bill1.value)
+      bill2.value.bill?.length > 0 && (ruleForm.value.bill as any[]).push(bill2.value)
+      bill3.value.bill?.length > 0 && (ruleForm.value.bill as any[]).push(bill3.value)
+      bill4.value.bill?.length > 0 && (ruleForm.value.bill as any[]).push(bill4.value)
 
       console.log('submit!', ruleForm.value)
       submitData(ruleForm.value)
@@ -213,8 +220,8 @@ const resetForm = (ruleFormRef: FormInstance | undefined) => {
 }
 
 // 监听赋值
-const changeItem = (key: String, val: any) => {
-  ruleForm.value[key] = val
+const changeItem = (key: string, val: any) => {
+  ;(ruleForm.value as FormValue)[key] = val
 }
 </script>
 

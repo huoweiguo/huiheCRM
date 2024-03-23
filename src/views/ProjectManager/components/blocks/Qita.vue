@@ -103,7 +103,7 @@ const delrow = (index: number) => {
   tableData.value.splice(index, 1)
 }
 
-function isEmpty(obj: object): boolean {
+function isEmpty(obj: Record<string, string>): boolean {
   return Object.keys(obj).every(key => {
     return obj[key] === null || obj[key] === undefined || obj[key] === ''
   })

@@ -78,6 +78,7 @@ const route = useRoute()
 const useProgram = useProgramStore()
 
 const ruleFormRef = ref<FormInstance>()
+const lightFormRef = ref<FormInstance>()
 
 interface RuleCompute {
   [key: string]: unknown

@@ -86,7 +86,7 @@ const ruleForm = reactive({
 
 tableData.value = props.form
 
-function isEmpty(obj: object): boolean {
+function isEmpty(obj: Record<string, string>): boolean {
   return Object.keys(obj).every(key => {
     return obj[key] === null || obj[key] === undefined || obj[key] === ''
   })

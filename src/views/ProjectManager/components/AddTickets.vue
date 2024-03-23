@@ -1,11 +1,11 @@
 <template>
   <div class="upload-form">
     <el-form ref="ruleFormRef" :model="recommend" :rules="rules" label-width="120px" :inline="true">
-      <el-form-item :label="`${typetxt}日期`" prop="billDate">
-        <el-date-picker v-model="recommend.billDate" type="datetime" :placeholder="`请选择${typetxt}日期`" style="width: 192px" value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
+      <el-form-item :label="`${typetxt[props.tickType]}日期`" prop="billDate">
+        <el-date-picker v-model="recommend.billDate" type="datetime" :placeholder="`请选择${typetxt[props.tickType]}日期`" style="width: 192px" value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
       </el-form-item>
-      <el-form-item :label="`${typetxt}金额`" prop="billAmount">
-        <el-input v-model="recommend.billAmount" :placeholder="`请输入${typetxt}金额`" />
+      <el-form-item :label="`${typetxt[props.tickType]}金额`" prop="billAmount">
+        <el-input v-model="recommend.billAmount" :placeholder="`请输入${typetxt[props.tickType]}金额`" />
       </el-form-item>
       <el-form-item label="上传图片">
         <el-upload
@@ -78,8 +78,8 @@ const dialogVisible = ref<boolean>(false)
 const ruleFormRef = ref<FormInstance>()
 const headersObj = ref({ Authorization: `Bearer ${localStorage.getItem('token')}` })
 const emits = defineEmits(['change'])
-const props = defineProps({ tickType: String })
-const typetxt = ['开票', '收票', '收款', '付款'][props.tickType - 1]
+const props = defineProps({ tickType: { type: Number, default: 0 } })
+const typetxt = ['', '开票', '收票', '收款', '付款']
 const recommend = reactive<RuleBill>({
   billDate: '',
   billAmount: '',
@@ -98,8 +98,8 @@ const addition = async (ruleFormRef: FormInstance | undefined) => {
 }
 
 const rules = reactive<FormRules<RuleForm>>({
-  billDate: [{ required: true, message: `请选择${typetxt}日期` }],
-  billAmount: [{ required: true, message: `请输入${typetxt}金额` }]
+  billDate: [{ required: true, message: `请选择${typetxt[props.tickType]}日期` }],
+  billAmount: [{ required: true, message: `请输入${typetxt[props.tickType]}金额` }]
 })
 
 const handleRemove: UploadProps['onRemove'] = (file, uploadFiles) => {
