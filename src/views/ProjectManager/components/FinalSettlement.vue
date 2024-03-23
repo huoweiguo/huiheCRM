@@ -122,7 +122,7 @@
   </div>
 </template>
 
-<script setup type="ts">
+<script lang="ts" setup>
 import { ref, reactive } from 'vue'
 
 import { useRoute } from 'vue-router'
@@ -136,10 +136,10 @@ const projectId = route.params.id
 const ruleForm = ref({})
 
 useProgram.getSettlementReduce({ projectId, category: props.category }).then(d => {
-    if (d.data.code == 200 ) {
-      ruleForm.value = d.data.data
-    }
-  })
+  if (d.data.code == 200) {
+    ruleForm.value = d.data.data
+  }
+})
 </script>
 
 <style lang="less" scoped></style>
