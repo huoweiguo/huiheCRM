@@ -7,7 +7,7 @@
         </el-form-item>
         <el-form-item label="销售团队">
           <el-select v-model="ruleForm.saleGroup" class="m-2" placeholder="请选择销售团队" style="width: 192px">
-            <el-option v-for="item in useProgram.saleTeam" :key="item.id" :label="item.name" :value="item.id" />
+            <el-option v-for="item in teamList" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="商务">
@@ -98,6 +98,7 @@ import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { useProgramStore } from '@/store/program'
 import { useRoleStore } from '@/store/role'
+import { commonStore } from '@/store/common'
 
 import Tuijian from './blocks/Tuijian.vue'
 import Kaipiao from './blocks/Kaipiao.vue'
@@ -112,13 +113,14 @@ import Qita from './blocks/Qita.vue'
 const props = defineProps(['proTabData', 'category'])
 
 const emit = defineEmits(['save'])
-
+const teamList = ref([])
 const loading = ref(false)
 const loadingd = ref(false)
 const ruleFormRef = ref<FormInstance>()
 const useProgram = useProgramStore()
 const useRole = useRoleStore()
 const route = useRoute()
+const useCommon = commonStore()
 
 interface FormValue {
   [key: string]: any
@@ -164,6 +166,13 @@ const employee1 = ref([])
 const employee2 = ref([])
 const employee3 = ref([])
 const employee4 = ref([])
+
+// 获取团队
+useCommon.getTeamSelectList().then(res => {
+  if (res.data.code === 200) {
+    teamList.value = res.data.data
+  }
+})
 
 // 获取详情
 useProgram.getProjectSettleDetail(props.proTabData.id).then(d => {

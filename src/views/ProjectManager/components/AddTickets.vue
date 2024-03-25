@@ -9,6 +9,7 @@
       </el-form-item>
       <el-form-item label="上传图片">
         <el-upload
+          v-if="billImage.length < 1"
           v-model:file-list="billImage"
           multiple
           method="post"
@@ -19,15 +20,15 @@
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove"
           :on-success="handleSuccessImage"
+          :show-file-list="false"
         >
           <el-icon>
             <Plus />
           </el-icon>
         </el-upload>
-
-        <el-dialog v-model="dialogVisible">
-          <img w-full :src="dialogImageUrl" alt="图片预览" />
-        </el-dialog>
+        <div v-if="billImage.length > 0" style="width: 80px; height: 80px; border: 1px solid #ccc">
+          <img :src="billImage[0].url" :alt="billImage[0].name" style="max-width: 78px; max-height: 78px" />
+        </div>
       </el-form-item>
       <div>
         <el-form-item label="上传附件">

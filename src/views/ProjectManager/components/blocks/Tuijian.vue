@@ -45,7 +45,7 @@
           <el-input v-model="ruleForm.paidPromotionRatio" placeholder="请输入已付推广费比例" />
         </el-form-item>
         <el-form-item label="已付推广费日期" prop="paidDate">
-          <el-date-picker v-model="paidDate" type="datetime" placeholder="请选择已付推广费日期" style="width: 192px"></el-date-picker>
+          <el-date-picker v-model="ruleForm.paidDate" type="date" placeholder="请选择已付推广费日期" style="width: 192px" value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
         </el-form-item>
         <el-form-item label="已付推广费金额" prop="paidPaidAmount">
           <el-input v-model="ruleForm.paidPaidAmount" placeholder="请输入已付推广费金额" />

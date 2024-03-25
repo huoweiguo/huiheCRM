@@ -78,7 +78,23 @@
 
       <!--员工-->
       <el-form-item label="员工">
-        <!-- {{ ruleForm.employee }} -->
+        <el-table :data="ruleForm.employee" border style="width: 100%">
+          <el-table-column prop="type" label="职位类型">
+            <template #default="{ row }">
+              <!-- 1 商务 2 灯具销售 3 项目经理 4 灯具项目经理 5 销售副总 -->
+              <span v-if="row.type == 1">商务</span>
+              <span v-if="row.type == 2">灯具销售</span>
+              <span v-if="row.type == 3">项目经理</span>
+              <span v-if="row.type == 4">灯具项目经理</span>
+              <span v-if="row.type == 5">销售副总</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="employeeName" label="员工姓名">
+            <template #default="{ row }">
+              <span v-for="(e, i) in row.employees" :key="i"> {{ e.employeeName }} </span>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-form-item>
 
       <!-- 其他税费 -->
@@ -109,6 +125,7 @@ interface RuleFormItem {
   taxFreePrice: string
   promotionalPaymentsImage: string
   operatingExpenseRatio: string
+  employee: []
   product: []
   popularize: []
   cost: []
