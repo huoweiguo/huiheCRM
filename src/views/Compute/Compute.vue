@@ -61,7 +61,7 @@
     </el-form-item>
   </el-form>
   <div style="padding-left: 120px">
-    <el-button type="primary" @click="submitForm">保存</el-button>
+    <el-button type="primary" @click="submitForm" :loading="loading">保存</el-button>
     <el-button @click="resetForm(ruleFormRef, lightFormRef)">重置</el-button>
   </div>
 </template>
@@ -75,6 +75,7 @@ interface RuleCompute {
   [key: string]: unknown
 }
 
+const loading = ref(false)
 const ruleFormRef = ref<FormInstance>()
 const lightFormRef = ref<FormInstance>()
 const useCompute = useComputeStore()
@@ -100,7 +101,9 @@ const light = reactive<RuleCompute>({
 })
 
 onMounted(() => {
+  loading.value = true
   useCompute.getCompute().then(res => {
+    loading.value = false
     if (res.data.code === 200) {
       for (let attr in cinema) {
         cinema[attr] = res.data.data.cinema[attr]
@@ -114,7 +117,9 @@ onMounted(() => {
 
 // 保存表单
 const submitForm = () => {
+  loading.value = true
   useCompute.modifyCompute({ cinema, light }).then(res => {
+    loading.value = false
     if (res.data.code === 200) {
       ElMessage.success('保存计算公式成功')
     } else {

@@ -28,14 +28,12 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { useProgramStore } from '@/store/program'
-import { useProjectStore } from '@/store/project'
 const tableData = ref([])
 const projectlist = ref([])
 const totalNum = ref<number>(1)
 const ploading = ref<boolean>(true)
 const loading = ref<boolean>(true)
 const useProgram = useProgramStore()
-const useProject = useProjectStore()
 const seacrhForm = reactive({
   projectName: '',
   business: '',
@@ -48,7 +46,7 @@ const changeTable = (current: number) => {
   getProjectList()
 }
 const getProjectList = () => {
-  useProject.queryProjectList(seacrhForm).then(res => {
+  useProgram.getProgramList(seacrhForm).then(res => {
     if (res.data.code === 200) {
       projectlist.value = res.data.rows
       totalNum.value = res.data.total
