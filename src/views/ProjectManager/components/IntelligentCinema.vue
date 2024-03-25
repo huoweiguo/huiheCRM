@@ -74,7 +74,14 @@
       <Shui :form="ruleForm" @changeItem="changeItem"></Shui>
 
       <!--商务-->
-      <Shangwu :form="ruleForm" @changeItem="changeItem"></Shangwu>
+      <Suspense>
+        <template #default>
+          <Shangwu :form="ruleForm" @changeItem="changeItem"></Shangwu>
+        </template>
+        <template #fallback>
+          <div>计算中...</div>
+        </template>
+      </Suspense>
     </el-form>
 
     <div style="padding-left: 120px">

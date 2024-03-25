@@ -13,13 +13,13 @@
       <el-input v-model="ruleForm.num4" disabled />
     </el-form-item>
     <el-form-item label="施工成本">
-      <el-input v-model="ruleForm.num5" />
+      <el-input v-model="ruleForm.num5" @input="iptChange('shigongChengben', $event)" />
     </el-form-item>
     <el-form-item label="总推广费">
       <el-input v-model="ruleForm.num6" @input="iptChange('promotionExpenses', $event)" />
     </el-form-item>
     <el-form-item label="运营费用率">
-      <el-input v-model="ruleForm.num7" />
+      <el-input v-model="ruleForm.num7" @input="iptChange('yunyingFeiyongLv', $event)" />
     </el-form-item>
     <el-form-item label="运营费用">
       <el-input v-model="ruleForm.num8" disabled @input="iptChange('operatingExpenseRatio', $event)" />
@@ -63,6 +63,14 @@ watch(
   },
   { deep: true }
 )
+watch(
+  () => ruleForm.num7,
+  value => {
+    ruleForm.num8 = parseFloat(((props.form.contractAmount || 0) * value).toFixed(2))
+    iptChange('operatingExpenseRatio', ruleForm.num8)
+  },
+  { deep: true }
+)
 
 // 净价
 watch(
@@ -70,6 +78,7 @@ watch(
   (value, oldValue) => {
     value[0] = value[0] || 0
     ruleForm.num3 = parseFloat((value[0] - value[1]).toFixed(2))
+    iptChange('jingjia', ruleForm.num3)
   }
 )
 

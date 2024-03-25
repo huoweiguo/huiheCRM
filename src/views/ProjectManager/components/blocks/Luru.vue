@@ -110,7 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import type { FormInstance } from 'element-plus'
 import { ElMessage, ElTable } from 'element-plus'
 import { useProductStore } from '@/store/product'
@@ -123,7 +123,7 @@ const visible = ref<boolean>(false)
 
 const ruleFormRef = ref<FormInstance>()
 
-const tableData = ref([...props.form])
+const tableData = ref([])
 const selectList = ref([])
 const list = ref([])
 
@@ -135,6 +135,32 @@ const seacrForm = reactive({
   brand: '',
   pageSize: 10,
   pageNum: 1
+})
+
+onMounted(() => {
+  // 初始化数据
+  props.form &&
+    (tableData.value = props.form.map((item: any) => ({
+      ...item,
+      productId: item.id,
+
+      // 税金合计=含税成本单价/1.13*0.13*数量
+      totalTaxes: (item.unitPriceIncludingTax / 1.13) * 0.13 * (item.productNum || 1),
+
+      // 未税成本单价=含税成本单价/1.13
+      unitPriceExcludingTax2: item.unitPriceIncludingTax / 1.13,
+
+      // 未税成本总价=未税成本单价*数量
+      totalCostExcludingTax: (item.unitPriceIncludingTax / 1.13) * (item.productNum || 1),
+
+      // 含税成本总价=含税成本单价*数量
+      totalCostIncludingTax: item.unitPriceIncludingTax * (item.productNum || 1),
+
+      // 系统总价=系统单价*数量
+      systemTotalPrice: item.systemUnitPrice * (item.productNum || 1)
+    })))
+
+  emit('update:form', tableData.value)
 })
 
 const getProductList = () => {
