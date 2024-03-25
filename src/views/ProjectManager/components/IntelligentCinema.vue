@@ -10,26 +10,30 @@
             <el-option v-for="item in useProgram.saleTeam" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <!-- <el-form-item label="商务">
-        <el-select multiple class="m-2" placeholder="请选择商务" style="width: 192px">
-          <el-option v-for="item in useRole.businessList" :key="item.userId" :label="item.nickName" :value="item.userId" />
-        </el-select>
-      </el-form-item> -->
-        <!-- <el-form-item label="灯具销售">
-        <el-select multiple class="m-2" placeholder="请选择灯具销售" style="width: 192px">
-          <el-option v-for="item in useRole.lightSalesList" :key="item.userId" :label="item.nickName" :value="item.userId" />
-        </el-select>
-      </el-form-item> -->
-        <!-- <el-form-item label="项目经理">
-        <el-select multiple class="m-2" placeholder="请选择项目经理" style="width: 192px">
-          <el-option v-for="item in useRole.projectManagerList" :key="item.userId" :label="item.nickName" :value="item.userId" />
-        </el-select>
-      </el-form-item> -->
-        <!-- <el-form-item label="灯具项目经理">
-        <el-select multiple class="m-2" placeholder="请选择灯具项目经理" style="width: 192px">
-          <el-option v-for="item in useRole.lightProjectManagerList" :key="item.userId" :label="item.nickName" :value="item.userId" />
-        </el-select>
-      </el-form-item> -->
+        <el-form-item label="商务">
+          {{ employee1 }}
+          <el-select v-model="employee1" multiple class="m-2" placeholder="请选择商务" style="width: 192px">
+            <el-option v-for="item in useRole.businessList" :key="item.userId" :label="item.nickName" :value="item.userId" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="灯具销售">
+          {{ employee2 }}
+          <el-select v-model="employee2" multiple class="m-2" placeholder="请选择灯具销售" style="width: 192px">
+            <el-option v-for="item in useRole.lightSalesList" :key="item.userId" :label="item.nickName" :value="item.userId" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="项目经理">
+          {{ employee3 }}
+          <el-select v-model="employee3" multiple class="m-2" placeholder="请选择项目经理" style="width: 192px">
+            <el-option v-for="item in useRole.projectManagerList" :key="item.userId" :label="item.nickName" :value="item.userId" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="灯具项目经理">
+          {{ employee4 }}
+          <el-select v-model="employee4" multiple class="m-2" placeholder="请选择灯具项目经理" style="width: 192px">
+            <el-option v-for="item in useRole.lightProjectManagerList" :key="item.userId" :label="item.nickName" :value="item.userId" />
+          </el-select>
+        </el-form-item>
 
         <el-form-item label="产品开票比例" prop="productRate">
           <el-input v-model="ruleForm.productRate" placeholder="请输入产品开票比例"></el-input>
@@ -119,6 +123,10 @@ interface FormValue {
 interface BillValue {
   [key: string]: any
 }
+interface employeeValue {
+  type: number
+  employee: any[]
+}
 
 const ruleForm = ref({
   projectId: route.params.id,
@@ -148,11 +156,32 @@ const bill2 = ref({} as BillValue)
 const bill3 = ref({} as BillValue)
 const bill4 = ref({} as BillValue)
 
+// 员工安排 职位类型 1 商务 2 灯具销售 3 项目经理 4 灯具项目经理
+const employee1 = ref([])
+const employee2 = ref([])
+const employee3 = ref([])
+const employee4 = ref([])
+
 // 获取详情
 useProgram.getProjectSettleDetail(props.proTabData.id).then(d => {
   loadingd.value = true
   if (d.data.code == 200) {
     ruleForm.value = Object.assign({}, ruleForm.value, d.data.data)
+
+    ruleForm.value.employee.forEach((item: any) => {
+      if (item.type == 1) {
+        employee1.value = item.employee || []
+      }
+      if (item.type == 2) {
+        employee2.value = item.employee || []
+      }
+      if (item.type == 3) {
+        employee3.value = item.employee || []
+      }
+      if (item.type == 4) {
+        employee4.value = item.employee || []
+      }
+    })
 
     ruleForm.value.bill.forEach((item: any) => {
       if (item.type == 1) {
@@ -176,6 +205,14 @@ const submitForm = async (ruleFormRef: FormInstance | undefined) => {
   if (!ruleFormRef) return
   await ruleFormRef.validate((valid, fields) => {
     if (valid) {
+      // 合并员工安排
+      ruleForm.value.employee = []
+      // employeeValue
+      employee1.value.length > 0 && (ruleForm.value.employee as employeeValue[]).push({ type: 1, employee: employee1.value }) // 商务
+      employee2.value.length > 0 && (ruleForm.value.employee as employeeValue[]).push({ type: 2, employee: employee2.value }) // 灯具销售
+      employee3.value.length > 0 && (ruleForm.value.employee as employeeValue[]).push({ type: 3, employee: employee3.value }) // 项目经理
+      employee4.value.length > 0 && (ruleForm.value.employee as employeeValue[]).push({ type: 4, employee: employee4.value }) // 灯具项目经理
+
       // 合并项目汇算票据/支付信息
       ruleForm.value.bill = []
       bill1.value.bill?.length > 0 && (ruleForm.value.bill as any[]).push(bill1.value)
