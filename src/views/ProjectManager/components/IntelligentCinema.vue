@@ -11,25 +11,21 @@
           </el-select>
         </el-form-item>
         <el-form-item label="商务">
-          {{ employee1 }}
           <el-select v-model="employee1" multiple class="m-2" placeholder="请选择商务" style="width: 192px">
             <el-option v-for="item in useRole.businessList" :key="item.userId" :label="item.nickName" :value="item.userId" />
           </el-select>
         </el-form-item>
         <el-form-item label="灯具销售">
-          {{ employee2 }}
           <el-select v-model="employee2" multiple class="m-2" placeholder="请选择灯具销售" style="width: 192px">
             <el-option v-for="item in useRole.lightSalesList" :key="item.userId" :label="item.nickName" :value="item.userId" />
           </el-select>
         </el-form-item>
         <el-form-item label="项目经理">
-          {{ employee3 }}
           <el-select v-model="employee3" multiple class="m-2" placeholder="请选择项目经理" style="width: 192px">
             <el-option v-for="item in useRole.projectManagerList" :key="item.userId" :label="item.nickName" :value="item.userId" />
           </el-select>
         </el-form-item>
         <el-form-item label="灯具项目经理">
-          {{ employee4 }}
           <el-select v-model="employee4" multiple class="m-2" placeholder="请选择灯具项目经理" style="width: 192px">
             <el-option v-for="item in useRole.lightProjectManagerList" :key="item.userId" :label="item.nickName" :value="item.userId" />
           </el-select>
