@@ -123,7 +123,7 @@ const visible = ref<boolean>(false)
 
 const ruleFormRef = ref<FormInstance>()
 
-const tableData = ref([])
+const tableData = ref<Row[]>([])
 const selectList = ref([])
 const list = ref([])
 
@@ -232,14 +232,28 @@ const onSelect = () => {
   visible.value = false
 }
 
-const iptChange = (row: any, index: number) => {
+interface Row {
+  totalTaxes: number
+  unitPriceIncludingTax: number
+  unitPriceExcludingTax2: number
+  totalCostExcludingTax: number
+  totalCostIncludingTax: number
+  systemUnitPrice: number
+  systemTotalPrice: number
+  productNum: number
+}
+
+const iptChange = (row: Row, index: number) => {
   row.totalTaxes = (row.unitPriceIncludingTax / 1.13) * 0.13 * (row.productNum || 0)
   row.unitPriceExcludingTax2 = row.unitPriceIncludingTax / 1.13
   row.totalCostExcludingTax = (row.unitPriceIncludingTax / 1.13) * (row.productNum || 0)
   row.totalCostIncludingTax = row.unitPriceIncludingTax * (row.productNum || 0)
   row.systemTotalPrice = row.systemUnitPrice * (row.productNum || 0)
+
+  // 更新 tableData 中的数据
   tableData.value.splice(index, 1, row)
 
+  // 发射事件更新 form 数据
   emit('update:form', tableData.value)
 }
 

@@ -113,7 +113,7 @@ import Qita from './blocks/Qita.vue'
 const props = defineProps(['proTabData', 'category'])
 
 const emit = defineEmits(['save'])
-const teamList = ref([])
+const teamList = ref<Team[]>([])
 const loading = ref(false)
 const loadingd = ref(false)
 const ruleFormRef = ref<FormInstance>()
@@ -121,6 +121,11 @@ const useProgram = useProgramStore()
 const useRole = useRoleStore()
 const route = useRoute()
 const useCommon = commonStore()
+
+interface Team {
+  id: number
+  name: string
+}
 
 interface FormValue {
   [key: string]: any
