@@ -7,6 +7,34 @@
       <el-form-item label="销售团队">
         <span>{{ ruleForm.saleGroup?.toString() || '--' }}</span>
       </el-form-item>
+
+      <template v-for="(item, index) in ruleForm.employee" :key="index">
+        <el-form-item :label="`${types2[item['type']]}`">
+          <span v-for="(e, i) in item['employees']" :key="i"> {{ e }} </span>
+        </el-form-item>
+      </template>
+
+      <!--员工-->
+      <el-form-item label="销售团队" v-if="false">
+        <el-table :data="ruleForm.employee" border style="width: 100%">
+          <el-table-column prop="type" label="职位类型">
+            <template #default="{ row }">
+              <!-- 1 商务 2 灯具销售 3 项目经理 4 灯具项目经理 5 销售副总 -->
+              <span v-if="row.type == 1">商务</span>
+              <span v-if="row.type == 2">灯具销售</span>
+              <span v-if="row.type == 3">项目经理</span>
+              <span v-if="row.type == 4">灯具项目经理</span>
+              <span v-if="row.type == 5">销售副总</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="employeeName" label="员工姓名">
+            <template #default="{ row }">
+              <span v-for="(e, i) in row.employees" :key="i"> {{ e.employeeName }} </span>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-form-item>
+
       <el-form-item label="产品开票比例">
         <span>{{ ruleForm.productRate?.toString() || '--' }}</span>
       </el-form-item>
@@ -45,16 +73,15 @@
       </el-form-item>
 
       <!--开票-->
-      <el-form-item label="开票">
-        <!-- {{ ruleForm.bill }} -->
-        <template v-for="(item, index) in ruleForm.bill" :key="index">
+      <template v-for="(item, index) in ruleForm.bill" :key="index">
+        <el-form-item :label="`${types[item.type]}`">
           <el-table :data="item.bill" border style="width: 100%">
             <el-table-column prop="billDate" :label="`${types[item.type]}日期`" />
             <el-table-column prop="billAmount" :label="`${types[item.type]}金额`" />
             <el-table-column prop="remark" label="备注" />
           </el-table>
-        </template>
-      </el-form-item>
+        </el-form-item>
+      </template>
 
       <!--产品录入-->
       <el-form-item label="产品录入">
@@ -73,27 +100,6 @@
           <el-table-column prop="totalCostIncludingTax" label="含税成本总价" width="120"></el-table-column>
           <el-table-column prop="systemTotalPrice" label="系统总价" width="120"></el-table-column>
           <el-table-column prop="quantitySoldOut" label="已出货数量" width="120" />
-        </el-table>
-      </el-form-item>
-
-      <!--员工-->
-      <el-form-item label="员工">
-        <el-table :data="ruleForm.employee" border style="width: 100%">
-          <el-table-column prop="type" label="职位类型">
-            <template #default="{ row }">
-              <!-- 1 商务 2 灯具销售 3 项目经理 4 灯具项目经理 5 销售副总 -->
-              <span v-if="row.type == 1">商务</span>
-              <span v-if="row.type == 2">灯具销售</span>
-              <span v-if="row.type == 3">项目经理</span>
-              <span v-if="row.type == 4">灯具项目经理</span>
-              <span v-if="row.type == 5">销售副总</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="employeeName" label="员工姓名">
-            <template #default="{ row }">
-              <span v-for="(e, i) in row.employees" :key="i"> {{ e.employeeName }} </span>
-            </template>
-          </el-table-column>
         </el-table>
       </el-form-item>
 
@@ -139,6 +145,7 @@ interface RuleFormItem {
 }
 
 const types = ['', '开票', '收票', '收款', '付款']
+const types2 = ['', '商务', '灯具销售', '项目经理', '灯具项目经理', '销售副总']
 
 const useProgram = useProgramStore()
 const route = useRoute()

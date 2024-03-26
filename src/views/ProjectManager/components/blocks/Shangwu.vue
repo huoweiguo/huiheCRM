@@ -94,13 +94,13 @@ const ruleForm = reactive({
 let res = await useProgram.getFunction({ projectId: props.form.projectId, type: props.form.type })
 if (res.data.code === 200) {
   let data = res.data.data
-  ruleForm.num1 = data.businessExpenseRatio || 0
-  ruleForm.num3 = data.saleAgmExpenseRatio || 0
-  ruleForm.num5 = data.sdExpenseRatio || 0
-  ruleForm.num7 = data.pmExpenseRatio || 0
-  ruleForm.num9 = data.pdExpenseRatio || 0
-  ruleForm.num11 = data.deepenExpenseRatio || 0
-  ruleForm.num13 = data.commissionerExpenseRatio || 0
+  ruleForm.num1 = props.form.businessExpenseRatio || data.businessExpenseRatio || 0
+  ruleForm.num3 = props.form.saleAgmExpenseRatio || data.saleAgmExpenseRatio || 0
+  ruleForm.num5 = props.form.sdExpenseRatio || data.sdExpenseRatio || 0
+  ruleForm.num7 = props.form.pmExpenseRatio || data.pmExpenseRatio || 0
+  ruleForm.num9 = props.form.pdExpenseRatio || data.pdExpenseRatio || 0
+  ruleForm.num11 = props.form.deepenExpenseRatio || data.deepenExpenseRatio || 0
+  ruleForm.num13 = props.form.commissionerExpenseRatio || data.commissionerExpenseRatio || 0
 }
 
 const iptChange = (key: String, value: string | number) => {
