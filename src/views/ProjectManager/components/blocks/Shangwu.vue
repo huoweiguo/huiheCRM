@@ -139,19 +139,26 @@ watchEffect(() => {
   jingjia(props.form.jingjia)
 
   // 其他成本
-  let qita = props.form.cost.map((item: any) => item.amount).reduce((pre: any, cur: any) => pre + cur, 0)
+  let qita = 0
+  if (props.form.cost && props.form.cost.length) {
+    let qita_arr = props.form.cost.map((item: any) => item.amount)
+    qita = qita_arr.reduce((pre: string, cur: string) => parseFloat(pre) + parseFloat(cur), 0)
+  }
+
   // 成本总计=施工成本+总推广费+运营费用+其他成本+商务提成+销售总监提成+项目经理提成+项目总监提成+深化提成+安装调试员提成
   let num =
     parseFloat(props.form.shigongChengben || 0) +
     parseFloat(props.form.promotionExpenses || 0) +
     parseFloat(props.form.operatingExpenseRatio || 0) +
-    parseFloat(qita || 0) +
+    parseFloat(qita.toString()) +
     parseFloat((ruleForm.num2 || 0).toFixed(6)) +
     parseFloat((ruleForm.num6 || 0).toFixed(6)) +
     parseFloat((ruleForm.num8 || 0).toFixed(6)) +
     parseFloat((ruleForm.num10 || 0).toFixed(6)) +
     parseFloat((ruleForm.num12 || 0).toFixed(6)) +
     parseFloat((ruleForm.num14 || 0).toFixed(6))
+
+  console.log(111, num)
 
   ruleForm.num15 = parseFloat(num.toFixed(2))
 
