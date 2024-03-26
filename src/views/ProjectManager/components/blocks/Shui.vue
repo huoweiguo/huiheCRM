@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted } from 'vue'
+import { ref, reactive, watch, onMounted, watchEffect } from 'vue'
 const props = defineProps(['form'])
 const emit = defineEmits(['changeItem'])
 
@@ -43,53 +43,6 @@ const ruleForm = reactive({
   num8: 0
 })
 
-onMounted(() => {
-  ruleForm.num2 = props.form.taxFreePrice
-  ruleForm.num6 = props.form.promotionExpenses
-  ruleForm.num8 = props.form.operatingExpenseRatio
-})
-
-// 未税成本总价
-watch(
-  () => props.form.product,
-  value => {
-    if (value)
-      ruleForm.num1 = parseFloat(
-        value
-          .map((d: { totalCostExcludingTax: any }) => d.totalCostExcludingTax)
-          .reduce((p: any, c: any) => p + c, 0)
-          ?.toFixed(2)
-      )
-  },
-  { deep: true }
-)
-watch(
-  () => ruleForm.num7,
-  value => {
-    ruleForm.num8 = parseFloat((((props.form.contractAmount || 0) * value) / 100).toFixed(2))
-    iptChange('operatingExpenseRatio', ruleForm.num8)
-  },
-  { deep: true }
-)
-
-// 净价
-watch(
-  () => [props.form.contractAmount, ruleForm.num6],
-  (value, oldValue) => {
-    value[0] = value[0] || 0
-    ruleForm.num3 = parseFloat((value[0] - value[1]).toFixed(2))
-    iptChange('jingjia', ruleForm.num3)
-  }
-)
-
-// 净折扣价
-watch(
-  () => [ruleForm.num2, ruleForm.num3],
-  (value, oldValue) => {
-    ruleForm.num4 = parseFloat((value[0] / value[1]).toFixed(2))
-  }
-)
-
 const iptChange = (key: String, value: string | number) => {
   emit('changeItem', key, value)
 }
@@ -97,6 +50,27 @@ const iptChange = (key: String, value: string | number) => {
 const limitIpt = (value: string, key: 'num7') => {
   ruleForm[key] = Math.min(parseFloat(value) || 0, 100)
 }
+
+onMounted(() => {
+  ruleForm.num2 = props.form.taxFreePrice
+  ruleForm.num6 = props.form.promotionExpenses
+  ruleForm.num8 = props.form.operatingExpenseRatio
+})
+
+watchEffect(() => {
+  console.log('计算2')
+  ruleForm.num1 = parseFloat(
+    props.form.product
+      .map((d: { totalCostExcludingTax: any }) => d.totalCostExcludingTax)
+      .reduce((p: any, c: any) => p + c, 0)
+      ?.toFixed(2)
+  )
+  ruleForm.num8 = parseFloat((((props.form.contractAmount || 0) * ruleForm.num7) / 100).toFixed(2))
+  ruleForm.num3 = parseFloat((props.form.contractAmount - ruleForm.num6).toFixed(2))
+  ruleForm.num4 = parseFloat((ruleForm.num2 / ruleForm.num3).toFixed(2))
+  iptChange('jingjia', ruleForm.num3)
+  iptChange('operatingExpenseRatio', ruleForm.num8)
+})
 </script>
 
 <style lang="less" scoped></style>
