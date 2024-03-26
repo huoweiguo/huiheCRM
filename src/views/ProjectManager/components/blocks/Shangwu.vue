@@ -1,43 +1,43 @@
 <template>
   <div>
-    <el-form-item label="商务提成率">
-      <el-input v-model="ruleForm.num1" />
+    <el-form-item label="商务提成率(%)">
+      <el-input v-model="ruleForm.num1" @input="limitIpt($event, 'num1')" />
     </el-form-item>
     <el-form-item label="商务提成">
       <el-input v-model="ruleForm.num2" disabled />
     </el-form-item>
-    <el-form-item label="销售副总提成率">
-      <el-input v-model="ruleForm.num3" />
+    <el-form-item label="销售副总提成率(%)">
+      <el-input v-model="ruleForm.num3" @input="limitIpt($event, 'num3')" />
     </el-form-item>
     <el-form-item label="销售副总提成">
       <el-input v-model="ruleForm.num4" disabled />
     </el-form-item>
-    <el-form-item label="销售总监提成率">
-      <el-input v-model="ruleForm.num5" />
+    <el-form-item label="销售总监提成率(%)">
+      <el-input v-model="ruleForm.num5" @input="limitIpt($event, 'num5')" />
     </el-form-item>
     <el-form-item label="销售总监提成">
       <el-input v-model="ruleForm.num6" disabled />
     </el-form-item>
-    <el-form-item label="项目经理提成率">
-      <el-input v-model="ruleForm.num7" />
+    <el-form-item label="项目经理提成率(%)">
+      <el-input v-model="ruleForm.num7" @input="limitIpt($event, 'num7')" />
     </el-form-item>
     <el-form-item label="项目经理提成">
       <el-input v-model="ruleForm.num8" disabled />
     </el-form-item>
-    <el-form-item label="项目总监提成率">
-      <el-input v-model="ruleForm.num9" />
+    <el-form-item label="项目总监提成率(%)">
+      <el-input v-model="ruleForm.num9" @input="limitIpt($event, 'num9')" />
     </el-form-item>
     <el-form-item label="项目总监提成">
       <el-input v-model="ruleForm.num10" disabled />
     </el-form-item>
-    <el-form-item label="深化提成率">
-      <el-input v-model="ruleForm.num11" />
+    <el-form-item label="深化提成率(%)">
+      <el-input v-model="ruleForm.num11" @input="limitIpt($event, 'num11')" />
     </el-form-item>
     <el-form-item label="深化提成">
       <el-input v-model="ruleForm.num12" disabled />
     </el-form-item>
-    <el-form-item label="安装调试员提成率">
-      <el-input v-model="ruleForm.num13" />
+    <el-form-item label="安装调试员提成率(%)">
+      <el-input v-model="ruleForm.num13" @input="limitIpt($event, 'num13')" />
     </el-form-item>
     <el-form-item label="安装调试员提成">
       <el-input v-model="ruleForm.num14" disabled />
@@ -107,24 +107,28 @@ const iptChange = (key: String, value: string | number) => {
   emit('changeItem', key, value)
 }
 
+const limitIpt = (value: string, key: 'num1' | 'num3' | 'num5' | 'num7' | 'num9' | 'num11' | 'num13') => {
+  ruleForm[key] = Math.min(parseFloat(value) || 0, 100)
+}
+
 const jingjia = (value: any) => {
   // 商务提成
-  ruleForm.num2 = parseFloat((value * ruleForm.num1).toFixed(2))
+  ruleForm.num2 = parseFloat(((value * ruleForm.num1) / 100).toFixed(2))
 
   // 销售总监提成
-  ruleForm.num6 = parseFloat((value * ruleForm.num5).toFixed(2))
+  ruleForm.num6 = parseFloat(((value * ruleForm.num5) / 100).toFixed(2))
 
   // 项目经理提成
-  ruleForm.num8 = parseFloat((value * ruleForm.num7).toFixed(2))
+  ruleForm.num8 = parseFloat(((value * ruleForm.num7) / 100).toFixed(2))
 
   // 项目总监提成
-  ruleForm.num10 = parseFloat((value * ruleForm.num9).toFixed(2))
+  ruleForm.num10 = parseFloat(((value * ruleForm.num9) / 100).toFixed(2))
 
   // 深化提成
-  ruleForm.num12 = parseFloat((value * ruleForm.num11).toFixed(2))
+  ruleForm.num12 = parseFloat(((value * ruleForm.num11) / 100).toFixed(2))
 
   // 安装调试员提成
-  ruleForm.num14 = parseFloat((value * ruleForm.num13).toFixed(2))
+  ruleForm.num14 = parseFloat(((value * ruleForm.num13) / 100).toFixed(2))
 }
 
 // 计算成本总计
@@ -154,8 +158,8 @@ watchEffect(() => {
   // 项目利润=签约金额-成本总计
   ruleForm.num16 = parseFloat(((props.form.contractAmount || 0) - num).toFixed(2))
 
-  // 销售副总提成=项目利润*销售副总提成率
-  ruleForm.num4 = parseFloat((ruleForm.num16 * ruleForm.num3).toFixed(2))
+  // 销售副总提成=项目利润*销售副总提成率(%)
+  ruleForm.num4 = parseFloat(((ruleForm.num16 * ruleForm.num3) / 100).toFixed(2))
 
   // 公司利润=项目利润-销售副总提成
   ruleForm.num17 = parseFloat((ruleForm.num16 - ruleForm.num4).toFixed(2))

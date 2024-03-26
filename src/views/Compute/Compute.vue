@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleFormRef" :model="cinema" label-width="140px" :inline="true" status-icon>
+  <el-form ref="ruleFormRef" :model="cinema" label-width="150px" :inline="true" status-icon>
     <h3 class="h3_title mb20">智能+影院项目汇算公示</h3>
     <el-form-item label="商务提成率" prop="businessExpenseRatio">
       <el-input v-model="cinema.businessExpenseRatio">

@@ -1,6 +1,6 @@
 <template>
   <div class="form-box">
-    <el-form label-width="140px">
+    <el-form label-width="150px">
       <el-form-item label="签约金额" prop="contractAmount">
         <span>{{ ruleForm.contractAmount?.toString() || '--' }}</span>
       </el-form-item>
