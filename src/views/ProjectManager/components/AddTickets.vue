@@ -9,7 +9,6 @@
       </el-form-item>
       <el-form-item label="上传图片">
         <el-upload
-          v-if="billImage.length < 1"
           v-model:file-list="billImage"
           multiple
           method="post"
@@ -20,15 +19,15 @@
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove"
           :on-success="handleSuccessImage"
-          :show-file-list="false"
         >
           <el-icon>
             <Plus />
           </el-icon>
         </el-upload>
-        <div v-if="billImage.length > 0" style="width: 80px; height: 80px; border: 1px solid #ccc">
-          <img :src="billImage[0].url" :alt="billImage[0].name" style="max-width: 78px; max-height: 78px" />
-        </div>
+
+        <el-dialog v-model="dialogVisible">
+          <img w-full :src="dialogImageUrl" alt="图片预览" />
+        </el-dialog>
       </el-form-item>
       <div>
         <el-form-item label="上传附件">
@@ -37,6 +36,9 @@
           </el-upload>
         </el-form-item>
       </div>
+      <el-form-item label="备注" prop="remark">
+        <el-input v-model="recommend.remark" type="textarea" :rows="3" :placeholder="`请输入备注`" />
+      </el-form-item>
 
       <div style="margin-left: 120px">
         <el-form-item>
@@ -64,6 +66,15 @@ interface RuleBill {
   billAmount: string
   billImage: string
   billAnnex: string
+  billImageOss: {
+    url: string
+    id: string
+  }[]
+  billAnnexOss: {
+    url: string
+    id: string
+  }[]
+
   remark: string
 }
 interface RuleForm {
@@ -86,6 +97,8 @@ const recommend = reactive<RuleBill>({
   billAmount: '',
   billImage: '',
   billAnnex: '',
+  billImageOss: [],
+  billAnnexOss: [],
   remark: ''
 })
 const addition = async (ruleFormRef: FormInstance | undefined) => {
@@ -114,11 +127,16 @@ const handleRemoveImage: UploadProps['onRemove'] = (file, uploadFiles) => {
 const handleSuccess: UploadProps['onSuccess'] = (response: any, uploadFile: UploadFile, uploadFiles: UploadFiles) => {
   if (response.code === 200) {
     let arr: RuleUpload[] = []
-    uploadFiles.map((v: any) => {
-      arr = [...arr, { name: v.response.data.fileName as string, url: v.response.data.url as string, id: v.response.data.ossId }]
+    uploadFiles.forEach((v: any) => {
+      if (v.response && v.response.code == 200) {
+        arr.push({ name: v.response.data.fileName as string, url: v.response.data.url as string, id: v.response.data.ossId })
+      } else {
+        arr.push({ name: v.name, url: v.url as string, id: v.id })
+      }
     })
     billAnnex.value = arr
     recommend.billAnnex = arr.map(d => d.id).join(',')
+    recommend.billAnnexOss = arr.map(d => ({ url: d.url, id: d.id }))
   } else if (response.code === 401) {
     ElMessage.closeAll()
     ElMessage.error('登录超时，请重新登录')
@@ -133,11 +151,16 @@ const handleSuccess: UploadProps['onSuccess'] = (response: any, uploadFile: Uplo
 const handleSuccessImage: UploadProps['onSuccess'] = (response: any, uploadFile: UploadFile, uploadFiles: UploadFiles) => {
   if (response.code === 200) {
     let arr: RuleUpload[] = []
-    uploadFiles.map((v: any) => {
-      arr = [...arr, { name: v.response.data.fileName as string, url: v.response.data.url as string, id: v.response.data.ossId }]
+    uploadFiles.forEach((v: any) => {
+      if (v.response && v.response.code == 200) {
+        arr.push({ name: v.response.data.fileName as string, url: v.response.data.url as string, id: v.response.data.ossId })
+      } else {
+        arr.push({ name: v.name, url: v.url as string, id: v.id })
+      }
     })
     billImage.value = arr
     recommend.billImage = arr.map(d => d.id).join(',')
+    recommend.billImageOss = arr.map(d => ({ url: d.url, id: d.id }))
   } else if (response.code === 401) {
     ElMessage.closeAll()
     ElMessage.error('登录超时，请重新登录')

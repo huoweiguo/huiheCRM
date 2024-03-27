@@ -9,8 +9,13 @@ export const commonStore = defineStore('common', () => {
     return http.get('/department/available')
   }
 
+  const getOssImgs = (ossIds: string) => {
+    return http.get(`/oss/listByIds/${ossIds}`)
+  }
+
   return {
     getRuleSelectList,
-    getTeamSelectList
+    getTeamSelectList,
+    getOssImgs
   }
 })

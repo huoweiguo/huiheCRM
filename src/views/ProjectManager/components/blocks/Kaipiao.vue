@@ -8,6 +8,12 @@
         <el-table :data="tableData" border style="width: 100%">
           <el-table-column prop="billDate" label="开票日期" />
           <el-table-column prop="billAmount" label="开票金额" />
+          <el-table-column label="图片">
+            <template #default="scope">
+              <el-image v-for="(item, index) in scope.row.billImageOss" :key="index" style="width: 30px; height: 30px" :src="item.url" fit="contain" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="remark" label="备注" />
           <el-table-column label="操作">
             <template #default="scope">
               <el-button type="primary" link size="small" @click="delrow(scope.$index)">删除</el-button>

@@ -12,22 +12,22 @@
         </el-form-item>
         <el-form-item label="商务">
           <el-select v-model="employee1" multiple class="m-2" placeholder="请选择商务" style="width: 192px">
-            <el-option v-for="item in useRole.businessList" :key="item.userId" :label="item.nickName" :value="item.userId" />
+            <el-option v-for="item in useRole.businessList" :key="item.userId" :label="item.nickName" :value="`${item.userId}||${item.nickName}`" />
           </el-select>
         </el-form-item>
         <el-form-item label="灯具销售">
           <el-select v-model="employee2" multiple class="m-2" placeholder="请选择灯具销售" style="width: 192px">
-            <el-option v-for="item in useRole.lightSalesList" :key="item.userId" :label="item.nickName" :value="item.userId" />
+            <el-option v-for="item in useRole.lightSalesList" :key="item.userId" :label="item.nickName" :value="`${item.userId}||${item.nickName}`" />
           </el-select>
         </el-form-item>
         <el-form-item label="项目经理">
           <el-select v-model="employee3" multiple class="m-2" placeholder="请选择项目经理" style="width: 192px">
-            <el-option v-for="item in useRole.projectManagerList" :key="item.userId" :label="item.nickName" :value="item.userId" />
+            <el-option v-for="item in useRole.projectManagerList" :key="item.userId" :label="item.nickName" :value="`${item.userId}||${item.nickName}`" />
           </el-select>
         </el-form-item>
         <el-form-item label="灯具项目经理">
           <el-select v-model="employee4" multiple class="m-2" placeholder="请选择灯具项目经理" style="width: 192px">
-            <el-option v-for="item in useRole.lightProjectManagerList" :key="item.userId" :label="item.nickName" :value="item.userId" />
+            <el-option v-for="item in useRole.lightProjectManagerList" :key="item.userId" :label="item.nickName" :value="`${item.userId}||${item.nickName}`" />
           </el-select>
         </el-form-item>
 
@@ -62,6 +62,11 @@
 
       <el-form-item label="备注">
         <el-input v-model="ruleForm.remark" type="textarea" maxlength="300" placeholder="请输入" show-word-limit style="width: 400px" />
+      </el-form-item>
+
+      <!-- 推广支付图片 -->
+      <el-form-item label="推广支付图片">
+        <TuiGuangImg v-model:form="ruleForm.promotionalPaymentsImage"></TuiGuangImg>
       </el-form-item>
 
       <!--产品录入-->
@@ -109,6 +114,7 @@ import Luru from './blocks/Luru.vue'
 import Shui from './blocks/Shui.vue'
 import Shangwu from './blocks/Shangwu.vue'
 import Qita from './blocks/Qita.vue'
+import TuiGuangImg from './blocks/TuiGuangImg.vue'
 
 const props = defineProps(['proTabData', 'category'])
 
@@ -135,7 +141,11 @@ interface BillValue {
 }
 interface employeeValue {
   type: number
-  employee: any[]
+  employees: any[]
+}
+
+interface FunctionValue {
+  [key: string]: any
 }
 
 const ruleForm = ref({
@@ -158,7 +168,10 @@ const ruleForm = ref({
   bill: [],
   product: [],
   employee: [],
-  cost: []
+  cost: [],
+
+  // 计算公式ID
+  functions: {} as FunctionValue
 })
 
 const bill1 = ref({} as BillValue)
@@ -167,10 +180,10 @@ const bill3 = ref({} as BillValue)
 const bill4 = ref({} as BillValue)
 
 // 员工安排 职位类型 1 商务 2 灯具销售 3 项目经理 4 灯具项目经理
-const employee1 = ref([])
-const employee2 = ref([])
-const employee3 = ref([])
-const employee4 = ref([])
+const employee1 = ref([] as Array<string>)
+const employee2 = ref([] as Array<string>)
+const employee3 = ref([] as Array<string>)
+const employee4 = ref([] as Array<string>)
 
 // 获取团队
 useCommon.getTeamSelectList().then(res => {
@@ -178,6 +191,15 @@ useCommon.getTeamSelectList().then(res => {
     teamList.value = res.data.data
   }
 })
+
+const encodeVal = (val: Array<any>) => {
+  return val.map((item: any) => `${item['employeeId']}||${item['employeeName']}`)
+}
+const decodeVal = (val: Array<any>) => {
+  return val.map((item: any) => {
+    return { employeeId: item.split('||')[0], employeeName: item.split('||')[1] }
+  })
+}
 
 // 获取详情
 useProgram.getProjectSettleDetail(props.proTabData.id).then(d => {
@@ -187,16 +209,16 @@ useProgram.getProjectSettleDetail(props.proTabData.id).then(d => {
 
     ruleForm.value.employee.forEach((item: any) => {
       if (item.type == 1) {
-        employee1.value = item.employee || []
+        employee1.value = encodeVal(item.employees || [])
       }
       if (item.type == 2) {
-        employee2.value = item.employee || []
+        employee2.value = encodeVal(item.employees || [])
       }
       if (item.type == 3) {
-        employee3.value = item.employee || []
+        employee3.value = encodeVal(item.employees || [])
       }
       if (item.type == 4) {
-        employee4.value = item.employee || []
+        employee4.value = encodeVal(item.employees || [])
       }
     })
 
@@ -225,10 +247,10 @@ const submitForm = async (ruleFormRef: FormInstance | undefined) => {
       // 合并员工安排
       ruleForm.value.employee = []
       // employeeValue
-      employee1.value.length > 0 && (ruleForm.value.employee as employeeValue[]).push({ type: 1, employee: employee1.value }) // 商务
-      employee2.value.length > 0 && (ruleForm.value.employee as employeeValue[]).push({ type: 2, employee: employee2.value }) // 灯具销售
-      employee3.value.length > 0 && (ruleForm.value.employee as employeeValue[]).push({ type: 3, employee: employee3.value }) // 项目经理
-      employee4.value.length > 0 && (ruleForm.value.employee as employeeValue[]).push({ type: 4, employee: employee4.value }) // 灯具项目经理
+      employee1.value.length > 0 && (ruleForm.value.employee as employeeValue[]).push({ type: 1, employees: decodeVal(employee1.value) }) // 商务
+      employee2.value.length > 0 && (ruleForm.value.employee as employeeValue[]).push({ type: 2, employees: decodeVal(employee2.value) }) // 灯具销售
+      employee3.value.length > 0 && (ruleForm.value.employee as employeeValue[]).push({ type: 3, employees: decodeVal(employee3.value) }) // 项目经理
+      employee4.value.length > 0 && (ruleForm.value.employee as employeeValue[]).push({ type: 4, employees: decodeVal(employee4.value) }) // 灯具项目经理
 
       // 合并项目汇算票据/支付信息
       ruleForm.value.bill = []
@@ -241,6 +263,24 @@ const submitForm = async (ruleFormRef: FormInstance | undefined) => {
       submitData(ruleForm.value)
     }
   })
+}
+
+// 保存计算公式
+const saveFunction = async () => {
+  let data = {
+    id: ruleForm.value.functions.id,
+    type: props.category, // 1、智能+影院项目汇算 2、灯具项目汇算
+    projectId: props.proTabData.id,
+    businessExpenseRatio: ruleForm.value.functions.num1,
+    saleAgmExpenseRatio: ruleForm.value.functions.num3,
+    sdExpenseRatio: ruleForm.value.functions.num5,
+    pmExpenseRatio: ruleForm.value.functions.num7,
+    pdExpenseRatio: ruleForm.value.functions.num9,
+    deepenExpenseRatio: ruleForm.value.functions.num11,
+    commissionerExpenseRatio: ruleForm.value.functions.num13
+  }
+
+  await useProgram.editFunction(data)
 }
 
 // 提交数据
@@ -259,6 +299,7 @@ const submitData = async (data: any) => {
   }
 
   if (res.data.code === 200) {
+    await saveFunction()
     ElMessage.success('保存成功')
     emit('save')
   } else {

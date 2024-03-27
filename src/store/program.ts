@@ -56,6 +56,11 @@ export const useProgramStore = defineStore(
       return http.put('/projectSettlement/editFunction', data)
     }
 
+    // 修改项目计算公式
+    const editSingleFunction = (data: RuleSearch) => {
+      return http.put('/projectSettlement/editSingleFunction', data)
+    }
+
     // 最终汇算
     const getSettlementReduce = (data: RuleSearch) => {
       return http.get('/projectSettlement/settlementReduce', data)
@@ -77,7 +82,8 @@ export const useProgramStore = defineStore(
       deleteProjectSettle,
       getFunctions,
       getFunction,
-      editFunction
+      editFunction,
+      editSingleFunction
     }
   },
   { persist: true }

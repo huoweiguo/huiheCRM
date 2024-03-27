@@ -22,7 +22,7 @@
       <el-input v-model="ruleForm.num7" @input="limitIpt($event, 'num7')" />
     </el-form-item>
     <el-form-item label="运营费用">
-      <el-input v-model="ruleForm.num8" disabled @input="iptChange('operatingExpenseRatio', $event)" />
+      <el-input v-model="ruleForm.num8" disabled />
     </el-form-item>
   </div>
 </template>
@@ -49,12 +49,13 @@ const iptChange = (key: String, value: string | number) => {
 
 const limitIpt = (value: string, key: 'num7') => {
   ruleForm[key] = Math.min(parseFloat(value) || 0, 100)
+  iptChange('operatingExpenseRatio', ruleForm.num7)
 }
 
 onMounted(() => {
   ruleForm.num2 = props.form.taxFreePrice
   ruleForm.num6 = props.form.promotionExpenses
-  ruleForm.num8 = props.form.operatingExpenseRatio
+  ruleForm.num7 = props.form.operatingExpenseRatio
 })
 
 watchEffect(() => {
@@ -69,7 +70,6 @@ watchEffect(() => {
   ruleForm.num3 = parseFloat((props.form.contractAmount - ruleForm.num6).toFixed(2))
   ruleForm.num4 = parseFloat((ruleForm.num3 / ruleForm.num2).toFixed(2))
   iptChange('jingjia', ruleForm.num3)
-  iptChange('operatingExpenseRatio', ruleForm.num8)
 })
 </script>
 

@@ -5,17 +5,17 @@
         <span>{{ ruleForm.contractAmount?.toString() || '--' }}</span>
       </el-form-item>
       <el-form-item label="销售团队">
-        <span>{{ ruleForm.saleGroupName || '--' }}</span>
+        <el-tag type="primary">{{ ruleForm.saleGroupName || '--' }}</el-tag>
       </el-form-item>
 
       <template v-for="(item, index) in ruleForm.employee" :key="index">
         <el-form-item :label="`${types2[item['type']]}`">
-          <span v-for="(e, i) in item['employees']" :key="i"> {{ e }} </span>
+          <el-tag v-for="(e, i) in item['employees']" :key="i" type="primary" style="margin-right: 10px">{{ e['employeeName'] }}</el-tag>
         </el-form-item>
       </template>
 
       <!--员工-->
-      <el-form-item label="销售团队" v-if="false">
+      <el-form-item label="员工" v-if="false">
         <el-table :data="ruleForm.employee" border style="width: 100%">
           <el-table-column prop="type" label="职位类型">
             <template #default="{ row }">
@@ -29,7 +29,7 @@
           </el-table-column>
           <el-table-column prop="employeeName" label="员工姓名">
             <template #default="{ row }">
-              <span v-for="(e, i) in row.employees" :key="i"> {{ e.employeeName }} </span>
+              <span v-for="(e, i) in row.employees" :key="i"> {{ e.employeeName }}, </span>
             </template>
           </el-table-column>
         </el-table>
@@ -51,9 +51,20 @@
         <span>{{ ruleForm.taxFreePrice?.toString() || '--' }}</span>
       </el-form-item>
       <el-form-item label="推广支付图片">
-        <span>{{ ruleForm.promotionalPaymentsImage?.toString() || '--' }}</span>
+        <el-image
+          v-for="(item, index) in imgList"
+          :key="index"
+          style="width: 100px; height: 100px"
+          :src="item"
+          :zoom-rate="1.2"
+          :max-scale="7"
+          :min-scale="0.2"
+          :preview-src-list="imgList"
+          :initial-index="index"
+          fit="cover"
+        />
       </el-form-item>
-      <el-form-item label="运营费用">
+      <el-form-item label="运营费用率">
         <span>{{ ruleForm.operatingExpenseRatio?.toString() || '--' }}</span>
       </el-form-item>
 
@@ -78,6 +89,11 @@
           <el-table :data="item.bill" border style="width: 100%">
             <el-table-column prop="billDate" :label="`${types[item.type]}日期`" />
             <el-table-column prop="billAmount" :label="`${types[item.type]}金额`" />
+            <el-table-column label="图片">
+              <template #default="scope">
+                <el-image v-for="(item, index) in scope.row.billImageOss" :key="index" style="width: 30px; height: 30px" :src="item.url" fit="contain" />
+              </template>
+            </el-table-column>
             <el-table-column prop="remark" label="备注" />
           </el-table>
         </el-form-item>
@@ -120,6 +136,7 @@ import { ref, reactive } from 'vue'
 
 import { useRoute } from 'vue-router'
 import { useProgramStore } from '@/store/program'
+import { commonStore } from '@/store/common'
 
 interface RuleFormItem {
   contractAmount: string
@@ -132,7 +149,16 @@ interface RuleFormItem {
   promotionalPaymentsImage: string
   operatingExpenseRatio: string
   saleGroupName: string
-  employee: []
+  employee: [
+    {
+      type: number
+      employees: [
+        {
+          employeeName: string
+        }
+      ]
+    }
+  ]
   product: []
   popularize: []
   cost: []
@@ -144,6 +170,10 @@ interface RuleFormItem {
     type: number
   }[]
 }
+
+const useCommon = commonStore()
+
+const imgList = ref([])
 
 const types = ['', '开票', '收票', '收款', '付款']
 const types2 = ['', '商务', '灯具销售', '项目经理', '灯具项目经理', '销售副总']
@@ -158,8 +188,17 @@ const ruleForm = ref({} as RuleFormItem)
 useProgram.getSettlementReduce({ projectId, category: props.category }).then(d => {
   if (d.data.code == 200) {
     ruleForm.value = d.data.data
+
+    // 获取图片
+    if (ruleForm.value.promotionalPaymentsImage) {
+      useCommon.getOssImgs(ruleForm.value.promotionalPaymentsImage).then(res => {
+        if (res.data.code === 200) {
+          if (res.data.data && res.data.data.length > 0) {
+            imgList.value = res.data.data.map((d: any) => d.url)
+          }
+        }
+      })
+    }
   }
 })
 </script>
-
-<style lang="less" scoped></style>

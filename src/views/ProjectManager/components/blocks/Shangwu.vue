@@ -69,6 +69,7 @@ const props = defineProps(['form'])
 const emit = defineEmits(['changeItem'])
 
 const ruleForm = reactive({
+  id: '',
   num1: 0,
   num2: 0,
   num3: 0,
@@ -91,9 +92,10 @@ const ruleForm = reactive({
 })
 
 // 获取计算数据
-let res = await useProgram.getFunction({ projectId: props.form.projectId, type: props.form.type })
+let res = await useProgram.getFunction({ projectId: props.form.projectId, type: props.form.category })
 if (res.data.code === 200) {
   let data = res.data.data
+  ruleForm.id = data.id || ''
   ruleForm.num1 = props.form.businessExpenseRatio || data.businessExpenseRatio || 0
   ruleForm.num3 = props.form.saleAgmExpenseRatio || data.saleAgmExpenseRatio || 0
   ruleForm.num5 = props.form.sdExpenseRatio || data.sdExpenseRatio || 0
@@ -101,10 +103,6 @@ if (res.data.code === 200) {
   ruleForm.num9 = props.form.pdExpenseRatio || data.pdExpenseRatio || 0
   ruleForm.num11 = props.form.deepenExpenseRatio || data.deepenExpenseRatio || 0
   ruleForm.num13 = props.form.commissionerExpenseRatio || data.commissionerExpenseRatio || 0
-}
-
-const iptChange = (key: String, value: string | number) => {
-  emit('changeItem', key, value)
 }
 
 const limitIpt = (value: string, key: 'num1' | 'num3' | 'num5' | 'num7' | 'num9' | 'num11' | 'num13') => {
@@ -158,8 +156,6 @@ watchEffect(() => {
     parseFloat((ruleForm.num12 || 0).toFixed(6)) +
     parseFloat((ruleForm.num14 || 0).toFixed(6))
 
-  console.log(111, num)
-
   ruleForm.num15 = parseFloat(num.toFixed(2))
 
   // 项目利润=签约金额-成本总计
@@ -176,6 +172,9 @@ watchEffect(() => {
 
   // 毛利率=项目利润/签约金额
   ruleForm.num19 = parseFloat((ruleForm.num16 / (props.form.contractAmount || 0)).toFixed(2))
+
+  // 计算公式ID回传
+  emit('changeItem', 'functions', ruleForm)
 })
 </script>
 
