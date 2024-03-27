@@ -67,7 +67,7 @@ watchEffect(() => {
   )
   ruleForm.num8 = parseFloat((((props.form.contractAmount || 0) * ruleForm.num7) / 100).toFixed(2))
   ruleForm.num3 = parseFloat((props.form.contractAmount - ruleForm.num6).toFixed(2))
-  ruleForm.num4 = parseFloat((ruleForm.num2 / ruleForm.num3).toFixed(2))
+  ruleForm.num4 = parseFloat((ruleForm.num3 / ruleForm.num2).toFixed(2))
   iptChange('jingjia', ruleForm.num3)
   iptChange('operatingExpenseRatio', ruleForm.num8)
 })

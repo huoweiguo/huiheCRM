@@ -14,7 +14,7 @@
           multiple
           method="post"
           list-type="picture-card"
-          :limit="1"
+          :limit="9"
           :headers="headersObj"
           :action="uploadUrl"
           :on-preview="handlePictureCardPreview"
