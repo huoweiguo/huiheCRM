@@ -5,7 +5,7 @@
         <span>{{ ruleForm.contractAmount?.toString() || '--' }}</span>
       </el-form-item>
       <el-form-item label="销售团队">
-        <span>{{ ruleForm.saleGroup?.toString() || '--' }}</span>
+        <span>{{ ruleForm.saleGroupName || '--' }}</span>
       </el-form-item>
 
       <template v-for="(item, index) in ruleForm.employee" :key="index">
@@ -53,7 +53,7 @@
       <el-form-item label="推广支付图片">
         <span>{{ ruleForm.promotionalPaymentsImage?.toString() || '--' }}</span>
       </el-form-item>
-      <el-form-item label="运营费用率">
+      <el-form-item label="运营费用">
         <span>{{ ruleForm.operatingExpenseRatio?.toString() || '--' }}</span>
       </el-form-item>
 
@@ -131,6 +131,7 @@ interface RuleFormItem {
   taxFreePrice: string
   promotionalPaymentsImage: string
   operatingExpenseRatio: string
+  saleGroupName: string
   employee: []
   product: []
   popularize: []

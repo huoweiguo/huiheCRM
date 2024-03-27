@@ -15,7 +15,11 @@
       <el-table-column prop="projectName" label="项目名称" align="center" />
       <el-table-column prop="projectAddress" label="项目地址" align="center" />
       <el-table-column prop="contractAmount" label="签约金额" align="center" />
-      <el-table-column prop="projectProgress" label="项目进度" align="center" />
+      <el-table-column prop="projectProgress" label="项目进度" align="center">
+        <template #default="scope">
+          <span>{{ types[scope.row.projectProgress] }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="business" label="商务" align="center" />
       <el-table-column prop="pm" label="项目经理" align="center" />
     </el-table>
@@ -34,6 +38,7 @@ const totalNum = ref<number>(1)
 const ploading = ref<boolean>(true)
 const loading = ref<boolean>(true)
 const useProgram = useProgramStore()
+const types = ['', '项目移交', '图纸深化', '隐形验收', '木工阶段', '涂画阶段', '主材备货', '安装结束', '预调试', '调试结束', '收尾阶段', '内部验收', '完工验收']
 const seacrhForm = reactive({
   projectName: '',
   business: '',
