@@ -48,6 +48,7 @@ const iptChange = (key: String, value: string | number) => {
 }
 
 const limitIpt = (value: string, key: 'num7') => {
+  if (value.slice(-1) === '.') return
   ruleForm[key] = Math.min(parseFloat(value) || 0, 100)
   iptChange('operatingExpenseRatio', ruleForm.num7)
 }

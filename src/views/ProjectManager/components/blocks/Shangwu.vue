@@ -106,6 +106,7 @@ if (res.data.code === 200) {
 }
 
 const limitIpt = (value: string, key: 'num1' | 'num3' | 'num5' | 'num7' | 'num9' | 'num11' | 'num13') => {
+  if (value.slice(-1) === '.') return
   ruleForm[key] = Math.min(parseFloat(value) || 0, 100)
 }
 
