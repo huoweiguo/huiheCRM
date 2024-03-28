@@ -87,7 +87,7 @@ const handlePictureCardPreview: UploadProps['onPreview'] = uploadFile => {
 }
 
 const handleRemove: UploadProps['onRemove'] = (file, uploadFiles) => {
-  console.log(file, uploadFiles)
+  emit('update:form', uploadFiles.map((d: any) => d.id).join(','))
 }
 </script>
 

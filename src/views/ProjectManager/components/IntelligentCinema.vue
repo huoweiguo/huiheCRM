@@ -270,7 +270,7 @@ const saveFunction = async () => {
   let data = {
     id: ruleForm.value.functions.id,
     type: props.category, // 1、智能+影院项目汇算 2、灯具项目汇算
-    projectId: props.proTabData.id,
+    projectId: route.params.id,
     businessExpenseRatio: ruleForm.value.functions.num1,
     saleAgmExpenseRatio: ruleForm.value.functions.num3,
     sdExpenseRatio: ruleForm.value.functions.num5,
@@ -280,7 +280,7 @@ const saveFunction = async () => {
     commissionerExpenseRatio: ruleForm.value.functions.num13
   }
 
-  await useProgram.editFunction(data)
+  await useProgram.editSingleFunction(data)
 }
 
 // 提交数据

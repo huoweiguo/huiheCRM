@@ -1,43 +1,43 @@
 <template>
   <div>
     <el-form-item label="商务提成率(%)">
-      <el-input v-model="ruleForm.num1" @input="limitIpt($event, 'num1')" />
+      <el-input v-model="ruleForm.num1" :disabled="disabled" @input="limitIpt($event, 'num1')" />
     </el-form-item>
     <el-form-item label="商务提成">
       <el-input v-model="ruleForm.num2" disabled />
     </el-form-item>
     <el-form-item label="销售副总提成率(%)">
-      <el-input v-model="ruleForm.num3" @input="limitIpt($event, 'num3')" />
+      <el-input v-model="ruleForm.num3" :disabled="disabled" @input="limitIpt($event, 'num3')" />
     </el-form-item>
     <el-form-item label="销售副总提成">
       <el-input v-model="ruleForm.num4" disabled />
     </el-form-item>
     <el-form-item label="销售总监提成率(%)">
-      <el-input v-model="ruleForm.num5" @input="limitIpt($event, 'num5')" />
+      <el-input v-model="ruleForm.num5" :disabled="disabled" @input="limitIpt($event, 'num5')" />
     </el-form-item>
     <el-form-item label="销售总监提成">
       <el-input v-model="ruleForm.num6" disabled />
     </el-form-item>
     <el-form-item label="项目经理提成率(%)">
-      <el-input v-model="ruleForm.num7" @input="limitIpt($event, 'num7')" />
+      <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
     </el-form-item>
     <el-form-item label="项目经理提成">
       <el-input v-model="ruleForm.num8" disabled />
     </el-form-item>
     <el-form-item label="项目总监提成率(%)">
-      <el-input v-model="ruleForm.num9" @input="limitIpt($event, 'num9')" />
+      <el-input v-model="ruleForm.num9" :disabled="disabled" @input="limitIpt($event, 'num9')" />
     </el-form-item>
     <el-form-item label="项目总监提成">
       <el-input v-model="ruleForm.num10" disabled />
     </el-form-item>
     <el-form-item label="深化提成率(%)">
-      <el-input v-model="ruleForm.num11" @input="limitIpt($event, 'num11')" />
+      <el-input v-model="ruleForm.num11" :disabled="disabled" @input="limitIpt($event, 'num11')" />
     </el-form-item>
     <el-form-item label="深化提成">
       <el-input v-model="ruleForm.num12" disabled />
     </el-form-item>
     <el-form-item label="安装调试员提成率(%)">
-      <el-input v-model="ruleForm.num13" @input="limitIpt($event, 'num13')" />
+      <el-input v-model="ruleForm.num13" :disabled="disabled" @input="limitIpt($event, 'num13')" />
     </el-form-item>
     <el-form-item label="安装调试员提成">
       <el-input v-model="ruleForm.num14" disabled />
@@ -63,10 +63,13 @@
 <script setup lang="ts">
 import { ref, reactive, watch, watchEffect } from 'vue'
 import { useProgramStore } from '@/store/program'
-const useProgram = useProgramStore()
+import { useRoute } from 'vue-router'
 
-const props = defineProps(['form'])
+const useProgram = useProgramStore()
+const route = useRoute()
+const props = defineProps(['form', 'disabled'])
 const emit = defineEmits(['changeItem'])
+const projectId = route.params.id
 
 const ruleForm = reactive({
   id: '',
@@ -92,7 +95,7 @@ const ruleForm = reactive({
 })
 
 // 获取计算数据
-let res = await useProgram.getFunction({ projectId: props.form.projectId, type: props.form.category })
+let res = await useProgram.getFunction({ projectId, type: props.form.category })
 if (res.data.code === 200) {
   let data = res.data.data
   ruleForm.id = data.id || ''
@@ -107,7 +110,8 @@ if (res.data.code === 200) {
 
 const limitIpt = (value: string, key: 'num1' | 'num3' | 'num5' | 'num7' | 'num9' | 'num11' | 'num13') => {
   if (value.slice(-1) === '.') return
-  ruleForm[key] = Math.min(parseFloat(value) || 0, 100)
+  let value_ = Math.min(parseFloat(value) || 0, 100)
+  ruleForm[key] = parseFloat(value_.toFixed(2))
 }
 
 const jingjia = (value: any) => {

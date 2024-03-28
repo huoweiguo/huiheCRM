@@ -4,7 +4,7 @@
       <el-input v-model="ruleForm.num1" disabled />
     </el-form-item>
     <el-form-item label="去税面价">
-      <el-input v-model="ruleForm.num2" @input="iptChange('taxFreePrice', $event)" />
+      <el-input v-model="ruleForm.num2" :disabled="disabled" @input="iptChange('taxFreePrice', $event)" />
     </el-form-item>
     <el-form-item label="净价">
       <el-input v-model="ruleForm.num3" disabled />
@@ -13,13 +13,13 @@
       <el-input v-model="ruleForm.num4" disabled />
     </el-form-item>
     <el-form-item label="施工成本">
-      <el-input v-model="ruleForm.num5" @input="iptChange('shigongChengben', $event)" />
+      <el-input v-model="ruleForm.num5" :disabled="disabled" @input="iptChange('shigongChengben', $event)" />
     </el-form-item>
     <el-form-item label="总推广费">
-      <el-input v-model="ruleForm.num6" @input="iptChange('promotionExpenses', $event)" />
+      <el-input v-model="ruleForm.num6" :disabled="disabled" @input="iptChange('promotionExpenses', $event)" />
     </el-form-item>
     <el-form-item label="运营费用率(%)">
-      <el-input v-model="ruleForm.num7" @input="limitIpt($event, 'num7')" />
+      <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
     </el-form-item>
     <el-form-item label="运营费用">
       <el-input v-model="ruleForm.num8" disabled />
@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, watch, onMounted, watchEffect } from 'vue'
-const props = defineProps(['form'])
+const props = defineProps(['form', 'disabled'])
 const emit = defineEmits(['changeItem'])
 
 const ruleForm = reactive({
@@ -54,9 +54,9 @@ const limitIpt = (value: string, key: 'num7') => {
 }
 
 onMounted(() => {
-  ruleForm.num2 = props.form.taxFreePrice
-  ruleForm.num6 = props.form.promotionExpenses
-  ruleForm.num7 = props.form.operatingExpenseRatio
+  ruleForm.num2 = props.form.taxFreePrice || 0
+  ruleForm.num6 = props.form.promotionExpenses || 0
+  ruleForm.num7 = props.form.operatingExpenseRatio || 0
 })
 
 watchEffect(() => {
@@ -71,6 +71,7 @@ watchEffect(() => {
   ruleForm.num3 = parseFloat((props.form.contractAmount - ruleForm.num6).toFixed(2))
   ruleForm.num4 = parseFloat((ruleForm.num3 / ruleForm.num2).toFixed(2))
   iptChange('jingjia', ruleForm.num3)
+  iptChange('yunyingfeiyong', ruleForm.num8)
 })
 </script>
 

@@ -1,16 +1,17 @@
 <template>
-  <div class="form-box">
-    <el-form label-width="150px">
+  <div class="form-box" v-loading="loading">
+    <div v-if="loading">loading...</div>
+    <el-form label-width="150px" v-if="!loading">
       <el-form-item label="签约金额" prop="contractAmount">
         <span>{{ ruleForm.contractAmount?.toString() || '--' }}</span>
       </el-form-item>
       <el-form-item label="销售团队">
-        <el-tag type="primary">{{ ruleForm.saleGroupName || '--' }}</el-tag>
+        <el-tag>{{ ruleForm.saleGroupName || '--' }}</el-tag>
       </el-form-item>
 
       <template v-for="(item, index) in ruleForm.employee" :key="index">
         <el-form-item :label="`${types2[item['type']]}`">
-          <el-tag v-for="(e, i) in item['employees']" :key="i" type="primary" style="margin-right: 10px">{{ e['employeeName'] }}</el-tag>
+          <el-tag v-for="(e, i) in item['employees']" :key="i" style="margin-right: 10px">{{ e['employeeName'] }}</el-tag>
         </el-form-item>
       </template>
 
@@ -100,24 +101,7 @@
       </template>
 
       <!--产品录入-->
-      <el-form-item label="产品录入">
-        <!-- {{ ruleForm.product }} -->
-        <el-table :data="ruleForm.product" border style="width: 100%">
-          <el-table-column prop="productId" label="id" />
-          <el-table-column prop="name" label="名称" />
-          <el-table-column prop="model" label="型号" />
-          <el-table-column prop="brand" label="品牌" />
-          <el-table-column prop="productNum" label="数量"></el-table-column>
-          <el-table-column prop="systemUnitPrice" label="系统单价" width="120" />
-          <el-table-column prop="unitPriceIncludingTax" label="含税成本单价" width="120" />
-          <el-table-column prop="totalTaxes" label="税金合计" width="120"></el-table-column>
-          <el-table-column prop="unitPriceExcludingTax2" label="未税成本单价" width="120"></el-table-column>
-          <el-table-column prop="totalCostExcludingTax" label="未税成本总价" width="120"></el-table-column>
-          <el-table-column prop="totalCostIncludingTax" label="含税成本总价" width="120"></el-table-column>
-          <el-table-column prop="systemTotalPrice" label="系统总价" width="120"></el-table-column>
-          <el-table-column prop="quantitySoldOut" label="已出货数量" width="120" />
-        </el-table>
-      </el-form-item>
+      <Luru v-model:form="ruleForm.product" :disabled="true"></Luru>
 
       <!-- 其他税费 -->
       <el-form-item label="其他税费 ">
@@ -127,6 +111,21 @@
           <el-table-column prop="remark" label="其他成本备注" />
         </el-table>
       </el-form-item>
+
+      <div style="max-width: 400px">
+        <!--未含税-->
+        <Shui :form="ruleForm" @changeItem="changeItem" :disabled="true"></Shui>
+
+        <!--商务-->
+        <Suspense>
+          <template #default>
+            <Shangwu :form="ruleForm" @changeItem="changeItem" :disabled="true"></Shangwu>
+          </template>
+          <template #fallback>
+            <div>计算中...</div>
+          </template>
+        </Suspense>
+      </div>
     </el-form>
   </div>
 </template>
@@ -138,7 +137,12 @@ import { useRoute } from 'vue-router'
 import { useProgramStore } from '@/store/program'
 import { commonStore } from '@/store/common'
 
+import Luru from './blocks/Luru.vue'
+import Shui from './blocks/Shui.vue'
+import Shangwu from './blocks/Shangwu.vue'
+
 interface RuleFormItem {
+  category: string
   contractAmount: string
   saleGroup: string
   productRate: string
@@ -185,9 +189,12 @@ const projectId = route.params.id
 
 const ruleForm = ref({} as RuleFormItem)
 
+const loading = ref(true)
 useProgram.getSettlementReduce({ projectId, category: props.category }).then(d => {
+  loading.value = false
   if (d.data.code == 200) {
     ruleForm.value = d.data.data
+    ruleForm.value.category = props.category
 
     // 获取图片
     if (ruleForm.value.promotionalPaymentsImage) {
@@ -201,4 +208,9 @@ useProgram.getSettlementReduce({ projectId, category: props.category }).then(d =
     }
   }
 })
+
+// 监听赋值
+const changeItem = (key: string, val: any) => {
+  ;(ruleForm.value as any)[key] = val
+}
 </script>

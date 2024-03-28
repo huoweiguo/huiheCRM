@@ -2,7 +2,7 @@
   <div class="upload-form">
     <el-form ref="ruleFormRef" :model="recommend" :rules="rules" label-width="120px" :inline="true">
       <el-form-item :label="`${typetxt[props.tickType]}日期`" prop="billDate">
-        <el-date-picker v-model="recommend.billDate" type="datetime" :placeholder="`请选择${typetxt[props.tickType]}日期`" style="width: 192px" value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
+        <el-date-picker v-model="recommend.billDate" type="date" :placeholder="`请选择${typetxt[props.tickType]}日期`" style="width: 192px" value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
       </el-form-item>
       <el-form-item :label="`${typetxt[props.tickType]}金额`" prop="billAmount">
         <el-input v-model="recommend.billAmount" :placeholder="`请输入${typetxt[props.tickType]}金额`" />
@@ -17,7 +17,7 @@
           :headers="headersObj"
           :action="uploadUrl"
           :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemove"
+          :on-remove="handleRemoveImage"
           :on-success="handleSuccessImage"
         >
           <el-icon>
@@ -31,7 +31,7 @@
       </el-form-item>
       <div>
         <el-form-item label="上传附件">
-          <el-upload class="upload-demo" method="post" :headers="headersObj" :action="uploadUrl" :on-remove="handleRemoveImage" multiple :limit="9" :on-success="handleSuccess" :file-list="billAnnex">
+          <el-upload class="upload-demo" method="post" :headers="headersObj" :action="uploadUrl" :on-remove="handleRemove" multiple :limit="9" :on-success="handleSuccess" :file-list="billAnnex">
             <div style="width: 150px"><el-button size="small" type="primary">点击上传</el-button></div>
           </el-upload>
         </el-form-item>
@@ -117,11 +117,15 @@ const rules = reactive<FormRules<RuleForm>>({
 })
 
 const handleRemove: UploadProps['onRemove'] = (file, uploadFiles) => {
-  console.log(file, uploadFiles)
+  billAnnex.value = uploadFiles
+  recommend.billAnnex = uploadFiles.map((d: any) => d.id).join(',')
+  recommend.billAnnexOss = uploadFiles.map((d: any) => ({ url: d.url, id: d.id }))
 }
 
 const handleRemoveImage: UploadProps['onRemove'] = (file, uploadFiles) => {
-  console.log(file, uploadFiles)
+  billImage.value = uploadFiles
+  recommend.billImage = uploadFiles.map((d: any) => d.id).join(',')
+  recommend.billImageOss = uploadFiles.map((d: any) => ({ url: d.url, id: d.id }))
 }
 
 const handleSuccess: UploadProps['onSuccess'] = (response: any, uploadFile: UploadFile, uploadFiles: UploadFiles) => {

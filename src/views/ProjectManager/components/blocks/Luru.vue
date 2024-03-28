@@ -15,7 +15,7 @@
           <el-table-column prop="brand" label="品牌" />
           <el-table-column label="数量">
             <template #default="scope">
-              <el-input v-model="scope.row.productNum" @input="iptChange(scope.row, scope.$index)" />
+              <el-input v-model="scope.row.productNum" @input="iptChange(scope.row, scope.$index)" :disabled="disabled" />
             </template>
           </el-table-column>
           <el-table-column prop="systemUnitPrice" label="系统单价" width="120" />
@@ -46,7 +46,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="quantitySoldOut" label="已出货数量" width="120" />
-          <el-table-column label="操作" fixed="right">
+          <el-table-column label="操作" fixed="right" v-if="!disabled">
             <template #default="scope">
               <el-button type="primary" link size="small" @click="delrow(scope.$index)">删除</el-button>
             </template>
@@ -117,7 +117,7 @@ import { useProductStore } from '@/store/product'
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 const useProduct = useProductStore()
 const emit = defineEmits(['update:form'])
-const props = defineProps(['form'])
+const props = defineProps(['form', 'disabled'])
 const loading = ref(false)
 const visible = ref<boolean>(false)
 
@@ -142,7 +142,7 @@ onMounted(() => {
   props.form &&
     (tableData.value = props.form.map((item: any) => ({
       ...item,
-      productId: item.id,
+      productId: item.id || item.productId,
 
       // 税金合计=含税成本单价/1.13*0.13*数量
       totalTaxes: (item.unitPriceIncludingTax / 1.13) * 0.13 * (item.productNum || 1),
