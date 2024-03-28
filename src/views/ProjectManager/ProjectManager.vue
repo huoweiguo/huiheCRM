@@ -73,16 +73,18 @@ import { projectSchedule } from '@/utils/fixedData'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import Program from './components/Program.vue'
 import router from '@/router'
-import type { UploadProps, UploadUserFile, UploadFile, UploadFiles, FormRules, FormInstance } from 'element-plus'
+import type { UploadFile, FormInstance } from 'element-plus'
 
-const changeFile = (uploadFile: UploadFile | Boolean | any, uploadFiles: UploadFiles) => {
-  console.log(1, uploadFile)
+const changeFile = (uploadFile: UploadFile | Boolean | any) => {
   const formData = new FormData()
   formData.append('file', uploadFile.raw, uploadFile.name)
   useProject.importProject(formData).then(res => {
     if (res.data.code === 200) {
       ElMessage.success('上传成功')
-      getProgramList()
+      setTimeout(() => {
+        seacrhForm.pageNum = 1
+        getProgramList()
+      }, 100)
     } else {
       ElMessage.error(res.data.msg)
     }

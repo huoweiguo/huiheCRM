@@ -29,13 +29,13 @@
           <img w-full :src="dialogImageUrl" alt="图片预览" />
         </el-dialog>
       </el-form-item>
-      <div>
+      <!-- <div>
         <el-form-item label="上传附件">
           <el-upload class="upload-demo" method="post" :headers="headersObj" :action="uploadUrl" :on-remove="handleRemove" multiple :limit="9" :on-success="handleSuccess" :file-list="billAnnex">
             <div style="width: 150px"><el-button size="small" type="primary">点击上传</el-button></div>
           </el-upload>
         </el-form-item>
-      </div>
+      </div> -->
       <el-form-item label="备注" prop="remark">
         <el-input v-model="recommend.remark" type="textarea" :rows="3" :placeholder="`请输入备注`" />
       </el-form-item>
