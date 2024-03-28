@@ -34,10 +34,10 @@ export default defineConfig({
     },
     // 设置 https 代理
     proxy: {
-      '/terminal': {
-        target: 'https://40d758v734.vicp.fun',
-        changeOrigin: true,
-        rewrite: (path: string) => path.replace(/^\/terminal/, '')
+      '/api': {
+        target: 'http://huihe.yyinhong.cn',
+        changeOrigin: true
+        // rewrite: (path: string) => path.replace(/^\/api/, '')
       }
     }
   }

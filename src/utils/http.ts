@@ -10,8 +10,10 @@ declare module 'axios' {
   export function create(config?: AxiosRequestConfig): AxiosInstance
 }
 
+const BASE_URL = import.meta.env.DEV ? '/api/terminal' : 'http://huihe.yyinhong.cn/api/terminal'
+
 const instance = axios.create({
-  baseURL: 'https://40d758v734.vicp.fun/terminal',
+  baseURL: BASE_URL,
   timeout: 10000
 })
 

@@ -1,1 +1,1 @@
-export const uploadUrl = 'https://40d758v734.vicp.fun/terminal/oss/upload'
+export const uploadUrl = 'http://huihe.yyinhong.cn/api/terminal/oss/upload'
