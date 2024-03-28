@@ -10,7 +10,16 @@
           <el-table-column prop="billAmount" label="付款金额" />
           <el-table-column label="图片">
             <template #default="scope">
-              <el-image v-for="(item, index) in scope.row.billImageOss" :key="index" style="width: 30px; height: 30px" :src="item.url" fit="contain" />
+              <el-image
+                v-for="(item, index) in scope.row.billImageOss"
+                :key="index"
+                style="width: 30px; height: 30px"
+                :src="item.url"
+                :preview-src-list="scope.row.billImageOss.map((item: any) => item.url)"
+                :initial-index="index"
+                :preview-teleported="true"
+                fit="contain"
+              />
             </template>
           </el-table-column>
           <el-table-column prop="remark" label="备注" />
