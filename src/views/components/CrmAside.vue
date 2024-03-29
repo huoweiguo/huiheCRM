@@ -33,14 +33,14 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
-import { menuRouts } from '@/router/index'
+// import { menuRouts } from '@/router/index'
 
-// import { useLoginStore } from '@/store/login'
-// const { getRouters } = useLoginStore()
-// const menuRouts = ref([] as any)
-// getRouters().then(res => {
-//   menuRouts.value = res.data.data || []
-// })
+import { useLoginStore } from '@/store/login'
+const { getRouters } = useLoginStore()
+const menuRouts = ref([] as any)
+getRouters().then(res => {
+  menuRouts.value = res.data.data || []
+})
 
 const menuActive = ref<string>('/productManager/productList')
 const router = useRouter()

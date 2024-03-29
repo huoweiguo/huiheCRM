@@ -28,16 +28,25 @@
   </div>
 
   <!--添加人员-->
-  <el-dialog v-model="dialogVisible" :title="isedit ? '编辑角色' : '添加角色'" width="450" :before-close="handleClose">
+  <el-dialog v-model="dialogVisible" :title="isedit ? '编辑角色' : '添加角色'" width="450">
     <el-form ref="ruleFormRef" v-model="personRole">
-      <el-form-item label="角色名称" :label-width="100" prop="name">
+      <el-form-item label="角色名称" prop="name" :label-width="100">
         <el-input v-model="personRole.name" autocomplete="off" style="width: 260px" />
       </el-form-item>
-      <el-form-item label="角色权限" :label-width="100" prop="roles">
-        <label class="label-role" v-for="item in roleList" :key="item.value">
-          <input type="checkbox" v-model="personRole.menus" :value="item.value" />
-          {{ item.label }}
-        </label>
+      <el-form-item label="角色权限" prop="roles" :label-width="100">
+        <el-tree
+          ref="treeRef"
+          :data="roleList"
+          :default-checked-keys="selectRoleList"
+          node-key="id"
+          :expand-on-click-node="false"
+          show-checkbox
+          check-strictly
+          check-on-click-node
+          default-expand-all
+          style="width: 240px"
+          @check-change="selectChange"
+        />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -51,7 +60,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, ElTree } from 'element-plus'
 import { roleListSchame } from '@/utils/fixedData'
 import type { FormInstance } from 'element-plus'
 import { useRoleStore } from '@/store/role'
@@ -85,7 +94,7 @@ interface RoleList {
 interface PersonRule {
   id: string
   name: string
-  menus: []
+  menus: any[]
 }
 const roleList = ref<RoleList[]>(roleListSchame)
 // 添加角色
@@ -95,21 +104,13 @@ const personRole = ref<PersonRule>({
   menus: []
 })
 const dialogVisible = ref<Boolean>(false)
-
-const handleClose = (done: () => void) => {
-  ElMessageBox.confirm('确定要关闭吗?')
-    .then(() => {
-      done()
-    })
-    .catch(() => {
-      // catch error
-    })
-}
+const selectRoleList = ref<any[]>([])
 
 const addRole = () => {
   personRole.value.id = ''
   personRole.value.name = ''
   personRole.value.menus = []
+  selectRoleList.value = []
   dialogVisible.value = true
   isedit.value = false
 }
@@ -119,11 +120,10 @@ const editRole = (row: any) => {
   dialogVisible.value = true
   personRole.value.id = row.id
   personRole.value.name = row.name
-  useRole.getMenuTreeById(row.id).then(res => {
+  useRole.queryRole(row.id).then(res => {
     if (res.data.code === 200) {
-      personRole.value.menus = res.data.data.map((item: any) => {
-        return item.id
-      })
+      personRole.value.menus = res.data.data.menus
+      selectRoleList.value = res.data.data.menus
     }
   })
 }
@@ -140,9 +140,16 @@ const deleteRole = (id: string) => {
     })
   })
 }
+const treeRef = ref<InstanceType<typeof ElTree>>()
+const selectChange = () => {
+  selectRoleList.value = treeRef.value!.getCheckedKeys(false)
+}
+
 const savePerson = () => {
   loading.value = true
-  const api = isedit.value ? useRole.updateTeam : useRole.addRole
+  const api = isedit.value ? useRole.editRole : useRole.addRole
+
+  personRole.value.menus = selectRoleList.value
 
   api(personRole.value).then(res => {
     loading.value = false
@@ -167,14 +174,13 @@ const getRoleList = () => {
     }
   })
 }
+
 onMounted(() => {
   getRoleList()
   // 查询可用角色
   useRole.getMenuTree().then(res => {
     if (res.data.code === 200) {
-      roleList.value = res.data.data.map((item: any) => {
-        return { label: item.label, value: item.id }
-      })
+      roleList.value = res.data.data
     }
   })
 })

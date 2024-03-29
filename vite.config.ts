@@ -27,10 +27,10 @@ export default defineConfig({
   ],
   base: './',
   server: {
-    port: 8080, //启动端口
+    port: 8089, //启动端口
     hmr: {
       host: '127.0.0.1',
-      port: 8080
+      port: 8089
     },
     // 设置 https 代理
     proxy: {

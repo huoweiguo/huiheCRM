@@ -31,6 +31,9 @@ export const useRoleStore = defineStore(
     const getRoleList = (data: userRule) => {
       return http.get('/role/list', data)
     }
+    const queryRole = (id: string) => {
+      return http.get(`/role/${id}`)
+    }
     const queryAvailableRole = () => {
       return http.get('/role/available')
     }
@@ -65,6 +68,7 @@ export const useRoleStore = defineStore(
       return http.get(`/role/menuTree/`)
     }
     return {
+      queryRole,
       getMenuTreeById,
       getMenuTree,
       editRole,
