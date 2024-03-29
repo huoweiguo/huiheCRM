@@ -12,22 +12,22 @@
         </el-form-item>
         <el-form-item label="商务">
           <el-select v-model="employee1" multiple class="m-2" placeholder="请选择商务" style="width: 192px">
-            <el-option v-for="item in useRole.businessList" :key="item.userId" :label="item.nickName" :value="`${item.userId}||${item.nickName}`" />
+            <el-option v-for="item in businessList" :key="item.userId" :label="item.nickName" :value="`${item.userId}||${item.nickName}`" />
           </el-select>
         </el-form-item>
         <el-form-item label="灯具销售">
           <el-select v-model="employee2" multiple class="m-2" placeholder="请选择灯具销售" style="width: 192px">
-            <el-option v-for="item in useRole.lightSalesList" :key="item.userId" :label="item.nickName" :value="`${item.userId}||${item.nickName}`" />
+            <el-option v-for="item in lightSalesList" :key="item.userId" :label="item.nickName" :value="`${item.userId}||${item.nickName}`" />
           </el-select>
         </el-form-item>
         <el-form-item label="项目经理">
           <el-select v-model="employee3" multiple class="m-2" placeholder="请选择项目经理" style="width: 192px">
-            <el-option v-for="item in useRole.projectManagerList" :key="item.userId" :label="item.nickName" :value="`${item.userId}||${item.nickName}`" />
+            <el-option v-for="item in projectManagerList" :key="item.userId" :label="item.nickName" :value="`${item.userId}||${item.nickName}`" />
           </el-select>
         </el-form-item>
         <el-form-item label="灯具项目经理">
           <el-select v-model="employee4" multiple class="m-2" placeholder="请选择灯具项目经理" style="width: 192px">
-            <el-option v-for="item in useRole.lightProjectManagerList" :key="item.userId" :label="item.nickName" :value="`${item.userId}||${item.nickName}`" />
+            <el-option v-for="item in lightProjectManagerList" :key="item.userId" :label="item.nickName" :value="`${item.userId}||${item.nickName}`" />
           </el-select>
         </el-form-item>
 
@@ -128,6 +128,11 @@ const useRole = useRoleStore()
 const route = useRoute()
 const useCommon = commonStore()
 
+const businessList = ref<any[]>([])
+const lightSalesList = ref<any[]>([])
+const projectManagerList = ref<any[]>([])
+const lightProjectManagerList = ref<any[]>([])
+
 interface Team {
   id: number
   name: string
@@ -189,6 +194,27 @@ const employee4 = ref([] as Array<string>)
 useCommon.getTeamSelectList().then(res => {
   if (res.data.code === 200) {
     teamList.value = res.data.data
+  }
+})
+
+useRole.queryUserByType({ type: '1' }).then(res => {
+  if (res.data.code === 200) {
+    businessList.value = res.data.data
+  }
+})
+useRole.queryUserByType({ type: '2' }).then(res => {
+  if (res.data.code === 200) {
+    lightSalesList.value = res.data.data
+  }
+})
+useRole.queryUserByType({ type: '3' }).then(res => {
+  if (res.data.code === 200) {
+    projectManagerList.value = res.data.data
+  }
+})
+useRole.queryUserByType({ type: '4' }).then(res => {
+  if (res.data.code === 200) {
+    lightProjectManagerList.value = res.data.data
   }
 })
 
