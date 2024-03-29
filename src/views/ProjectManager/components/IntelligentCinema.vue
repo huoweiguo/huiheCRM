@@ -1,6 +1,6 @@
 <template>
   <div class="form-box" v-if="loadingd">
-    <el-form ref="ruleFormRef" :model="ruleForm" label-width="150px" :inline="true" status-icon>
+    <el-form ref="ruleFormRef" :model="ruleForm" label-width="170px" :inline="true" status-icon>
       <div>
         <el-form-item label="签约金额" prop="contractAmount">
           <el-input v-model="ruleForm.contractAmount" placeholder="请输入签约金额，保留2位小数" />

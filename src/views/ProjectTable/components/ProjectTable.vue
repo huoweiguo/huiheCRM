@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="150px" :inline="true" status-icon>
+  <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="170px" :inline="true" status-icon>
     <el-form-item label="公司名称" prop="projectName">
       <el-input v-model="ruleForm.projectName" />
     </el-form-item>

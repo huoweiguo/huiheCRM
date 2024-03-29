@@ -149,6 +149,7 @@ import { commonStore } from '@/store/common'
 import Luru from './blocks/Luru.vue'
 import Shui from './blocks/Shui.vue'
 import Shangwu from './blocks/Shangwu.vue'
+import { ElMessage } from 'element-plus'
 
 interface RuleFormItem {
   category: string
@@ -200,8 +201,8 @@ const ruleForm = ref({} as RuleFormItem)
 
 const loading = ref(true)
 useProgram.getSettlementReduce({ projectId, category: props.category }).then(d => {
-  loading.value = false
-  if (d.data.code == 200) {
+  if (d.data.code == 200 && d.data.data) {
+    loading.value = false
     ruleForm.value = d.data.data
     ruleForm.value.category = props.category
 
@@ -215,6 +216,8 @@ useProgram.getSettlementReduce({ projectId, category: props.category }).then(d =
         }
       })
     }
+  } else {
+    ElMessage.error('暂无数据')
   }
 })
 

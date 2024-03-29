@@ -18,30 +18,62 @@
     <el-form-item label="销售总监提成">
       <el-input v-model="ruleForm.num6" disabled />
     </el-form-item>
-    <el-form-item label="项目经理提成率(%)">
-      <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
-    </el-form-item>
-    <el-form-item label="项目经理提成">
-      <el-input v-model="ruleForm.num8" disabled />
-    </el-form-item>
-    <el-form-item label="项目总监提成率(%)">
-      <el-input v-model="ruleForm.num9" :disabled="disabled" @input="limitIpt($event, 'num9')" />
-    </el-form-item>
-    <el-form-item label="项目总监提成">
-      <el-input v-model="ruleForm.num10" disabled />
-    </el-form-item>
-    <el-form-item label="深化提成率(%)">
-      <el-input v-model="ruleForm.num11" :disabled="disabled" @input="limitIpt($event, 'num11')" />
-    </el-form-item>
-    <el-form-item label="深化提成">
-      <el-input v-model="ruleForm.num12" disabled />
-    </el-form-item>
-    <el-form-item label="安装调试员提成率(%)">
-      <el-input v-model="ruleForm.num13" :disabled="disabled" @input="limitIpt($event, 'num13')" />
-    </el-form-item>
-    <el-form-item label="安装调试员提成">
-      <el-input v-model="ruleForm.num14" disabled />
-    </el-form-item>
+
+    <template v-if="props.form.category == 1">
+      <el-form-item label="项目经理提成率(%)">
+        <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
+      </el-form-item>
+      <el-form-item label="项目经理提成">
+        <el-input v-model="ruleForm.num8" disabled />
+      </el-form-item>
+      <el-form-item label="项目总监提成率(%)">
+        <el-input v-model="ruleForm.num9" :disabled="disabled" @input="limitIpt($event, 'num9')" />
+      </el-form-item>
+      <el-form-item label="项目总监提成">
+        <el-input v-model="ruleForm.num10" disabled />
+      </el-form-item>
+      <el-form-item label="深化提成率(%)">
+        <el-input v-model="ruleForm.num11" :disabled="disabled" @input="limitIpt($event, 'num11')" />
+      </el-form-item>
+      <el-form-item label="深化提成">
+        <el-input v-model="ruleForm.num12" disabled />
+      </el-form-item>
+      <el-form-item label="安装调试员提成率(%)">
+        <el-input v-model="ruleForm.num13" :disabled="disabled" @input="limitIpt($event, 'num13')" />
+      </el-form-item>
+      <el-form-item label="安装调试员提成">
+        <el-input v-model="ruleForm.num14" disabled />
+      </el-form-item>
+    </template>
+    <template v-if="props.form.category == 2">
+      <el-form-item label="灯具销售提成率(%)">
+        <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
+      </el-form-item>
+      <el-form-item label="灯具销售提成">
+        <el-input v-model="ruleForm.num8" disabled />
+      </el-form-item>
+      <el-form-item label="灯具项目经理提成率(%)">
+        <el-input v-model="ruleForm.num9" :disabled="disabled" @input="limitIpt($event, 'num9')" />
+      </el-form-item>
+      <el-form-item label="灯具项目经理提成">
+        <el-input v-model="ruleForm.num10" disabled />
+      </el-form-item>
+      <template v-show="false">
+        <el-form-item label="深化提成率(%)">
+          <el-input v-model="ruleForm.num11" :disabled="disabled" @input="limitIpt($event, 'num11')" />
+        </el-form-item>
+        <el-form-item label="深化提成">
+          <el-input v-model="ruleForm.num12" disabled />
+        </el-form-item>
+        <el-form-item label="安装调试员提成率(%)">
+          <el-input v-model="ruleForm.num13" :disabled="disabled" @input="limitIpt($event, 'num13')" />
+        </el-form-item>
+        <el-form-item label="安装调试员提成">
+          <el-input v-model="ruleForm.num14" disabled />
+        </el-form-item>
+      </template>
+    </template>
+
     <el-form-item label="成本总计">
       <el-input v-model="ruleForm.num15" disabled />
     </el-form-item>
@@ -152,7 +184,7 @@ watchEffect(() => {
   let num =
     parseFloat(props.form.shigongChengben || 0) +
     parseFloat(props.form.promotionExpenses || 0) +
-    parseFloat(props.form.operatingExpenseRatio || 0) +
+    parseFloat(props.form.yunyingfeiyong || 0) +
     parseFloat(qita.toString()) +
     parseFloat((ruleForm.num2 || 0).toFixed(6)) +
     parseFloat((ruleForm.num6 || 0).toFixed(6)) +

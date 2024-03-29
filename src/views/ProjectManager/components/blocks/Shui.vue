@@ -61,13 +61,11 @@ onMounted(() => {
 
 watchEffect(() => {
   console.log('计算2')
-  ruleForm.num1 = parseFloat(
-    props.form.product
-      .map((d: { totalCostExcludingTax: any }) => d.totalCostExcludingTax)
-      .reduce((p: any, c: any) => p + c, 0)
-      ?.toFixed(2)
-  )
-  ruleForm.num8 = parseFloat((((props.form.contractAmount || 0) * ruleForm.num7) / 100).toFixed(2))
+  ruleForm.num1 = parseFloat(props.form.product.map((d: { totalCostExcludingTax: any }) => d.totalCostExcludingTax).reduce((p: any, c: any) => p + c, 0))
+  // num1 向下取整保留两位小数
+  ruleForm.num1 = parseFloat((Math.floor(ruleForm.num1 * 100) / 100).toFixed(2))
+
+  ruleForm.num8 = parseFloat(((props.form.contractAmount || 0) * (ruleForm.num7 / 100)).toFixed(2))
   ruleForm.num3 = parseFloat((props.form.contractAmount - ruleForm.num6).toFixed(2))
   ruleForm.num4 = parseFloat((ruleForm.num3 / ruleForm.num2).toFixed(2))
   iptChange('jingjia', ruleForm.num3)
