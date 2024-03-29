@@ -26,7 +26,16 @@
 
   <div class="mb20">
     <el-button type="primary" @click="goProgram">项目录入</el-button>
-    <el-upload style="display: inline-block; margin-left: 20px" method="post" :limit="1" :auto-upload="false" :on-change="changeFile" :show-file-list="false" accept=".xlsx, .xls">
+    <el-upload
+      style="display: inline-block; margin-left: 20px"
+      method="post"
+      :file-list="fileList"
+      :auto-upload="false"
+      :limit="1"
+      :on-change="changeFile"
+      :show-file-list="false"
+      accept=".xlsx, .xls"
+    >
       <el-button type="primary">导入</el-button>
     </el-upload>
   </div>
@@ -75,19 +84,19 @@ import Program from './components/Program.vue'
 import router from '@/router'
 import type { UploadFile, FormInstance } from 'element-plus'
 
+const fileList = ref<UploadFile[]>([])
 const changeFile = (uploadFile: UploadFile | Boolean | any) => {
   const formData = new FormData()
   formData.append('file', uploadFile.raw, uploadFile.name)
   useProject.importProject(formData).then(res => {
     if (res.data.code === 200) {
       ElMessage.success('上传成功')
-      setTimeout(() => {
-        seacrhForm.pageNum = 1
-        getProgramList()
-      }, 100)
+      seacrhForm.pageNum = 1
+      getProgramList()
     } else {
       ElMessage.error(res.data.msg)
     }
+    fileList.value = []
   })
 }
 
