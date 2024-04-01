@@ -11,9 +11,9 @@
           {{ (userInfo.user as UserInfo).nickName }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
         </span>
         <ul>
-          <li>系统消息</li>
+          <!-- <li>系统消息</li>
           <li>个人中心</li>
-          <li>修改密码</li>
+          <li>修改密码</li> -->
           <li @click="logout">退出登录</li>
         </ul>
       </div>
