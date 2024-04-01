@@ -182,7 +182,7 @@ watchEffect(() => {
 
   // 成本总计=施工成本+总推广费+运营费用+其他成本+商务提成+销售总监提成+项目经理提成+项目总监提成+深化提成+安装调试员提成
   let num =
-    parseFloat(props.form.shigongChengben || 0) +
+    parseFloat(props.form.constructionCost || 0) +
     parseFloat(props.form.promotionExpenses || 0) +
     parseFloat(props.form.yunyingfeiyong || 0) +
     parseFloat(qita.toString()) +

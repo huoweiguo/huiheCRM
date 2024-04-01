@@ -174,6 +174,7 @@ const ruleForm = ref({
   product: [],
   employee: [],
   cost: [],
+  constructionCost: '',
 
   // 计算公式ID
   functions: {} as FunctionValue

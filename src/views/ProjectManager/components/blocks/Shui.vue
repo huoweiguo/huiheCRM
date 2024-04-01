@@ -13,7 +13,7 @@
       <el-input v-model="ruleForm.num4" disabled />
     </el-form-item>
     <el-form-item label="施工成本">
-      <el-input v-model="ruleForm.num5" :disabled="disabled" @input="iptChange('shigongChengben', $event)" />
+      <el-input v-model="ruleForm.num5" :disabled="disabled" @input="iptChange('constructionCost', $event)" />
     </el-form-item>
     <el-form-item label="总推广费">
       <el-input v-model="ruleForm.num6" :disabled="disabled" @input="iptChange('promotionExpenses', $event)" />
@@ -55,6 +55,7 @@ const limitIpt = (value: string, key: 'num7') => {
 
 onMounted(() => {
   ruleForm.num2 = props.form.taxFreePrice || 0
+  ruleForm.num5 = props.form.constructionCost || 0
   ruleForm.num6 = props.form.promotionExpenses || 0
   ruleForm.num7 = props.form.operatingExpenseRatio || 0
 })

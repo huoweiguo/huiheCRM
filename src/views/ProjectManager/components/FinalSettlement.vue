@@ -163,6 +163,7 @@ interface RuleFormItem {
   promotionalPaymentsImage: string
   operatingExpenseRatio: string
   saleGroupName: string
+  constructionCost: string
   employee: [
     {
       type: number
