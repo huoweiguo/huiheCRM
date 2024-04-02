@@ -127,7 +127,7 @@ const ruleForm = reactive({
 })
 
 // 获取计算数据
-let res = await useProgram.getFunction({ projectId, type: props.form.category })
+let res = await useProgram.getFunction({ settlementId: props.form.id, projectId, type: props.form.category })
 if (res.data.code === 200) {
   let data = res.data.data
   ruleForm.id = data.id || ''
