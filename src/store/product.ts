@@ -39,11 +39,15 @@ export const useProductStore = defineStore('product', () => {
   const importProducts = (data: any) => {
     return http.post('/product/import', data)
   }
+  const hasPermission = () => {
+    return http.get('/product/hasPermission')
+  }
   return {
     editItem,
     createItem,
     getProductList,
     deleteItem,
-    importProducts
+    importProducts,
+    hasPermission
   }
 })

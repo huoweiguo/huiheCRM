@@ -27,6 +27,9 @@ export const useProjectStore = defineStore('project', () => {
   const importProject = (data: any) => {
     return http.post('/project/import', data)
   }
+  const hasPermission = () => {
+    return http.get('/project/hasPermission')
+  }
   return {
     queryProjectList,
     createProject,
@@ -34,6 +37,7 @@ export const useProjectStore = defineStore('project', () => {
     updateProject,
     getProjectDetail,
     queryTrace,
-    importProject
+    importProject,
+    hasPermission
   }
 })
