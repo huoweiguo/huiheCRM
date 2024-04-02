@@ -297,7 +297,7 @@ const submitForm = async (ruleFormRef: FormInstance | undefined) => {
 const saveFunction = async (pid: string) => {
   let data = {
     id: ruleForm.value.functions.id,
-    settlementld: pid,
+    settlementId: pid,
     type: props.category, // 1、智能+影院项目汇算 2、灯具项目汇算
     projectId: route.params.id,
     businessExpenseRatio: ruleForm.value.functions.num1,
