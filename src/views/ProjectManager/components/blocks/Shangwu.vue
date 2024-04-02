@@ -180,18 +180,36 @@ watchEffect(() => {
     qita = qita_arr.reduce((pre: string, cur: string) => parseFloat(pre) + parseFloat(cur), 0)
   }
 
-  // 成本总计=施工成本+总推广费+运营费用+其他成本+商务提成+销售总监提成+项目经理提成+项目总监提成+深化提成+安装调试员提成
-  let num =
-    parseFloat(props.form.constructionCost || 0) +
-    parseFloat(props.form.promotionExpenses || 0) +
-    parseFloat(props.form.yunyingfeiyong || 0) +
-    parseFloat(qita.toString()) +
-    parseFloat((ruleForm.num2 || 0).toFixed(6)) +
-    parseFloat((ruleForm.num6 || 0).toFixed(6)) +
-    parseFloat((ruleForm.num8 || 0).toFixed(6)) +
-    parseFloat((ruleForm.num10 || 0).toFixed(6)) +
-    parseFloat((ruleForm.num12 || 0).toFixed(6)) +
-    parseFloat((ruleForm.num14 || 0).toFixed(6))
+  let num = 0
+
+  // 智能+影院
+  // 成本总计 = 施工成本+总推广费+运营费用+其他成本+商务提成+销售总监提成+项目经理提成+项目总监提成+深化提成+安装调试员提成
+  if (props.form.category == 1) {
+    num =
+      parseFloat(props.form.constructionCost || 0) +
+      parseFloat(props.form.promotionExpenses || 0) +
+      parseFloat(props.form.yunyingfeiyong || 0) +
+      parseFloat(qita.toString()) +
+      parseFloat((ruleForm.num2 || 0).toFixed(6)) +
+      parseFloat((ruleForm.num6 || 0).toFixed(6)) +
+      parseFloat((ruleForm.num8 || 0).toFixed(6)) +
+      parseFloat((ruleForm.num10 || 0).toFixed(6)) +
+      parseFloat((ruleForm.num12 || 0).toFixed(6)) +
+      parseFloat((ruleForm.num14 || 0).toFixed(6))
+  }
+
+  // 灯具
+  // 成本总计 = 施工成本+总推广费+运营费用+其他成本+商务提成+灯具销售提成+灯具项目经理提成
+  if (props.form.category == 2) {
+    num =
+      parseFloat(props.form.constructionCost || 0) +
+      parseFloat(props.form.promotionExpenses || 0) +
+      parseFloat(props.form.yunyingfeiyong || 0) +
+      parseFloat(qita.toString()) +
+      parseFloat((ruleForm.num2 || 0).toFixed(6)) +
+      parseFloat((ruleForm.num8 || 0).toFixed(6)) +
+      parseFloat((ruleForm.num10 || 0).toFixed(6))
+  }
 
   ruleForm.num15 = parseFloat(num.toFixed(2))
 
