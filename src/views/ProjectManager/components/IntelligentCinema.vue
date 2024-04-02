@@ -154,6 +154,7 @@ interface FunctionValue {
 }
 
 const ruleForm = ref({
+  id: '',
   projectId: route.params.id,
   category: props.category, // 1、智能+影院项目汇算 2、灯具项目汇算
   type: props.proTabData.type, // 1、初始项目 2、增减项目
@@ -293,9 +294,9 @@ const submitForm = async (ruleFormRef: FormInstance | undefined) => {
 }
 
 // 保存计算公式
-const saveFunction = async () => {
+const saveFunction = async (pid: string) => {
   let data = {
-    id: ruleForm.value.functions.id,
+    id: pid,
     type: props.category, // 1、智能+影院项目汇算 2、灯具项目汇算
     projectId: route.params.id,
     businessExpenseRatio: ruleForm.value.functions.num1,
@@ -326,7 +327,7 @@ const submitData = async (data: any) => {
   }
 
   if (res.data.code === 200) {
-    await saveFunction()
+    await saveFunction(props.proTabData.id || res.data.data.settlementId)
     ElMessage.success('保存成功')
     emit('save')
   } else {
