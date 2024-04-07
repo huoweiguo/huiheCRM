@@ -121,7 +121,58 @@
         </el-table>
       </el-form-item>
 
-      <div style="max-width: 400px">
+      <dir style="max-width: 400px">
+        <el-form-item label="销售金额">
+          <el-input v-model="ruleForm.commission.saleAmount" disabled />
+        </el-form-item>
+        <el-form-item label="公司利润率">
+          <el-input v-model="ruleForm.commission.companyProfitRate" disabled />
+        </el-form-item>
+        <el-form-item label="毛利率">
+          <el-input v-model="ruleForm.commission.grossProfitRate" disabled />
+        </el-form-item>
+        <el-form-item label="施工成本">
+          <el-input v-model="ruleForm.commission.constructionCost" disabled />
+        </el-form-item>
+        <el-form-item label="推广费用">
+          <el-input v-model="ruleForm.commission.promotionExpenses" disabled />
+        </el-form-item>
+        <el-form-item label="深化提成费用">
+          <el-input v-model="ruleForm.commission.deepenExpense" disabled />
+        </el-form-item>
+        <el-form-item label="运营费用">
+          <el-input v-model="ruleForm.commission.operatingExpense" disabled />
+        </el-form-item>
+        <el-form-item label="其他费用">
+          <el-input v-model="ruleForm.commission.otherExpenses" disabled />
+        </el-form-item>
+        <el-form-item label="商务提成">
+          <el-input v-model="ruleForm.commission.businessRoyalties" disabled />
+        </el-form-item>
+        <el-form-item label="销售副总提成">
+          <el-input v-model="ruleForm.commission.saleAgmExpense" disabled />
+        </el-form-item>
+        <el-form-item label="销售总监提成">
+          <el-input v-model="ruleForm.commission.sdRoyalties" disabled />
+        </el-form-item>
+        <el-form-item label="项目经理提成">
+          <el-input v-model="ruleForm.commission.pmRoyalties" disabled />
+        </el-form-item>
+        <el-form-item label="项目总监提成">
+          <el-input v-model="ruleForm.commission.pdRoyalties" disabled />
+        </el-form-item>
+        <el-form-item label="安装调试员提成">
+          <el-input v-model="ruleForm.commission.commissionerRoyalties" disabled />
+        </el-form-item>
+        <el-form-item label="未税成本总价">
+          <el-input v-model="ruleForm.commission.totalUntaxedCostOfProduct" disabled />
+        </el-form-item>
+        <el-form-item label="净价折扣">
+          <el-input v-model="ruleForm.commission.netPriceDiscount" disabled />
+        </el-form-item>
+      </dir>
+
+      <div style="max-width: 400px" v-if="false">
         <!--未含税-->
         <Shui :form="ruleForm" @changeItem="changeItem" :disabled="true"></Shui>
 
@@ -151,6 +202,10 @@ import Shui from './blocks/Shui.vue'
 import Shangwu from './blocks/Shangwu.vue'
 import { ElMessage } from 'element-plus'
 
+interface CommissionItem {
+  [key: string]: any
+}
+
 interface RuleFormItem {
   category: string
   contractAmount: string
@@ -177,6 +232,7 @@ interface RuleFormItem {
   product: []
   popularize: []
   cost: []
+  commission: CommissionItem
   bill: {
     bill: {}
     billDate: string
