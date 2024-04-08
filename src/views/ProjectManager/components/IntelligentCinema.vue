@@ -46,7 +46,7 @@
       </div>
 
       <!--推荐-->
-      <Tuijian v-model:form="ruleForm.popularize"></Tuijian>
+      <Tuijian v-model:form="ruleForm.popularize" @changeItem="changeItem"></Tuijian>
 
       <!--开票-->
       <Kaipiao v-model:form="bill1"></Kaipiao>
@@ -165,6 +165,7 @@ const ruleForm = ref({
   productAmount: '',
   serviceRate: '',
   serviceAmount: '',
+  promotionExpenses: '',
   //
   taxFreePrice: '',
   promotionalPaymentsImage: '',

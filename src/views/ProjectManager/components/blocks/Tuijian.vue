@@ -65,7 +65,7 @@
 import { ref, reactive } from 'vue'
 import type { FormInstance } from 'element-plus'
 
-const emit = defineEmits(['update:form'])
+const emit = defineEmits(['update:form', 'changeItem'])
 const props = defineProps(['form'])
 const ruleFormRef = ref<FormInstance>()
 const visible = ref(false)
@@ -84,19 +84,32 @@ const ruleForm = reactive({
   remark: ''
 })
 
-tableData.value = props.form
-
 function isEmpty(obj: Record<string, string>): boolean {
   return Object.keys(obj).every(key => {
     return obj[key] === null || obj[key] === undefined || obj[key] === ''
   })
 }
 
+function calculate() {
+  let promotionExpensesValue = 0
+
+  tableData.value.forEach((item: any) => {
+    promotionExpensesValue += Number(item.paidAmount)
+  })
+  emit('changeItem', 'promotionExpenses', parseFloat(promotionExpensesValue.toFixed(2)))
+}
+
+tableData.value = props.form
+
+// 计算
+calculate()
+
 const save = (ruleFormRef: FormInstance | undefined) => {
   visible.value = false
   if (!isEmpty(ruleForm)) {
     tableData.value.push({ ...ruleForm })
     emit('update:form', tableData)
+    calculate()
   }
   resetForm(ruleFormRef)
 }
