@@ -38,11 +38,11 @@
         <el-form-item label="推广费金额" prop="promotionAmount">
           <el-input v-model="ruleForm.promotionAmount" placeholder="请输入推广费金额" />
         </el-form-item>
-        <el-form-item label="已付推广费" prop="paidAmount">
-          <el-input v-model="ruleForm.paidAmount" placeholder="请输入已付推广费" />
-        </el-form-item>
         <el-form-item label="已付推广费比例" prop="paidPromotionRatio">
           <el-input v-model="ruleForm.paidPromotionRatio" placeholder="请输入已付推广费比例" />
+        </el-form-item>
+        <el-form-item label="已付推广费" prop="paidAmount">
+          <el-input v-model="ruleForm.paidAmount" placeholder="请输入已付推广费" />
         </el-form-item>
         <el-form-item label="已付推广费日期" prop="paidDate">
           <el-date-picker v-model="ruleForm.paidDate" type="date" placeholder="请选择已付推广费日期" style="width: 192px" value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
