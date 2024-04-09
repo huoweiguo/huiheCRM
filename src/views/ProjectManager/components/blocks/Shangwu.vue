@@ -79,7 +79,7 @@
 
     <!-- 对公返点进项税税额可抵(专票) -->
     <el-form-item label="对公返点进项税税额可抵(专票)">
-      <el-input v-model="ruleForm.num20" />
+      <el-input v-model="ruleForm.num20" @input="emit('changeItem', 'taxDeduction', $event)" />
     </el-form-item>
 
     <el-form-item label="成本总计">
@@ -147,6 +147,7 @@ if (res.data.code === 200) {
   ruleForm.num9 = props.form.pdExpenseRatio || data.pdExpenseRatio || 0
   ruleForm.num11 = props.form.deepenExpenseRatio || data.deepenExpenseRatio || 0
   ruleForm.num13 = props.form.commissionerExpenseRatio || data.commissionerExpenseRatio || 0
+  ruleForm.num20 = props.form.taxDeduction || data.taxDeduction || 0
 }
 
 const limitIpt = (value: string, key: 'num1' | 'num3' | 'num5' | 'num7' | 'num9' | 'num11' | 'num13') => {

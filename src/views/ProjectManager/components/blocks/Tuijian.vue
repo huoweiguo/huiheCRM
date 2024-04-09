@@ -90,26 +90,13 @@ function isEmpty(obj: Record<string, string>): boolean {
   })
 }
 
-function calculate() {
-  let promotionExpensesValue = 0
-
-  tableData.value.forEach((item: any) => {
-    promotionExpensesValue += Number(item.paidAmount)
-  })
-  emit('changeItem', 'promotionExpenses', parseFloat(promotionExpensesValue.toFixed(2)))
-}
-
 tableData.value = props.form
-
-// 计算
-calculate()
 
 const save = (ruleFormRef: FormInstance | undefined) => {
   visible.value = false
   if (!isEmpty(ruleForm)) {
     tableData.value.push({ ...ruleForm })
     emit('update:form', tableData)
-    calculate()
   }
   resetForm(ruleFormRef)
 }

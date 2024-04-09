@@ -53,20 +53,25 @@ const limitIpt = (value: string, key: 'num7') => {
   iptChange('operatingExpenseRatio', ruleForm.num7)
 }
 
-onMounted(() => {
-  ruleForm.num2 = props.form.taxFreePrice || 0
-  ruleForm.num5 = props.form.constructionCost || 0
-  ruleForm.num6 = props.form.promotionExpenses || 0
-  ruleForm.num7 = props.form.operatingExpenseRatio || 0
-})
+// 初始化
+ruleForm.num2 = props.form.taxFreePrice || 0
+ruleForm.num5 = props.form.constructionCost || 0
+ruleForm.num6 = props.form.promotionExpenses || 0
+ruleForm.num7 = props.form.operatingExpenseRatio || 0
 
 watchEffect(() => {
-  console.log('计算2')
+  console.log('计算2', props.form.promotionExpenses)
   ruleForm.num1 = parseFloat(props.form.product.map((d: { totalCostExcludingTax: any }) => d.totalCostExcludingTax).reduce((p: any, c: any) => p + c, 0))
   // num1 向下取整保留两位小数
   ruleForm.num1 = parseFloat((Math.floor(ruleForm.num1 * 100) / 100).toFixed(2))
 
-  ruleForm.num6 = props.form.promotionExpenses || 0
+  // 计算总推广费用
+  let promotionExpensesValue = 0
+  props.form.popularize.forEach((item: any) => {
+    promotionExpensesValue += Number(item.paidAmount)
+  })
+
+  ruleForm.num6 = props.form.promotionExpenses || parseFloat(promotionExpensesValue.toFixed(2)) || 0
   ruleForm.num8 = parseFloat(((props.form.contractAmount || 0) * (ruleForm.num7 / 100)).toFixed(2))
   ruleForm.num3 = parseFloat((props.form.contractAmount - ruleForm.num6).toFixed(2))
   ruleForm.num4 = parseFloat((ruleForm.num3 / ruleForm.num2).toFixed(2))
