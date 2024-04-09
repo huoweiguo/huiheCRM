@@ -9,7 +9,6 @@
               <span>{{ scope.$index + 1 + (seacrForm.pageNum - 1) * seacrForm.pageSize }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="productId" label="id" />
           <el-table-column prop="name" label="名称" />
           <el-table-column prop="model" label="型号" />
           <el-table-column prop="brand" label="品牌" />
@@ -151,7 +150,7 @@ onMounted(() => {
       unitPriceExcludingTax2: item.unitPriceIncludingTax / 1.13,
 
       // 未税成本总价=未税成本单价*数量
-      totalCostExcludingTax: (item.unitPriceIncludingTax / 1.13) * (item.productNum || 1),
+      totalCostExcludingTax: parseFloat((item.unitPriceIncludingTax / 1.13).toFixed(2)) * (item.productNum || 1),
 
       // 含税成本总价=含税成本单价*数量
       totalCostIncludingTax: item.unitPriceIncludingTax * (item.productNum || 1),
@@ -217,7 +216,7 @@ const onSelect = () => {
     unitPriceExcludingTax2: item.unitPriceIncludingTax / 1.13,
 
     // 未税成本总价=未税成本单价*数量
-    totalCostExcludingTax: (item.unitPriceIncludingTax / 1.13) * (item.productNum || 1),
+    totalCostExcludingTax: parseFloat((item.unitPriceIncludingTax / 1.13).toFixed(2)) * (item.productNum || 1),
 
     // 含税成本总价=含税成本单价*数量
     totalCostIncludingTax: item.unitPriceIncludingTax * (item.productNum || 1),
@@ -246,7 +245,7 @@ interface Row {
 const iptChange = (row: Row, index: number) => {
   row.totalTaxes = (row.unitPriceIncludingTax / 1.13) * 0.13 * (row.productNum || 0)
   row.unitPriceExcludingTax2 = row.unitPriceIncludingTax / 1.13
-  row.totalCostExcludingTax = (row.unitPriceIncludingTax / 1.13) * (row.productNum || 0)
+  row.totalCostExcludingTax = parseFloat((row.unitPriceIncludingTax / 1.13).toFixed(2)) * (row.productNum || 0)
   row.totalCostIncludingTax = row.unitPriceIncludingTax * (row.productNum || 0)
   row.systemTotalPrice = row.systemUnitPrice * (row.productNum || 0)
 

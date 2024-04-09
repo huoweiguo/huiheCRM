@@ -5,6 +5,7 @@
         <el-button type="primary" icon="plus" @click="visible = true">添加</el-button>
       </el-form-item>
       <div class="mb20 pl140">
+        <div style="font-size: 14px; color: #666; margin-bottom: 10px">开票金额总计：{{ productAmount }}</div>
         <el-table :data="tableData" border style="width: 100%">
           <el-table-column prop="billDate" label="开票日期" />
           <el-table-column prop="billAmount" label="开票金额" />
@@ -47,8 +48,10 @@ const emit = defineEmits(['update:form'])
 const props = defineProps(['form'])
 const visible = ref(false)
 const tableData = ref([] as any)
+const productAmount = ref(0)
 
 tableData.value = props.form.bill || []
+productAmount.value = tableData.value.reduce((pre: any, cur: any) => parseFloat(pre) + parseFloat(cur.billAmount), 0)
 
 const delrow = (index: number) => {
   tableData.value.splice(index, 1)
@@ -61,6 +64,8 @@ const change = (data: any) => {
     type: 1,
     bill: tableData.value
   })
+
+  productAmount.value = tableData.value.reduce((pre: any, cur: any) => parseFloat(pre) + parseFloat(cur.billAmount), 0)
 }
 </script>
 ../AddTickets.vue
