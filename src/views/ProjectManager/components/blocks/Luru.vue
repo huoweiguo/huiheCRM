@@ -2,7 +2,27 @@
   <div>
     <div class="cinema">
       <el-form-item label="产品录入">
-        <el-button type="primary" class="mb20" @click="addProduct">产品录入</el-button>
+        <div style="width: 100%">
+          <el-button type="primary" class="mb20" @click="addProduct">产品录入</el-button>
+          <el-row>
+            <el-col :span="6">
+              税金合计总计:
+              <span>{{ tableData.reduce((pre, cur) => pre + cur.totalTaxes, 0).toFixed(2) }}</span>
+            </el-col>
+            <el-col :span="6">
+              未税成本总价总计:
+              <span>{{ tableData.reduce((pre, cur) => pre + cur.totalCostExcludingTax, 0).toFixed(2) }}</span>
+            </el-col>
+            <el-col :span="6">
+              含税成本总价总计:
+              <span>{{ tableData.reduce((pre, cur) => pre + cur.totalCostIncludingTax, 0).toFixed(2) }}</span>
+            </el-col>
+            <el-col :span="6">
+              系统总价总计:
+              <span>{{ tableData.reduce((pre, cur) => pre + cur.systemTotalPrice, 0).toFixed(2) }}</span>
+            </el-col>
+          </el-row>
+        </div>
         <el-table :data="tableData" row-key="productId" border style="width: 100%">
           <el-table-column label="序号" width="60" align="center" fixed="left">
             <template #default="scope">
