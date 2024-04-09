@@ -107,7 +107,6 @@ import { useRouter } from 'vue-router'
 import { useProductStore } from '@/store/product'
 
 const changeFile = (uploadFile: UploadFile | Boolean | any, uploadFiles: UploadFiles) => {
-  console.log(1, uploadFile)
   const formData = new FormData()
   formData.append('file', uploadFile.raw, uploadFile.name)
   useProduct.importProducts(formData).then(res => {
@@ -118,17 +117,6 @@ const changeFile = (uploadFile: UploadFile | Boolean | any, uploadFiles: UploadF
       ElMessage.error(res.data.msg)
     }
   })
-  // if (response.code === 200) {
-  //   console.log(2,uploadFile);
-  // } else if (response.code === 401) {
-  //   ElMessage.closeAll()
-  //   ElMessage.error('登录超时，请重新登录')
-  //   setTimeout(() => {
-  //     router.push('/login')
-  //   })
-  // } else {
-  //   ElMessage.error(response.msg)
-  // }
 }
 
 const router = useRouter()
