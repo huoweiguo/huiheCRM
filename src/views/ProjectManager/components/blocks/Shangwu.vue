@@ -19,6 +19,7 @@
       <el-input v-model="ruleForm.num6" disabled />
     </el-form-item>
 
+    <!-- category == 1 -->
     <template v-if="props.form.category == 1">
       <el-form-item label="项目经理提成率(%)">
         <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
@@ -45,6 +46,8 @@
         <el-input v-model="ruleForm.num14" disabled />
       </el-form-item>
     </template>
+
+    <!-- category == 2 -->
     <template v-if="props.form.category == 2">
       <el-form-item label="灯具销售提成率(%)">
         <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
@@ -73,6 +76,11 @@
         </el-form-item>
       </template>
     </template>
+
+    <!-- 对公返点进项税税额可抵(专票) -->
+    <el-form-item label="对公返点进项税税额可抵(专票)">
+      <el-input v-model="ruleForm.num20" />
+    </el-form-item>
 
     <el-form-item label="成本总计">
       <el-input v-model="ruleForm.num15" disabled />
@@ -123,7 +131,8 @@ const ruleForm = reactive({
   num16: 0,
   num17: 0,
   num18: 0,
-  num19: 0
+  num19: 0,
+  num20: 0
 })
 
 // 获取计算数据
@@ -213,8 +222,8 @@ watchEffect(() => {
 
   ruleForm.num15 = parseFloat(num.toFixed(2))
 
-  // 项目利润=签约金额-成本总计
-  ruleForm.num16 = parseFloat(((props.form.contractAmount || 0) - num).toFixed(2))
+  // 项目利润=签约金额-成本总计+对公返点进项税税额可抵(专票)
+  ruleForm.num16 = parseFloat(((props.form.contractAmount || 0) - num + (parseFloat(ruleForm.num20.toString()) || 0)).toFixed(2))
 
   // 销售副总提成=项目利润*销售副总分成率(%)
   ruleForm.num4 = parseFloat(((ruleForm.num16 * ruleForm.num3) / 100).toFixed(2))
