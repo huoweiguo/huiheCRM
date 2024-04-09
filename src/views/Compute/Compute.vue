@@ -6,7 +6,7 @@
         <template #append>%</template>
       </el-input>
     </el-form-item>
-    <el-form-item label="销售副总提成率" prop="saleAgmExpenseRatio">
+    <el-form-item label="销售副总分成率" prop="saleAgmExpenseRatio">
       <el-input v-model="cinema.saleAgmExpenseRatio">
         <template #append>%</template>
       </el-input>
@@ -39,7 +39,7 @@
         <template #append>%</template>
       </el-input>
     </el-form-item>
-    <el-form-item label="销售副总提成率" prop="saleAgmExpenseRatio">
+    <el-form-item label="销售副总分成率" prop="saleAgmExpenseRatio">
       <el-input v-model="light.saleAgmExpenseRatio">
         <template #append>%</template>
       </el-input>

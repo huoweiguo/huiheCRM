@@ -6,7 +6,7 @@
     <el-form-item label="商务提成">
       <el-input v-model="ruleForm.num2" disabled />
     </el-form-item>
-    <el-form-item label="销售副总提成率(%)">
+    <el-form-item label="销售副总分成率(%)">
       <el-input v-model="ruleForm.num3" :disabled="disabled" @input="limitIpt($event, 'num3')" />
     </el-form-item>
     <el-form-item label="销售副总提成">
@@ -216,7 +216,7 @@ watchEffect(() => {
   // 项目利润=签约金额-成本总计
   ruleForm.num16 = parseFloat(((props.form.contractAmount || 0) - num).toFixed(2))
 
-  // 销售副总提成=项目利润*销售副总提成率(%)
+  // 销售副总提成=项目利润*销售副总分成率(%)
   ruleForm.num4 = parseFloat(((ruleForm.num16 * ruleForm.num3) / 100).toFixed(2))
 
   // 公司利润=项目利润-销售副总提成
