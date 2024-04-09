@@ -27,6 +27,11 @@
           <template #append>%</template>
         </el-input>
       </el-form-item>
+      <el-form-item label="深化提成率" prop="pdExpenseRatio">
+        <el-input v-model="cinema.deepenExpenseRatio">
+          <template #append>%</template>
+        </el-input>
+      </el-form-item>
       <el-form-item label="安装调试员提成率" prop="commissionerExpenseRatio">
         <el-input v-model="cinema.commissionerExpenseRatio">
           <template #append>%</template>
@@ -57,6 +62,11 @@
       </el-form-item>
       <el-form-item label="灯具项目经理提成率" prop="pdExpenseRatio">
         <el-input v-model="light.pdExpenseRatio">
+          <template #append>%</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="深化提成率" prop="pdExpenseRatio">
+        <el-input v-model="light.deepenExpenseRatio">
           <template #append>%</template>
         </el-input>
       </el-form-item>
@@ -93,7 +103,8 @@ const cinema = reactive<RuleCompute>({
   sdExpenseRatio: '',
   pmExpenseRatio: '',
   pdExpenseRatio: '',
-  commissionerExpenseRatio: ''
+  commissionerExpenseRatio: '',
+  deepenExpenseRatio: ''
 })
 const light = reactive<RuleCompute>({
   id: '',
@@ -104,7 +115,8 @@ const light = reactive<RuleCompute>({
   sdExpenseRatio: '',
   pmExpenseRatio: '',
   pdExpenseRatio: '',
-  commissionerExpenseRatio: null
+  commissionerExpenseRatio: '',
+  deepenExpenseRatio: ''
 })
 
 useProgram.getFunctions({ projectId: route.params.id }).then(res => {
