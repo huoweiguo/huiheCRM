@@ -3,10 +3,10 @@
     <div class="cinema">
       <el-form-item label="产品录入">
         <el-button type="primary" class="mb20" @click="addProduct">产品录入</el-button>
-        <el-table :data="tableData" border style="width: 100%">
+        <el-table :data="tableData" row-key="productId" border style="width: 100%">
           <el-table-column label="序号" width="60" align="center" fixed="left">
             <template #default="scope">
-              <span>{{ scope.$index + 1 + (seacrForm.pageNum - 1) * seacrForm.pageSize }}</span>
+              <span>{{ scope.$index + 1 }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="name" label="名称" />
@@ -138,27 +138,25 @@ const seacrForm = reactive({
 
 onMounted(() => {
   // 初始化数据
-  props.form &&
-    (tableData.value = props.form.map((item: any) => ({
-      ...item,
-      productId: item.id || item.productId,
+  if (props.form) {
+    // 初始化选择
+    selectList.value = props.form
 
-      // 税金合计=含税成本单价/1.13*0.13*数量
-      totalTaxes: (item.unitPriceIncludingTax / 1.13) * 0.13 * (item.productNum || 1),
+    // 计算
+    let arr = props.form.map((item: itemType) => {
+      let row = {
+        ...item,
+        productId: item.id || item.productId,
+        productNum: 1
+      }
+      row = Object.assign(row, calculate(item))
+      return row
+    })
 
-      // 未税成本单价=含税成本单价/1.13
-      unitPriceExcludingTax2: item.unitPriceIncludingTax / 1.13,
+    tableData.value = Object.assign([], tableData.value, arr)
+  }
 
-      // 未税成本总价=未税成本单价*数量
-      totalCostExcludingTax: parseFloat((item.unitPriceIncludingTax / 1.13).toFixed(2)) * (item.productNum || 1),
-
-      // 含税成本总价=含税成本单价*数量
-      totalCostIncludingTax: item.unitPriceIncludingTax * (item.productNum || 1),
-
-      // 系统总价=系统单价*数量
-      systemTotalPrice: item.systemUnitPrice * (item.productNum || 1)
-    })))
-
+  console.log('初始化选择', tableData.value.length)
   emit('update:form', tableData.value)
 })
 
@@ -204,28 +202,18 @@ interface itemType {
   [propName: string]: any
 }
 const onSelect = () => {
-  let arr = selectList.value.map((item: itemType) => ({
-    ...item,
-    productId: item.id,
-    productNum: 1,
-
-    // 税金合计=含税成本单价/1.13*0.13*数量
-    totalTaxes: (item.unitPriceIncludingTax / 1.13) * 0.13 * (item.productNum || 1),
-
-    // 未税成本单价=含税成本单价/1.13
-    unitPriceExcludingTax2: item.unitPriceIncludingTax / 1.13,
-
-    // 未税成本总价=未税成本单价*数量
-    totalCostExcludingTax: parseFloat((item.unitPriceIncludingTax / 1.13).toFixed(2)) * (item.productNum || 1),
-
-    // 含税成本总价=含税成本单价*数量
-    totalCostIncludingTax: item.unitPriceIncludingTax * (item.productNum || 1),
-
-    // 系统总价=系统单价*数量
-    systemTotalPrice: item.systemUnitPrice * (item.productNum || 1)
-  }))
+  let arr = selectList.value.map((item: itemType) => {
+    let row = {
+      ...item,
+      productId: item.id,
+      productNum: 1
+    }
+    row = Object.assign(row, calculate(item))
+    return row
+  })
 
   tableData.value = Object.assign([], tableData.value, arr)
+  console.log('选择数据', tableData.value.length)
 
   emit('update:form', tableData.value)
   visible.value = false
@@ -243,11 +231,7 @@ interface Row {
 }
 
 const iptChange = (row: Row, index: number) => {
-  row.totalTaxes = (row.unitPriceIncludingTax / 1.13) * 0.13 * (row.productNum || 0)
-  row.unitPriceExcludingTax2 = row.unitPriceIncludingTax / 1.13
-  row.totalCostExcludingTax = parseFloat((row.unitPriceIncludingTax / 1.13).toFixed(2)) * (row.productNum || 0)
-  row.totalCostIncludingTax = row.unitPriceIncludingTax * (row.productNum || 0)
-  row.systemTotalPrice = row.systemUnitPrice * (row.productNum || 0)
+  row = Object.assign(row, calculate(row))
 
   // 更新 tableData 中的数据
   tableData.value.splice(index, 1, row)
@@ -259,5 +243,25 @@ const iptChange = (row: Row, index: number) => {
 const delrow = (index: number) => {
   tableData.value.splice(index, 1)
   emit('update:form', tableData.value)
+}
+
+// 计算
+const calculate = (row: itemType) => {
+  return {
+    // 税金合计=含税成本单价/1.13*0.13*数量
+    totalTaxes: (row.unitPriceIncludingTax / 1.13) * 0.13 * (row.productNum || 1),
+
+    // 未税成本单价=含税成本单价/1.13
+    unitPriceExcludingTax2: row.unitPriceIncludingTax / 1.13,
+
+    // 未税成本总价=未税成本单价*数量
+    totalCostExcludingTax: parseFloat((row.unitPriceIncludingTax / 1.13).toFixed(2)) * (row.productNum || 1),
+
+    // 含税成本总价=含税成本单价*数量
+    totalCostIncludingTax: row.unitPriceIncludingTax * (row.productNum || 1),
+
+    // 系统总价=系统单价*数量
+    systemTotalPrice: row.systemUnitPrice * (row.productNum || 1)
+  }
 }
 </script>
