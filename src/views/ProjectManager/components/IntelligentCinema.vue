@@ -32,16 +32,16 @@
         </el-form-item>
 
         <el-form-item label="产品开票比例" prop="productRate">
-          <el-input v-model="ruleForm.productRate" placeholder="请输入产品开票比例"></el-input>
+          <el-input v-model="ruleForm.productRate" placeholder="请输入产品开票比例" @input="JS_productRate"></el-input>
         </el-form-item>
         <el-form-item label="产品开票金额" prop="productAmount">
-          <el-input v-model="ruleForm.productAmount" placeholder="请输入产品开票金额" />
+          <el-input v-model="ruleForm.productAmount" placeholder="请输入产品开票金额" @input="JS_productAmount" />
         </el-form-item>
         <el-form-item label="服务费开票比例" prop="serviceRate">
-          <el-input v-model="ruleForm.serviceRate" placeholder="请输入服务费开票比例" />
+          <el-input v-model="ruleForm.serviceRate" placeholder="请输入服务费开票比例" @input="JS_serviceRate" />
         </el-form-item>
         <el-form-item label="服务费开票金额" prop="serviceAmount">
-          <el-input v-model="ruleForm.serviceAmount" placeholder="请输入服务费开票金额" />
+          <el-input v-model="ruleForm.serviceAmount" placeholder="请输入服务费开票金额" @input="JS_serviceAmount" />
         </el-form-item>
       </div>
 
@@ -97,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
@@ -347,6 +347,42 @@ const resetForm = (ruleFormRef: FormInstance | undefined) => {
 // 监听赋值
 const changeItem = (key: string, val: any) => {
   ;(ruleForm.value as FormValue)[key] = val
+}
+
+// 监听计算
+const JS_productRate = (newVal: any) => {
+  if (newVal.slice(-1) === '.') return
+  let newVal_ = Math.min(parseFloat(newVal) || 0, 100)
+  ruleForm.value.productRate = newVal_.toString()
+
+  if (ruleForm.value.contractAmount && newVal) {
+    // 产品开票金额=签约金额*产品开票比例
+    ruleForm.value.productAmount = (parseFloat(ruleForm.value.contractAmount) * (newVal_ / 100)).toString()
+  }
+}
+const JS_productAmount = (newVal: any) => {
+  if (ruleForm.value.contractAmount && newVal) {
+    // 产品开票比例=产品开票金额/签约金额
+    ruleForm.value.productRate = ((parseFloat(newVal) / parseFloat(ruleForm.value.contractAmount)) * 100).toString()
+  }
+}
+
+const JS_serviceRate = (newVal: any) => {
+  if (newVal.slice(-1) === '.') return
+  let newVal_ = Math.min(parseFloat(newVal) || 0, 100)
+  ruleForm.value.serviceRate = newVal_.toString()
+
+  if (ruleForm.value.contractAmount && newVal) {
+    // 服务开票金额=签约金额*服务开票比例
+    ruleForm.value.serviceAmount = ((parseFloat(ruleForm.value.contractAmount) * newVal_) / 100).toString()
+  }
+}
+
+const JS_serviceAmount = (newVal: any) => {
+  if (ruleForm.value.contractAmount && newVal) {
+    // 服务开票比例=服务开票金额/签约金额
+    ruleForm.value.serviceRate = ((parseFloat(newVal) / parseFloat(ruleForm.value.contractAmount)) * 100).toString()
+  }
 }
 </script>
 
