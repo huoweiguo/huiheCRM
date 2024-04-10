@@ -150,6 +150,8 @@ const editRole = (row: any) => {
     if (res.data.code === 200) {
       personRole.value.menus = res.data.data.menus
       selectRoleList.value = res.data.data.menus
+      personRole.value.writePermission = res.data.data.writePermission || false
+      personRole.value.readPermissionForAllGroups = res.data.data.readPermissionForAllGroups || false
     }
   })
 }
