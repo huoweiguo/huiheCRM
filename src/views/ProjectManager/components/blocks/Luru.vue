@@ -76,7 +76,7 @@
 
     <!--产品录入弹出框-->
     <el-dialog v-model="visible" title="产品录入" width="1100" align-center>
-      <el-form ref="ruleFormRef" :model="seacrForm" label-width="50px" class="mb20" :inline="true">
+      <el-form ref="ruleFormRef" :model="seacrForm" label-width="80px" class="mb20" :inline="true">
         <el-form-item label="名称" prop="name">
           <el-input v-model="seacrForm.name" placeholder="请输入名称" />
         </el-form-item>
@@ -85,6 +85,13 @@
         </el-form-item>
         <el-form-item label="品牌" prop="brand">
           <el-input v-model="seacrForm.brand" placeholder="请输入品牌" />
+        </el-form-item>
+        <el-form-item label="产品类型" prop="type">
+          <el-select v-model="seacrForm.type" placeholder="请选择产品类型" style="width: 167px">
+            <el-option label="全部" value="" />
+            <el-option label="智能+影院" value="1" />
+            <el-option label="灯具" value="2" />
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">搜索</el-button>
