@@ -35,6 +35,7 @@
       </el-form-item>
       <el-form-item label="角色权限" prop="roles" :label-width="100">
         <el-tree
+          v-if="dialogVisible"
           ref="treeRef"
           :data="roleList"
           :default-checked-keys="selectRoleList"
@@ -47,6 +48,11 @@
           style="width: 240px"
           @check-change="selectChange"
         />
+      </el-form-item>
+
+      <el-form-item label="数据权限" :label-width="100">
+        <el-checkbox v-model="personRole.writePermission" label="修改数据" :disabled="!Permission.hasWritePermission"></el-checkbox>
+        <el-checkbox v-model="personRole.readPermissionForAllGroups" label="查看所有团队数据" :disabled="!Permission.hasReadPermissionForAllGroups"></el-checkbox>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -95,13 +101,17 @@ interface PersonRule {
   id: string
   name: string
   menus: any[]
+  writePermission: boolean
+  readPermissionForAllGroups: boolean
 }
 const roleList = ref<RoleList[]>(roleListSchame)
 // 添加角色
 const personRole = ref<PersonRule>({
   id: '',
   name: '',
-  menus: []
+  menus: [],
+  writePermission: false,
+  readPermissionForAllGroups: false
 })
 const dialogVisible = ref<Boolean>(false)
 const selectRoleList = ref<any[]>([])
@@ -110,16 +120,32 @@ const addRole = () => {
   personRole.value.id = ''
   personRole.value.name = ''
   personRole.value.menus = []
+  personRole.value.writePermission = false
+  personRole.value.readPermissionForAllGroups = false
   selectRoleList.value = []
   dialogVisible.value = true
   isedit.value = false
 }
+
+// 获取权限
+const Permission = reactive({
+  hasReadPermissionForAllGroups: false,
+  hasWritePermission: false
+})
+useRole.checkDataPermission().then(res => {
+  if (res.data.code === 200) {
+    Permission.hasReadPermissionForAllGroups = res.data.data.hasReadPermissionForAllGroups || false
+    Permission.hasWritePermission = res.data.data.hasWritePermission || false
+  }
+})
 
 const editRole = (row: any) => {
   isedit.value = true
   dialogVisible.value = true
   personRole.value.id = row.id
   personRole.value.name = row.name
+  personRole.value.writePermission = row.writePermission
+  personRole.value.readPermissionForAllGroups = row.readPermissionForAllGroups
   useRole.queryRole(row.id).then(res => {
     if (res.data.code === 200) {
       personRole.value.menus = res.data.data.menus

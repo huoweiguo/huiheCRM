@@ -67,7 +67,11 @@ export const useRoleStore = defineStore(
     const getMenuTree = () => {
       return http.get(`/role/menuTree/`)
     }
+    const checkDataPermission = () => {
+      return http.get(`/role/checkDataPermission`)
+    }
     return {
+      checkDataPermission,
       queryRole,
       getMenuTreeById,
       getMenuTree,
