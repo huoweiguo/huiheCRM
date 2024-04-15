@@ -1,38 +1,66 @@
 <template>
-  <div>
-    <el-form-item label="商务提成率(%)">
-      <el-input v-model="ruleForm.num1" :disabled="disabled" @input="limitIpt($event, 'num1')" />
-    </el-form-item>
-    <el-form-item label="商务提成">
-      <el-input v-model="ruleForm.num2" disabled />
-    </el-form-item>
-    <el-form-item label="销售副总分成率(%)">
-      <el-input v-model="ruleForm.num3" :disabled="disabled" @input="limitIpt($event, 'num3')" />
-    </el-form-item>
-    <el-form-item label="销售副总提成">
-      <el-input v-model="ruleForm.num4" disabled />
-    </el-form-item>
-    <el-form-item label="销售总监提成率(%)">
-      <el-input v-model="ruleForm.num5" :disabled="disabled" @input="limitIpt($event, 'num5')" />
-    </el-form-item>
-    <el-form-item label="销售总监提成">
-      <el-input v-model="ruleForm.num6" disabled />
-    </el-form-item>
+  <el-form-item label="商务提成率(%)">
+    <el-input v-model="ruleForm.num1" :disabled="disabled" @input="limitIpt($event, 'num1')" />
+  </el-form-item>
+  <el-form-item label="商务提成">
+    <el-input v-model="ruleForm.num2" disabled />
+  </el-form-item>
+  <el-form-item label="销售副总分成率(%)">
+    <el-input v-model="ruleForm.num3" :disabled="disabled" @input="limitIpt($event, 'num3')" />
+  </el-form-item>
+  <el-form-item label="销售副总提成">
+    <el-input v-model="ruleForm.num4" disabled />
+  </el-form-item>
+  <el-form-item label="销售总监提成率(%)">
+    <el-input v-model="ruleForm.num5" :disabled="disabled" @input="limitIpt($event, 'num5')" />
+  </el-form-item>
+  <el-form-item label="销售总监提成">
+    <el-input v-model="ruleForm.num6" disabled />
+  </el-form-item>
 
-    <!-- category == 1 -->
-    <template v-if="props.form.category == 1">
-      <el-form-item label="项目经理提成率(%)">
-        <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
-      </el-form-item>
-      <el-form-item label="项目经理提成">
-        <el-input v-model="ruleForm.num8" disabled />
-      </el-form-item>
-      <el-form-item label="项目总监提成率(%)">
-        <el-input v-model="ruleForm.num9" :disabled="disabled" @input="limitIpt($event, 'num9')" />
-      </el-form-item>
-      <el-form-item label="项目总监提成">
-        <el-input v-model="ruleForm.num10" disabled />
-      </el-form-item>
+  <!-- category == 1 -->
+  <template v-if="props.form.category == 1">
+    <el-form-item label="项目经理提成率(%)">
+      <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
+    </el-form-item>
+    <el-form-item label="项目经理提成">
+      <el-input v-model="ruleForm.num8" disabled />
+    </el-form-item>
+    <el-form-item label="项目总监提成率(%)">
+      <el-input v-model="ruleForm.num9" :disabled="disabled" @input="limitIpt($event, 'num9')" />
+    </el-form-item>
+    <el-form-item label="项目总监提成">
+      <el-input v-model="ruleForm.num10" disabled />
+    </el-form-item>
+    <el-form-item label="深化提成率(%)">
+      <el-input v-model="ruleForm.num11" :disabled="disabled" @input="limitIpt($event, 'num11')" />
+    </el-form-item>
+    <el-form-item label="深化提成">
+      <el-input v-model="ruleForm.num12" disabled />
+    </el-form-item>
+    <el-form-item label="安装调试员提成率(%)">
+      <el-input v-model="ruleForm.num13" :disabled="disabled" @input="limitIpt($event, 'num13')" />
+    </el-form-item>
+    <el-form-item label="安装调试员提成">
+      <el-input v-model="ruleForm.num14" disabled />
+    </el-form-item>
+  </template>
+
+  <!-- category == 2 -->
+  <template v-if="props.form.category == 2">
+    <el-form-item label="灯具销售提成率(%)">
+      <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
+    </el-form-item>
+    <el-form-item label="灯具销售提成">
+      <el-input v-model="ruleForm.num8" disabled />
+    </el-form-item>
+    <el-form-item label="灯具项目经理提成率(%)">
+      <el-input v-model="ruleForm.num9" :disabled="disabled" @input="limitIpt($event, 'num9')" />
+    </el-form-item>
+    <el-form-item label="灯具项目经理提成">
+      <el-input v-model="ruleForm.num10" disabled />
+    </el-form-item>
+    <template v-show="false">
       <el-form-item label="深化提成率(%)">
         <el-input v-model="ruleForm.num11" :disabled="disabled" @input="limitIpt($event, 'num11')" />
       </el-form-item>
@@ -46,42 +74,13 @@
         <el-input v-model="ruleForm.num14" disabled />
       </el-form-item>
     </template>
+  </template>
 
-    <!-- category == 2 -->
-    <template v-if="props.form.category == 2">
-      <el-form-item label="灯具销售提成率(%)">
-        <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
-      </el-form-item>
-      <el-form-item label="灯具销售提成">
-        <el-input v-model="ruleForm.num8" disabled />
-      </el-form-item>
-      <el-form-item label="灯具项目经理提成率(%)">
-        <el-input v-model="ruleForm.num9" :disabled="disabled" @input="limitIpt($event, 'num9')" />
-      </el-form-item>
-      <el-form-item label="灯具项目经理提成">
-        <el-input v-model="ruleForm.num10" disabled />
-      </el-form-item>
-      <template v-show="false">
-        <el-form-item label="深化提成率(%)">
-          <el-input v-model="ruleForm.num11" :disabled="disabled" @input="limitIpt($event, 'num11')" />
-        </el-form-item>
-        <el-form-item label="深化提成">
-          <el-input v-model="ruleForm.num12" disabled />
-        </el-form-item>
-        <el-form-item label="安装调试员提成率(%)">
-          <el-input v-model="ruleForm.num13" :disabled="disabled" @input="limitIpt($event, 'num13')" />
-        </el-form-item>
-        <el-form-item label="安装调试员提成">
-          <el-input v-model="ruleForm.num14" disabled />
-        </el-form-item>
-      </template>
-    </template>
-
+  <div>
     <!-- 对公返点进项税税额可抵(专票) -->
     <el-form-item label="对公返点进项税税额可抵(专票)">
       <el-input v-model="ruleForm.num20" @input="emit('changeItem', 'taxDeduction', $event)" />
     </el-form-item>
-
     <el-form-item label="成本总计">
       <el-input v-model="ruleForm.num15" disabled />
     </el-form-item>

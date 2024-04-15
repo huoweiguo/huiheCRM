@@ -75,18 +75,20 @@
       <!-- 其他税费 -->
       <Qita v-model:form="ruleForm.cost"></Qita>
 
-      <!--未含税-->
-      <Shui :form="ruleForm" @changeItem="changeItem"></Shui>
+      <div style="min-width: 2230px">
+        <!--未含税-->
+        <Shui :form="ruleForm" @changeItem="changeItem"></Shui>
 
-      <!--商务-->
-      <Suspense>
-        <template #default>
-          <Shangwu :form="ruleForm" @changeItem="changeItem"></Shangwu>
-        </template>
-        <template #fallback>
-          <div>计算中...</div>
-        </template>
-      </Suspense>
+        <!--商务-->
+        <Suspense>
+          <template #default>
+            <Shangwu :form="ruleForm" @changeItem="changeItem"></Shangwu>
+          </template>
+          <template #fallback>
+            <div>计算中...</div>
+          </template>
+        </Suspense>
+      </div>
     </el-form>
 
     <div style="padding-left: 120px">

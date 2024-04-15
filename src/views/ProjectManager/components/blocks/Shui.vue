@@ -1,30 +1,28 @@
 <template>
-  <div>
-    <el-form-item label="未税成本总价">
-      <el-input v-model="ruleForm.num1" disabled />
-    </el-form-item>
-    <el-form-item label="去税面价">
-      <el-input v-model="ruleForm.num2" :disabled="disabled" @input="iptChange('taxFreePrice', $event)" />
-    </el-form-item>
-    <el-form-item label="净价">
-      <el-input v-model="ruleForm.num3" disabled />
-    </el-form-item>
-    <el-form-item label="净折扣">
-      <el-input v-model="ruleForm.num4" disabled />
-    </el-form-item>
-    <el-form-item label="施工成本">
-      <el-input v-model="ruleForm.num5" :disabled="disabled" @input="iptChange('constructionCost', $event)" />
-    </el-form-item>
-    <el-form-item label="总推广费">
-      <el-input v-model="ruleForm.num6" :disabled="disabled" @input="iptChange('promotionExpenses', $event)" />
-    </el-form-item>
-    <el-form-item label="运营费用率(%)">
-      <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
-    </el-form-item>
-    <el-form-item label="运营费用">
-      <el-input v-model="ruleForm.num8" disabled />
-    </el-form-item>
-  </div>
+  <el-form-item label="未税成本总价">
+    <el-input v-model="ruleForm.num1" disabled />
+  </el-form-item>
+  <el-form-item label="去税面价">
+    <el-input v-model="ruleForm.num2" :disabled="disabled" @input="iptChange('taxFreePrice', $event)" />
+  </el-form-item>
+  <el-form-item label="净价">
+    <el-input v-model="ruleForm.num3" disabled />
+  </el-form-item>
+  <el-form-item label="净折扣">
+    <el-input v-model="ruleForm.num4" disabled />
+  </el-form-item>
+  <el-form-item label="施工成本">
+    <el-input v-model="ruleForm.num5" :disabled="disabled" @input="iptChange('constructionCost', $event)" />
+  </el-form-item>
+  <el-form-item label="总推广费">
+    <el-input v-model="ruleForm.num6" :disabled="disabled" @input="iptChange('promotionExpenses', $event)" />
+  </el-form-item>
+  <el-form-item label="运营费用率(%)">
+    <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
+  </el-form-item>
+  <el-form-item label="运营费用">
+    <el-input v-model="ruleForm.num8" disabled />
+  </el-form-item>
 </template>
 
 <script setup lang="ts">
