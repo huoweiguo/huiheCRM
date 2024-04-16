@@ -65,11 +65,6 @@
           <template #append>%</template>
         </el-input>
       </el-form-item>
-      <el-form-item label="深化提成率" prop="pdExpenseRatio">
-        <el-input v-model="light.deepenExpenseRatio">
-          <template #append>%</template>
-        </el-input>
-      </el-form-item>
     </el-form>
     <div style="padding-left: 120px">
       <el-button type="primary" @click="submitForm">保存</el-button>
