@@ -66,7 +66,7 @@
     </el-form-item>
   </el-form>
   <div style="padding-left: 120px">
-    <el-button type="primary" @click="submitForm" :loading="loading">保存</el-button>
+    <el-button type="primary" @click="submitForm" :loading="loading" v-hasPermi="['compute:list:save']">保存</el-button>
     <el-button @click="resetForm(ruleFormRef, lightFormRef)">重置</el-button>
   </div>
 </template>

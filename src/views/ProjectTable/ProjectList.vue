@@ -15,7 +15,7 @@
     </el-form-item>
   </el-form>
   <div class="mb20">
-    <el-button type="primary" @click="router.push('/projectTable/addProjectList')">添加项目跟进</el-button>
+    <el-button type="primary" @click="router.push('/projectTable/addProjectList')" v-hasPermi="['projectTrace:list:insert']">添加项目跟进</el-button>
   </div>
 
   <el-table :data="tableData" class="mb20" border style="width: 100%">
@@ -46,8 +46,8 @@
     </el-table-column>
     <el-table-column label="操作" align="center" fixed="right" width="140">
       <template #default="scope">
-        <el-button link type="primary" size="small" @click="showEdit(JSON.stringify(scope.row.id))">编辑</el-button>
-        <el-button link type="primary" size="small" @click="deleteItem(scope.row.id)">删除</el-button>
+        <el-button link type="primary" size="small" @click="showEdit(JSON.stringify(scope.row.id))" v-hasPermi="['projectTrace:list:edit']">编辑</el-button>
+        <el-button link type="primary" size="small" @click="deleteItem(scope.row.id)" v-hasPermi="['projectTrace:list:delete']">删除</el-button>
       </template>
     </el-table-column>
   </el-table>

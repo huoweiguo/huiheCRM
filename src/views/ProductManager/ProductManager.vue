@@ -22,8 +22,17 @@
     </el-form-item>
   </el-form>
   <div class="mb20">
-    <el-button type="primary" @click="router.push('/productManager/addProduct')">添加产品</el-button>
-    <el-upload style="display: inline-block; margin-left: 20px" method="post" :limit="1" :auto-upload="false" :on-change="changeFile" :show-file-list="false" accept=".xlsx, .xls">
+    <el-button v-hasPermi="['product:list:insert']" type="primary" @click="router.push('/productManager/addProduct')">添加产品</el-button>
+    <el-upload
+      v-hasPermi="['product:list:import']"
+      style="display: inline-block; margin-left: 20px"
+      method="post"
+      :limit="1"
+      :auto-upload="false"
+      :on-change="changeFile"
+      :show-file-list="false"
+      accept=".xlsx, .xls"
+    >
       <el-button type="primary">导入</el-button>
     </el-upload>
   </div>
@@ -53,8 +62,8 @@
     </el-table-column>
     <el-table-column prop="address" label="操作" align="center" fixed="right" width="180">
       <template #default="scope">
-        <el-button link type="primary" size="small" @click="editLine(scope.row)">编辑</el-button>
-        <el-button link type="primary" size="small" @click="deleteLine(scope.row.id)">删除</el-button>
+        <el-button link type="primary" size="small" @click="editLine(scope.row)" v-hasPermi="['product:list:edit']">编辑</el-button>
+        <el-button link type="primary" size="small" @click="deleteLine(scope.row.id)" v-hasPermi="['product:list:delete']">删除</el-button>
       </template>
     </el-table-column>
   </el-table>

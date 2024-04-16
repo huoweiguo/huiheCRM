@@ -9,7 +9,7 @@
     </el-form-item>
   </el-form>
   <div class="mb20">
-    <el-button type="primary" @click="addRole">添加角色</el-button>
+    <el-button type="primary" @click="addRole" v-hasPermi="['person:role:list:insert', 'person:role:add']">添加角色</el-button>
   </div>
 
   <el-table :data="tableData" class="mb20" border style="width: 100%">
@@ -18,8 +18,8 @@
     <el-table-column prop="createTime" label="创建时间" align="center" />
     <el-table-column label="操作" align="center" fixed="right" width="180">
       <template #default="scope">
-        <el-button link type="primary" size="small" @click="editRole(scope.row)">编辑</el-button>
-        <el-button link type="primary" size="small" @click="deleteRole(scope.row.id)">删除</el-button>
+        <el-button link type="primary" size="small" @click="editRole(scope.row)" v-hasPermi="['person:role:list:edit']">编辑</el-button>
+        <el-button link type="primary" size="small" @click="deleteRole(scope.row.id)" v-hasPermi="['person:role:list:delete']">删除</el-button>
       </template>
     </el-table-column>
   </el-table>

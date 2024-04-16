@@ -18,7 +18,7 @@
     </el-form-item>
   </el-form>
   <div class="mb20">
-    <el-button type="primary" @click="router.push('/channel/addChannel')">添加渠道</el-button>
+    <el-button v-hasPermi="['channel:list:insert']" type="primary" @click="router.push('/channel/addChannel')">添加渠道</el-button>
   </div>
   <el-table :data="tableData" class="mb20" border style="width: 100%">
     <el-table-column label="序号" width="60" align="center" fixed="left">
@@ -43,8 +43,8 @@
     </el-table-column>
     <el-table-column prop="address" label="操作" align="center" fixed="right" width="180">
       <template #default="scope">
-        <el-button link type="primary" size="small" @click="showEdit(JSON.stringify(scope.row.id))">编辑</el-button>
-        <el-button link type="primary" size="small" @click="deleteItem(scope.row.id)">删除</el-button>
+        <el-button link type="primary" size="small" @click="showEdit(JSON.stringify(scope.row.id))" v-hasPermi="['channel:list:edit']">编辑</el-button>
+        <el-button link type="primary" size="small" @click="deleteItem(scope.row.id)" v-hasPermi="['channel:list:delete']">删除</el-button>
       </template>
     </el-table-column>
   </el-table>

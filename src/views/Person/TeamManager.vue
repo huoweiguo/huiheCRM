@@ -9,7 +9,7 @@
     </el-form-item>
   </el-form>
   <div class="mb20">
-    <el-button type="primary" @click="addTeamVisible">添加团队</el-button>
+    <el-button type="primary" @click="addTeamVisible" v-hasPermi="['person:group:list:insert']">添加团队</el-button>
   </div>
 
   <el-table :data="tableData" class="mb20" border style="width: 100%">
@@ -22,12 +22,14 @@
     <el-table-column prop="createTime" label="创建时间" align="center" />
     <el-table-column label="操作" align="center" fixed="right" width="180">
       <template #default="scope">
-        <el-button link type="primary" size="small" @click="updateTeamVisible(scope.row)">编辑</el-button>
-        <el-button link type="primary" size="small" @click="deleteTeam(scope.row.id)">删除</el-button>
+        <el-button link type="primary" size="small" @click="updateTeamVisible(scope.row)" v-hasPermi="['person:group:list:edit']">编辑</el-button>
+        <el-button link type="primary" size="small" @click="deleteTeam(scope.row.id)" v-hasPermi="['person:group:list:delete']">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
-  <div class="fright"><el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" v-model:current-page="seacrhForm.pageNum" @change="changeTable" /></div>
+  <div class="fright">
+    <el-pagination small background layout="prev, pager, next" :total="totalNum" :pageSize="seacrhForm.pageSize" v-model:current-page="seacrhForm.pageNum" @change="changeTable" />
+  </div>
 
   <!--添加团队-->
   <el-dialog v-model="dialogVisible" :title="isModify ? '编辑团队' : '添加团队'" width="450">

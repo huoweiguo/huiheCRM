@@ -54,7 +54,7 @@
     </el-form-item>
   </el-form>
   <div style="padding-left: 120px">
-    <el-button type="primary" @click="submitForm(ruleFormRef)">保存</el-button>
+    <el-button type="primary" @click="submitForm(ruleFormRef)" v-hasPermi="['projectTrace:add:save']">保存</el-button>
     <el-button @click="resetForm(ruleFormRef)">重置</el-button>
   </div>
 </template>

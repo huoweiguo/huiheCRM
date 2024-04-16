@@ -25,8 +25,9 @@
   </el-form>
 
   <div class="mb20">
-    <el-button type="primary" @click="goProgram">项目录入</el-button>
+    <el-button type="primary" @click="goProgram" v-hasPermi="['project:add']">项目录入</el-button>
     <el-upload
+      v-hasPermi="['project:import']"
       style="display: inline-block; margin-left: 20px"
       method="post"
       :file-list="fileList"
@@ -59,9 +60,9 @@
     <el-table-column prop="pm" label="项目经理" align="center" />
     <el-table-column label="操作" align="center" fixed="right" width="180">
       <template #default="scope">
-        <el-button link type="primary" size="small" @click="visibleUpdate(JSON.stringify(scope.row.id))">编辑</el-button>
-        <el-button link type="primary" size="small" @click="deleteItem(JSON.stringify(scope.row.id))">删除</el-button>
-        <el-button link type="primary" size="small" @click="goCompute(JSON.stringify(scope.row.id))">项目汇算</el-button>
+        <el-button link type="primary" size="small" @click="visibleUpdate(JSON.stringify(scope.row.id))" v-hasPermi="['project:edit']">编辑</el-button>
+        <el-button link type="primary" size="small" @click="deleteItem(JSON.stringify(scope.row.id))" v-hasPermi="['project:delete']">删除</el-button>
+        <el-button link type="primary" size="small" @click="goCompute(JSON.stringify(scope.row.id))" v-hasPermi="['prooject:settlement:info']">项目汇算</el-button>
       </template>
     </el-table-column>
   </el-table>
