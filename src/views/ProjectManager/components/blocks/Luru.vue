@@ -174,7 +174,7 @@ onMounted(() => {
       let row = {
         ...item,
         productId: item.id || item.productId,
-        productNum: 1
+        productNum: item.productNum || 1
       }
       row = Object.assign(row, calculate(item))
       return row
