@@ -195,7 +195,7 @@ const getProductList = () => {
       list.value = res.data.rows
       totalNum.value = res.data.total
 
-      selectList.value.forEach((row: any) => {
+      tableData.value.forEach((row: any) => {
         list.value.forEach((item: any) => {
           if (row.productId === item.id || row.id === item.id) {
             multipleTableRef.value!.toggleRowSelection(item, true)
@@ -211,6 +211,7 @@ const getProductList = () => {
 const addProduct = () => {
   list.value = []
   visible.value = true
+  selectList.value = tableData.value as []
   getProductList()
 }
 
@@ -230,7 +231,16 @@ const changeTable = (current: number) => {
 }
 
 const handleSelectionChange = (val: []) => {
-  selectList.value = val
+  // 去重
+  let newArr = val.reduce((item: any, next: any) => {
+    if (!item.find((i: any) => i.id === next.id)) {
+      item.push(next)
+    }
+    return item
+  }, [])
+
+  // 更新选择
+  selectList.value = newArr
 }
 
 interface itemType {
@@ -276,8 +286,6 @@ const iptChange = (row: Row, index: number) => {
 }
 
 const delrow = (index: number) => {
-  // 删除 selectList 中的数据
-  selectList.value.splice(index, 1)
   // 删除 tableData 中的数据
   tableData.value.splice(index, 1)
   emit('update:form', tableData.value)
