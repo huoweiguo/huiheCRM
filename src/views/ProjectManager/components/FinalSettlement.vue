@@ -138,7 +138,7 @@
         <el-form-item label="推广费用">
           <el-input v-model="ruleForm.commission.promotionExpenses" disabled />
         </el-form-item>
-        <el-form-item label="深化提成费用">
+        <el-form-item label="深化提成费用" v-if="props.category == 1">
           <el-input v-model="ruleForm.commission.deepenExpense" disabled />
         </el-form-item>
         <el-form-item label="运营费用">
@@ -162,7 +162,7 @@
         <el-form-item label="项目总监提成">
           <el-input v-model="ruleForm.commission.pdRoyalties" disabled />
         </el-form-item>
-        <el-form-item label="安装调试员提成">
+        <el-form-item label="安装调试员提成" v-if="props.category == 1">
           <el-input v-model="ruleForm.commission.commissionerRoyalties" disabled />
         </el-form-item>
         <el-form-item label="未税成本总价">

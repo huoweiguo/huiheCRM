@@ -356,12 +356,12 @@ const changeItem = (key: string, val: any) => {
 const JS_contractAmount = (newVal: any) => {
   if (ruleForm.value.productRate && newVal) {
     // 产品开票金额=签约金额*产品开票比例
-    ruleForm.value.productAmount = (parseFloat(newVal) * (parseFloat(ruleForm.value.productRate) / 100)).toString()
+    ruleForm.value.productAmount = (parseFloat(newVal) * (parseFloat(ruleForm.value.productRate) / 100)).toFixed(2)
   }
 
   if (ruleForm.value.serviceRate && newVal) {
     // 服务开票金额=签约金额*服务开票比例
-    ruleForm.value.serviceAmount = (parseFloat(newVal) * (parseFloat(ruleForm.value.serviceRate) / 100)).toString()
+    ruleForm.value.serviceAmount = (parseFloat(newVal) * (parseFloat(ruleForm.value.serviceRate) / 100)).toFixed(2)
   }
 }
 
@@ -372,13 +372,13 @@ const JS_productRate = (newVal: any) => {
 
   if (ruleForm.value.contractAmount && newVal) {
     // 产品开票金额=签约金额*产品开票比例
-    ruleForm.value.productAmount = (parseFloat(ruleForm.value.contractAmount) * (newVal_ / 100)).toString()
+    ruleForm.value.productAmount = (parseFloat(ruleForm.value.contractAmount) * (newVal_ / 100)).toFixed(2)
   }
 }
 const JS_productAmount = (newVal: any) => {
   if (ruleForm.value.contractAmount && newVal) {
     // 产品开票比例=产品开票金额/签约金额
-    ruleForm.value.productRate = ((parseFloat(newVal) / parseFloat(ruleForm.value.contractAmount)) * 100).toString()
+    ruleForm.value.productRate = ((parseFloat(newVal) / parseFloat(ruleForm.value.contractAmount)) * 100).toFixed(2)
   }
 }
 
@@ -389,14 +389,14 @@ const JS_serviceRate = (newVal: any) => {
 
   if (ruleForm.value.contractAmount && newVal) {
     // 服务开票金额=签约金额*服务开票比例
-    ruleForm.value.serviceAmount = ((parseFloat(ruleForm.value.contractAmount) * newVal_) / 100).toString()
+    ruleForm.value.serviceAmount = ((parseFloat(ruleForm.value.contractAmount) * newVal_) / 100).toFixed(2)
   }
 }
 
 const JS_serviceAmount = (newVal: any) => {
   if (ruleForm.value.contractAmount && newVal) {
     // 服务开票比例=服务开票金额/签约金额
-    ruleForm.value.serviceRate = ((parseFloat(newVal) / parseFloat(ruleForm.value.contractAmount)) * 100).toString()
+    ruleForm.value.serviceRate = ((parseFloat(newVal) / parseFloat(ruleForm.value.contractAmount)) * 100).toFixed(2)
   }
 }
 </script>
