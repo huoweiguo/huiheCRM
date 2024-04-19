@@ -3,7 +3,7 @@
     <el-form ref="ruleFormRef" :model="ruleForm" label-width="170px" :inline="true" status-icon>
       <div>
         <el-form-item label="签约金额" prop="contractAmount">
-          <el-input v-model="ruleForm.contractAmount" placeholder="请输入签约金额，保留2位小数" />
+          <el-input v-model="ruleForm.contractAmount" placeholder="请输入签约金额，保留2位小数" @input="JS_contractAmount" />
         </el-form-item>
         <el-form-item label="销售团队">
           <el-select v-model="ruleForm.saleGroup" class="m-2" placeholder="请选择销售团队" style="width: 192px">
@@ -353,6 +353,18 @@ const changeItem = (key: string, val: any) => {
 }
 
 // 监听计算
+const JS_contractAmount = (newVal: any) => {
+  if (ruleForm.value.productRate && newVal) {
+    // 产品开票金额=签约金额*产品开票比例
+    ruleForm.value.productAmount = (parseFloat(newVal) * (parseFloat(ruleForm.value.productRate) / 100)).toString()
+  }
+
+  if (ruleForm.value.serviceRate && newVal) {
+    // 服务开票金额=签约金额*服务开票比例
+    ruleForm.value.serviceAmount = (parseFloat(newVal) * (parseFloat(ruleForm.value.serviceRate) / 100)).toString()
+  }
+}
+
 const JS_productRate = (newVal: any) => {
   if (newVal.slice(-1) === '.') return
   let newVal_ = Math.min(parseFloat(newVal) || 0, 100)

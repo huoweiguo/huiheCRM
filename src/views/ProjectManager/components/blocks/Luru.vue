@@ -7,19 +7,19 @@
           <el-row>
             <el-col :span="6">
               税金合计总计:
-              <span>{{ tableData.reduce((pre, cur) => pre + cur.totalTaxes, 0).toFixed(2) }}</span>
+              <span>{{ tableData.reduce((pre, cur) => pre + parseFloat(cur.totalTaxes.toFixed(2)), 0).toFixed(2) }}</span>
             </el-col>
             <el-col :span="6">
               未税成本总价总计:
-              <span>{{ tableData.reduce((pre, cur) => pre + cur.totalCostExcludingTax, 0).toFixed(2) }}</span>
+              <span>{{ tableData.reduce((pre, cur) => pre + parseFloat(cur.totalCostExcludingTax.toFixed(2)), 0).toFixed(2) }}</span>
             </el-col>
             <el-col :span="6">
               含税成本总价总计:
-              <span>{{ tableData.reduce((pre, cur) => pre + cur.totalCostIncludingTax, 0).toFixed(2) }}</span>
+              <span>{{ tableData.reduce((pre, cur) => pre + parseFloat(cur.totalCostIncludingTax.toFixed(2)), 0).toFixed(2) }}</span>
             </el-col>
             <el-col :span="6">
               系统总价总计:
-              <span>{{ tableData.reduce((pre, cur) => pre + cur.systemTotalPrice, 0).toFixed(2) }}</span>
+              <span>{{ tableData.reduce((pre, cur) => pre + parseFloat(cur.systemTotalPrice.toFixed(2)), 0).toFixed(2) }}</span>
             </el-col>
           </el-row>
         </div>
@@ -99,7 +99,7 @@
         </el-form-item>
       </el-form>
 
-      <el-table ref="multipleTableRef" row-key="id" :data="list" border style="width: 100%" class="mb20" @selection-change="handleSelectionChange">
+      <el-table v-if="visible" ref="multipleTableRef" row-key="id" :data="list" border style="width: 100%" class="mb20" @selection-change="handleSelectionChange">
         <el-table-column type="selection" :reserve-selection="true" width="55" />
         <el-table-column label="序号" width="60" align="center" fixed="left">
           <template #default="scope">
@@ -194,6 +194,14 @@ const getProductList = () => {
     if (res.data.code === 200) {
       list.value = res.data.rows
       totalNum.value = res.data.total
+
+      selectList.value.forEach((row: any) => {
+        list.value.forEach((item: any) => {
+          if (row.productId === item.id || row.id === item.id) {
+            multipleTableRef.value!.toggleRowSelection(item, true)
+          }
+        })
+      })
     } else {
       ElMessage.error(res.data.msg)
     }
@@ -268,6 +276,9 @@ const iptChange = (row: Row, index: number) => {
 }
 
 const delrow = (index: number) => {
+  // 删除 selectList 中的数据
+  selectList.value.splice(index, 1)
+  // 删除 tableData 中的数据
   tableData.value.splice(index, 1)
   emit('update:form', tableData.value)
 }

@@ -65,9 +65,10 @@
           fit="cover"
         />
       </el-form-item>
-      <el-form-item label="运营费用率">
+
+      <!-- <el-form-item label="运营费用率">
         <span>{{ ruleForm.operatingExpenseRatio?.toString() || '--' }}</span>
-      </el-form-item>
+      </el-form-item> -->
 
       <!--推荐-->
       <el-form-item label="推荐">
