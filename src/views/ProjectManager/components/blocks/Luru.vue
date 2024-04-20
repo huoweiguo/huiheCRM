@@ -99,7 +99,18 @@
         </el-form-item>
       </el-form>
 
-      <el-table v-if="visible" ref="multipleTableRef" row-key="id" :data="list" border style="width: 100%" class="mb20" @selection-change="handleSelectionChange">
+      <el-table
+        v-if="visible"
+        ref="multipleTableRef"
+        row-key="id"
+        :data="list"
+        border
+        style="width: 100%"
+        class="mb20"
+        @selection-change="handleSelectionChange"
+        @select="selectRow"
+        @select-all="selectAllRow"
+      >
         <el-table-column type="selection" :reserve-selection="true" width="55" />
         <el-table-column label="序号" width="60" align="center" fixed="left">
           <template #default="scope">
@@ -138,8 +149,24 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import type { FormInstance } from 'element-plus'
-import { ElMessage, ElTable } from 'element-plus'
+import { ElMessage, ElTable, ElTableColumn } from 'element-plus'
 import { useProductStore } from '@/store/product'
+
+interface itemType {
+  [propName: string]: any
+}
+
+interface Row {
+  totalTaxes: number
+  unitPriceIncludingTax: number
+  unitPriceExcludingTax2: number
+  totalCostExcludingTax: number
+  totalCostIncludingTax: number
+  systemUnitPrice: number
+  systemTotalPrice: number
+  productNum: number
+}
+
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 const useProduct = useProductStore()
 const emit = defineEmits(['update:form'])
@@ -150,7 +177,7 @@ const visible = ref<boolean>(false)
 const ruleFormRef = ref<FormInstance>()
 
 const tableData = ref<Row[]>([])
-const selectList = ref([])
+const selectList = ref<itemType[]>([])
 const list = ref([])
 
 const totalNum = ref(0)
@@ -166,9 +193,6 @@ const seacrForm = reactive({
 onMounted(() => {
   // 初始化数据
   if (props.form) {
-    // 初始化选择
-    selectList.value = props.form
-
     // 计算
     let arr = props.form.map((item: itemType) => {
       let row = {
@@ -208,11 +232,111 @@ const getProductList = () => {
   })
 }
 
+// 打开产品录入弹出框
 const addProduct = () => {
   list.value = []
   visible.value = true
-  selectList.value = tableData.value as []
+  selectList.value = Object.assign(
+    [],
+    tableData.value.map((item: any) => {
+      return {
+        id: item.productId || item.id,
+        type: item.type,
+        name: item.name,
+        model: item.model,
+        brand: item.brand,
+        systemUnitPrice: item.systemUnitPrice,
+        unitPriceIncludingTax: item.unitPriceIncludingTax,
+        unitPriceExcludingTax: item.unitPriceExcludingTax,
+        quantitySoldOut: item.quantitySoldOut,
+        remark: item.remark
+      }
+    })
+  )
+
   getProductList()
+}
+
+// 选择当前行
+const selectRow = (selection: any, row: any) => {
+  // 判断是否已经选择
+  let isSelect = selectList.value.find((item: any) => item.id === row.id)
+  if (isSelect) {
+    // 取消选择
+    multipleTableRef.value!.toggleRowSelection(row, false)
+    // 删除选择
+    selectList.value = selectList.value.filter((item: any) => item.id !== row.id)
+  } else {
+    // 选择当前行
+    multipleTableRef.value!.toggleRowSelection(row, true)
+    // 添加选择
+    selectList.value.push(row)
+  }
+}
+
+// 选择所有行
+const selectAllRow = (selection: any) => {
+  if (selection.length) {
+    selection.forEach((row: any) => {
+      let result = selectList.value.some((item: any) => item.id == row.id)
+      if (!result) {
+        selectList.value.push(row)
+      }
+    })
+  } else {
+    list.value.forEach((row: any) => {
+      selectList.value = selectList.value.filter((item: any) => item.id !== row.id)
+    })
+  }
+}
+
+// 当选择项发生变化时
+const handleSelectionChange = (val: []) => {
+  // 去重
+  let newArr = val.reduce((item: any, next: any) => {
+    if (!item.find((i: any) => i.id === next.id)) {
+      item.push(next)
+    }
+    return item
+  }, [])
+
+  // 更新选择
+  // selectList.value = newArr
+}
+
+// 确认选择
+const onSelect = () => {
+  let arr = selectList.value.map((item: itemType) => {
+    let row = {
+      ...item,
+      productId: item.id,
+      productNum: 1
+    }
+    row = Object.assign(row, calculate(item))
+    return row
+  })
+
+  tableData.value = Object.assign([], arr)
+  console.log('选择数据', tableData.value.length)
+
+  emit('update:form', tableData.value)
+  visible.value = false
+}
+
+// 删除 tableData 中的数据
+const delrow = (index: number) => {
+  tableData.value.splice(index, 1)
+  emit('update:form', tableData.value)
+}
+
+const iptChange = (row: Row, index: number) => {
+  row = Object.assign(row, calculate(row))
+
+  // 更新 tableData 中的数据
+  tableData.value.splice(index, 1, row)
+
+  // 发射事件更新 form 数据
+  emit('update:form', tableData.value)
 }
 
 const search = () => {
@@ -228,67 +352,6 @@ const resetForm = (ruleFormRef: FormInstance | undefined) => {
 const changeTable = (current: number) => {
   seacrForm.pageNum = current
   getProductList()
-}
-
-const handleSelectionChange = (val: []) => {
-  // 去重
-  let newArr = val.reduce((item: any, next: any) => {
-    if (!item.find((i: any) => i.id === next.id)) {
-      item.push(next)
-    }
-    return item
-  }, [])
-
-  // 更新选择
-  selectList.value = newArr
-}
-
-interface itemType {
-  [propName: string]: any
-}
-const onSelect = () => {
-  let arr = selectList.value.map((item: itemType) => {
-    let row = {
-      ...item,
-      productId: item.id,
-      productNum: 1
-    }
-    row = Object.assign(row, calculate(item))
-    return row
-  })
-
-  tableData.value = Object.assign([], tableData.value, arr)
-  console.log('选择数据', tableData.value.length)
-
-  emit('update:form', tableData.value)
-  visible.value = false
-}
-
-interface Row {
-  totalTaxes: number
-  unitPriceIncludingTax: number
-  unitPriceExcludingTax2: number
-  totalCostExcludingTax: number
-  totalCostIncludingTax: number
-  systemUnitPrice: number
-  systemTotalPrice: number
-  productNum: number
-}
-
-const iptChange = (row: Row, index: number) => {
-  row = Object.assign(row, calculate(row))
-
-  // 更新 tableData 中的数据
-  tableData.value.splice(index, 1, row)
-
-  // 发射事件更新 form 数据
-  emit('update:form', tableData.value)
-}
-
-const delrow = (index: number) => {
-  // 删除 tableData 中的数据
-  tableData.value.splice(index, 1)
-  emit('update:form', tableData.value)
 }
 
 // 计算
