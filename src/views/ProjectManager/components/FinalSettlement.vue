@@ -1,7 +1,6 @@
 <template>
-  <div class="form-box" v-loading="loading">
-    <div v-if="loading">loading...</div>
-    <el-form label-width="150px" v-if="!loading">
+  <div class="form-box">
+    <el-form label-width="150px" v-if="!loading && showDetail">
       <el-form-item label="签约金额" prop="contractAmount">
         <span>{{ ruleForm.contractAmount?.toString() || '--' }}</span>
       </el-form-item>
@@ -156,12 +155,25 @@
         <el-form-item label="销售总监提成">
           <el-input v-model="ruleForm.commission.sdRoyalties" disabled />
         </el-form-item>
-        <el-form-item label="项目经理提成">
-          <el-input v-model="ruleForm.commission.pmRoyalties" disabled />
-        </el-form-item>
-        <el-form-item label="项目总监提成">
-          <el-input v-model="ruleForm.commission.pdRoyalties" disabled />
-        </el-form-item>
+
+        <template v-if="props.category == 1">
+          <el-form-item label="项目经理提成">
+            <el-input v-model="ruleForm.commission.pmRoyalties" disabled />
+          </el-form-item>
+          <el-form-item label="项目总监提成">
+            <el-input v-model="ruleForm.commission.pdRoyalties" disabled />
+          </el-form-item>
+        </template>
+
+        <template v-else>
+          <el-form-item label="灯具销售提成">
+            <el-input v-model="ruleForm.commission.pmRoyalties" disabled />
+          </el-form-item>
+          <el-form-item label="灯具项目经理提成">
+            <el-input v-model="ruleForm.commission.pdRoyalties" disabled />
+          </el-form-item>
+        </template>
+
         <el-form-item label="安装调试员提成" v-if="props.category == 1">
           <el-input v-model="ruleForm.commission.commissionerRoyalties" disabled />
         </el-form-item>
@@ -188,6 +200,8 @@
         </Suspense>
       </div>
     </el-form>
+    <div v-if="loading">loading...</div>
+    <div v-else>暂无数据</div>
   </div>
 </template>
 
@@ -258,9 +272,11 @@ const projectId = route.params.id
 const ruleForm = ref({} as RuleFormItem)
 
 const loading = ref(true)
+const showDetail = ref(false)
 useProgram.getSettlementReduce({ projectId, category: props.category }).then(d => {
+  loading.value = false
   if (d.data.code == 200 && d.data.data) {
-    loading.value = false
+    showDetail.value = true
     ruleForm.value = d.data.data
     ruleForm.value.category = props.category
 
