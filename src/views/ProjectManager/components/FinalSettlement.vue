@@ -201,7 +201,7 @@
       </div>
     </el-form>
     <div v-if="loading">loading...</div>
-    <div v-else>暂无数据</div>
+    <div v-if="!loading && !showDetail">暂无数据</div>
   </div>
 </template>
 

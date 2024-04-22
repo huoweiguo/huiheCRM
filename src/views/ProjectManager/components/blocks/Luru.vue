@@ -207,7 +207,6 @@ onMounted(() => {
     tableData.value = Object.assign([], tableData.value, arr)
   }
 
-  console.log('初始化选择', tableData.value.length)
   emit('update:form', tableData.value)
 })
 
@@ -219,7 +218,7 @@ const getProductList = () => {
       list.value = res.data.rows
       totalNum.value = res.data.total
 
-      tableData.value.forEach((row: any) => {
+      selectList.value.forEach((row: any) => {
         list.value.forEach((item: any) => {
           if (row.productId === item.id || row.id === item.id) {
             multipleTableRef.value!.toggleRowSelection(item, true)
