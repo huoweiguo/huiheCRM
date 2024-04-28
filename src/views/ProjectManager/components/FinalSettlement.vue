@@ -80,7 +80,7 @@
           <el-table-column prop="paidAmount" label="已付推广费" />
           <el-table-column prop="paidPromotionRatio" label="已付推广费比例" />
           <el-table-column prop="paidDate" label="已付推广费日期" />
-          <el-table-column prop="paidPaidAmount" label="已付推广费金额" />
+          <!-- <el-table-column prop="paidPaidAmount" label="已付推广费金额" /> -->
         </el-table>
       </el-form-item>
 
