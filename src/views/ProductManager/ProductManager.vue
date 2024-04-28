@@ -55,11 +55,11 @@
     <el-table-column prop="unitPriceIncludingTax" label="含税成本单价" align="center" />
     <!-- <el-table-column prop="address" label="税金合计" align="center" /> -->
     <el-table-column prop="unitPriceExcludingTax" label="未税成本单价" align="center" />
-    <el-table-column prop="quantitySoldOut" label="已出货数量" align="center">
+    <!-- <el-table-column prop="quantitySoldOut" label="已出货数量" align="center">
       <template #default="scope">
         <span>{{ scope.row.quantitySoldOut === null ? '--' : scope.row.quantitySoldOut }}</span>
       </template>
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column prop="address" label="操作" align="center" fixed="right" width="180">
       <template #default="scope">
         <el-button link type="primary" size="small" @click="editLine(scope.row)" v-hasPermi="['product:list:edit']">编辑</el-button>

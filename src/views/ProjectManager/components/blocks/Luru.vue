@@ -46,7 +46,7 @@
           </el-table-column>
           <el-table-column label="未税成本单价" width="120">
             <template #default="scope">
-              <b>{{ scope.row.unitPriceExcludingTax2?.toFixed(2) }}</b>
+              <b>{{ scope.row.unitPriceExcludingTax?.toFixed(2) }}</b>
             </template>
           </el-table-column>
           <el-table-column label="未税成本总价" width="120">
@@ -64,7 +64,11 @@
               <b>{{ scope.row.systemTotalPrice?.toFixed(2) }}</b>
             </template>
           </el-table-column>
-          <el-table-column prop="quantitySoldOut" label="已出货数量" width="120" />
+          <el-table-column label="已出货数量" width="120">
+            <template #default="scope">
+              <el-input v-model="scope.row.quantitySoldOut" @input="iptChange(scope.row, scope.$index)" :disabled="disabled" />
+            </template>
+          </el-table-column>
           <el-table-column label="操作" fixed="right" v-if="!disabled">
             <template #default="scope">
               <el-button type="primary" link size="small" @click="delrow(scope.$index)">删除</el-button>
@@ -159,7 +163,7 @@ interface itemType {
 interface Row {
   totalTaxes: number
   unitPriceIncludingTax: number
-  unitPriceExcludingTax2: number
+  unitPriceExcludingTax: number
   totalCostExcludingTax: number
   totalCostIncludingTax: number
   systemUnitPrice: number
@@ -355,12 +359,31 @@ const changeTable = (current: number) => {
 
 // 计算
 const calculate = (row: itemType) => {
+  // 如果后端返回了未税成本单价则直接使用未税成本单价
+  if (row.unitPriceExcludingTax) {
+    return {
+      // 税金合计=含税成本单价/1.13*0.13*数量
+      totalTaxes: (row.unitPriceExcludingTax / 1.13) * 0.13 * (row.productNum || 1),
+
+      // 未税成本单价=含税成本单价/1.13
+      // unitPriceExcludingTax: row.unitPriceExcludingTax / 1.13,
+
+      // 未税成本总价=未税成本单价*数量
+      totalCostExcludingTax: parseFloat((row.unitPriceExcludingTax / 1.13).toFixed(2)) * (row.productNum || 1),
+
+      // 含税成本总价=含税成本单价*数量
+      totalCostIncludingTax: row.unitPriceExcludingTax * (row.productNum || 1),
+
+      // 系统总价=系统单价*数量
+      systemTotalPrice: row.systemUnitPrice * (row.productNum || 1)
+    }
+  }
   return {
     // 税金合计=含税成本单价/1.13*0.13*数量
     totalTaxes: (row.unitPriceIncludingTax / 1.13) * 0.13 * (row.productNum || 1),
 
     // 未税成本单价=含税成本单价/1.13
-    unitPriceExcludingTax2: row.unitPriceIncludingTax / 1.13,
+    unitPriceExcludingTax: row.unitPriceIncludingTax / 1.13,
 
     // 未税成本总价=未税成本单价*数量
     totalCostExcludingTax: parseFloat((row.unitPriceIncludingTax / 1.13).toFixed(2)) * (row.productNum || 1),

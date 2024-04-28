@@ -66,7 +66,13 @@ export const useProgramStore = defineStore(
       return http.get('/projectSettlement/settlementReduce', data)
     }
 
+    // 最终汇算
+    const getAmountSum = (data: RuleSearch) => {
+      return http.get('/project/amountSum', data)
+    }
+
     return {
+      getAmountSum,
       getSettlementReduce,
       saleTeam,
       getProgramList,

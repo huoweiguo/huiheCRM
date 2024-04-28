@@ -13,7 +13,7 @@
           <el-table-column prop="paidAmount" label="已付推广费" />
           <el-table-column prop="paidPromotionRatio" label="已付推广费比例" />
           <el-table-column prop="paidDate" label="已付推广费日期" />
-          <el-table-column prop="paidPaidAmount" label="已付推广费金额" />
+          <!-- <el-table-column prop="paidPaidAmount" label="已付推广费金额" /> -->
           <el-table-column label="操作">
             <template #default="scope">
               <el-button type="primary" link size="small" @click="delrow(scope.$index)">删除</el-button>
@@ -47,9 +47,9 @@
         <el-form-item label="已付推广费日期" prop="paidDate">
           <el-date-picker v-model="ruleForm.paidDate" type="date" placeholder="请选择已付推广费日期" style="width: 192px" value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
         </el-form-item>
-        <el-form-item label="已付推广费金额" prop="paidPaidAmount">
+        <!-- <el-form-item label="已付推广费金额" prop="paidPaidAmount">
           <el-input v-model="ruleForm.paidPaidAmount" placeholder="请输入已付推广费金额" />
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <template #footer>
         <div class="dialog-footer">

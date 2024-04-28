@@ -1,7 +1,11 @@
 <template>
   <div class="dashboard-section mb50">
     <h3>团队销售排行</h3>
-    <el-table :data="tableData" border style="width: 100%" v-loading="loading">
+    <div class="table-title">
+      <span>销售总额：{{ tableData.saleTotal }}</span>
+      <span>利润总额：{{ tableData.profitTotal }}</span>
+    </div>
+    <el-table :data="tableData.statictis" border style="width: 100%" v-loading="loading">
       <el-table-column type="index" label="排行" align="center" width="80" />
       <el-table-column prop="departmentName" label="团队" align="center" />
       <el-table-column prop="saleAmount" label="销售额" align="center" />
@@ -11,6 +15,9 @@
 
   <div class="dashboard-section">
     <h3>项目签约</h3>
+    <div class="table-title">
+      <span>签约金额总计：{{ totalContractedAmount }}</span>
+    </div>
     <el-table class="mb20" :data="projectlist" border style="width: 100%" v-loading="ploading">
       <el-table-column prop="projectName" label="项目名称" align="center" />
       <el-table-column prop="projectAddress" label="项目地址" align="center" />
@@ -32,12 +39,13 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { useProgramStore } from '@/store/program'
-const tableData = ref([])
+const tableData = ref({}) as any
 const projectlist = ref([])
 const totalNum = ref<number>(1)
 const ploading = ref<boolean>(true)
 const loading = ref<boolean>(true)
 const useProgram = useProgramStore()
+const totalContractedAmount = ref<number>(0)
 const types = ['', '项目移交', '图纸深化', '隐形验收', '木工阶段', '涂画阶段', '主材备货', '安装结束', '预调试', '调试结束', '收尾阶段', '内部验收', '完工验收']
 const seacrhForm = reactive({
   projectName: '',
@@ -60,6 +68,12 @@ const getProjectList = () => {
   })
 }
 
+useProgram.getAmountSum(seacrhForm).then(res => {
+  if (res.data.code === 200) {
+    totalContractedAmount.value = res.data.data
+  }
+})
+
 onMounted(() => {
   useProgram.saleLevel().then(res => {
     if (res.data.code === 200) {
@@ -79,6 +93,13 @@ onMounted(() => {
     line-height: 50px;
     font-size: 18px;
     font-weight: bold;
+  }
+}
+.table-title {
+  display: flex;
+  line-height: 3;
+  span {
+    margin-right: 30px;
   }
 }
 </style>
