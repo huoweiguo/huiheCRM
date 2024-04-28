@@ -46,7 +46,7 @@
           </el-table-column>
           <el-table-column label="未税成本单价" width="120">
             <template #default="scope">
-              <b>{{ scope.row.unitPriceExcludingTax?.toFixed(2) }}</b>
+              <b>{{ scope.row.unitPriceExcludingTax }}</b>
             </template>
           </el-table-column>
           <el-table-column label="未税成本总价" width="120">

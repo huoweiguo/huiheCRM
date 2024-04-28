@@ -6,9 +6,14 @@
       </el-form-item>
       <div class="mb20 pl140">
         <el-table :data="tableData" border style="width: 100%">
+          <el-table-column label="附件">
+            <template #default="scope">
+              <a :href="scope.row.fileurl" target="_blank">附件预览</a>
+            </template>
+          </el-table-column>
           <el-table-column prop="annexDesc" label="附件描述" />
           <el-table-column prop="remark" label="备注" />
-          <el-table-column prop="createTime" label="创建时间" />
+          <el-table-column prop="createTime" label="记录时间" />
           <el-table-column label="操作" fixed="right">
             <template #default="scope">
               <el-button type="primary" link size="small" @click="delrow(scope.$index)">删除</el-button>
@@ -23,10 +28,9 @@
       <el-form ref="ruleFormRef" :model="ruleForm" label-width="120px">
         <el-form-item label="附件" class="upload-form">
           <el-upload
-            v-model:file-list="billImage"
-            multiple
             method="post"
-            list-type="picture-card"
+            v-model:file-list="billImage"
+            accept=".pdf"
             :limit="1"
             :headers="headersObj"
             :action="uploadUrl"
@@ -34,14 +38,8 @@
             :on-remove="handleRemove"
             :on-success="handleSuccessImage"
           >
-            <el-icon>
-              <Plus />
-            </el-icon>
+            <el-button icon="Plus"></el-button>
           </el-upload>
-
-          <el-dialog v-model="dialogVisible">
-            <img w-full :src="dialogImageUrl" alt="图片预览" />
-          </el-dialog>
         </el-form-item>
         <div>
           <el-form-item label="附件描述" prop="annexDesc">
@@ -54,7 +52,7 @@
           </el-form-item>
         </div>
         <div>
-          <el-form-item label="创建时间" prop="createTime">
+          <el-form-item label="记录时间" prop="createTime">
             <el-date-picker v-model="ruleForm.createTime" type="datetime" :placeholder="`请选择记录日期`" style="width: 192px" value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
           </el-form-item>
         </div>
@@ -71,7 +69,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
 import type { FormInstance, UploadUserFile, UploadProps, UploadFile, UploadFiles } from 'element-plus'
 import { uploadUrl } from '@/utils/api'
 import { useRouter } from 'vue-router'
@@ -97,11 +95,15 @@ const dialogVisible = ref<boolean>(false)
 const ruleForm = reactive({
   annexDesc: '',
   annexId: '',
+  filename: '',
+  fileurl: '',
   remark: '',
-  createTime: ''
+  createTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
 })
 
-tableData.value = props.form
+tableData.value = props.form.map((v: any) => {
+  return { ...v, fileurl: v.annexOss.url }
+})
 
 const delrow = (index: number) => {
   tableData.value.splice(index, 1)
@@ -145,6 +147,7 @@ const handleSuccessImage: UploadProps['onSuccess'] = (response: any, uploadFile:
     })
     billImage.value = arr
     ruleForm.annexId = arr[0].id
+    ruleForm.fileurl = arr[0].url
   } else if (response.code === 401) {
     ElMessage.closeAll()
     ElMessage.error('登录超时，请重新登录')
