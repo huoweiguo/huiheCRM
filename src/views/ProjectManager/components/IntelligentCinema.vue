@@ -72,6 +72,9 @@
       <!--产品录入-->
       <Luru v-model:form="ruleForm.product"></Luru>
 
+      <!-- 附件模块 -->
+      <Fujian v-model:form="ruleForm.annex"></Fujian>
+
       <!-- 其他税费 -->
       <Qita v-model:form="ruleForm.cost"></Qita>
 
@@ -115,6 +118,7 @@ import Fukuan from './blocks/Fukuan.vue'
 import Luru from './blocks/Luru.vue'
 import Shui from './blocks/Shui.vue'
 import Shangwu from './blocks/Shangwu.vue'
+import Fujian from './blocks/Fujian.vue'
 import Qita from './blocks/Qita.vue'
 import TuiGuangImg from './blocks/TuiGuangImg.vue'
 
@@ -178,6 +182,7 @@ const ruleForm = ref({
   product: [],
   employee: [],
   cost: [],
+  annex: [],
   constructionCost: '',
   taxDeduction: '',
 

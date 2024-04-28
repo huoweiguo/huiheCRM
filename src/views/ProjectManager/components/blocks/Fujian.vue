@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="cinema">
-      <el-form-item label="其他">
+      <el-form-item label="附件模块">
         <el-button type="primary" icon="plus" @click="visible = true">添加</el-button>
       </el-form-item>
       <div class="mb20 pl140">
         <el-table :data="tableData" border style="width: 100%">
-          <el-table-column prop="recordDate" label="其他成本日期" />
-          <el-table-column prop="amount" label="其他成本金额" />
-          <el-table-column prop="remark" label="其他成本备注" />
+          <el-table-column prop="annexDesc" label="附件描述" />
+          <el-table-column prop="remark" label="备注" />
+          <el-table-column prop="createTime" label="创建时间" />
           <el-table-column label="操作" fixed="right">
             <template #default="scope">
               <el-button type="primary" link size="small" @click="delrow(scope.$index)">删除</el-button>
@@ -21,19 +21,13 @@
     <!--添加-->
     <el-dialog v-model="visible" title="添加" width="750" align-center destroy-on-close>
       <el-form ref="ruleFormRef" :model="ruleForm" label-width="120px">
-        <el-form-item label="其他成本金额" prop="amount">
-          <el-input v-model="ruleForm.amount" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="记录日期" prop="recordDate">
-          <el-date-picker v-model="ruleForm.recordDate" type="datetime" :placeholder="`请选择记录日期`" style="width: 192px" value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="其他成本图片" class="upload-form">
+        <el-form-item label="附件" class="upload-form">
           <el-upload
             v-model:file-list="billImage"
             multiple
             method="post"
             list-type="picture-card"
-            :limit="9"
+            :limit="1"
             :headers="headersObj"
             :action="uploadUrl"
             :on-preview="handlePictureCardPreview"
@@ -50,8 +44,18 @@
           </el-dialog>
         </el-form-item>
         <div>
+          <el-form-item label="附件描述" prop="annexDesc">
+            <el-input v-model="ruleForm.annexDesc" placeholder="请输入" />
+          </el-form-item>
+        </div>
+        <div>
           <el-form-item label="备注" prop="remark">
             <el-input type="textarea" v-model="ruleForm.remark" placeholder="请输入" :rows="6" />
+          </el-form-item>
+        </div>
+        <div>
+          <el-form-item label="创建时间" prop="createTime">
+            <el-date-picker v-model="ruleForm.createTime" type="datetime" :placeholder="`请选择记录日期`" style="width: 192px" value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
           </el-form-item>
         </div>
       </el-form>
@@ -91,10 +95,10 @@ const dialogImageUrl = ref('')
 const dialogVisible = ref<boolean>(false)
 
 const ruleForm = reactive({
-  amount: '',
-  recordDate: '',
-  costImage: '',
-  remark: ''
+  annexDesc: '',
+  annexId: '',
+  remark: '',
+  createTime: ''
 })
 
 tableData.value = props.form
@@ -140,7 +144,7 @@ const handleSuccessImage: UploadProps['onSuccess'] = (response: any, uploadFile:
       arr = [...arr, { name: v.response.data.fileName as string, url: v.response.data.url as string, id: v.response.data.ossId }]
     })
     billImage.value = arr
-    ruleForm.costImage = uploadFiles.map((v: any) => v.response.data.ossId).join(',')
+    ruleForm.annexId = arr[0].id
   } else if (response.code === 401) {
     ElMessage.closeAll()
     ElMessage.error('登录超时，请重新登录')
