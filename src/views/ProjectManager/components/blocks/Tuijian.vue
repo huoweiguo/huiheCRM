@@ -65,7 +65,8 @@
 import { ref, reactive } from 'vue'
 import type { FormInstance } from 'element-plus'
 
-const emit = defineEmits(['update:form', 'changeItem'])
+// const emit = defineEmits(['update:form', 'changeItem'])
+const emit = defineEmits(['update:form'])
 const props = defineProps(['form'])
 const ruleFormRef = ref<FormInstance>()
 const visible = ref(false)
@@ -97,7 +98,7 @@ const save = (ruleFormRef: FormInstance | undefined) => {
   if (!isEmpty(ruleForm)) {
     tableData.value.push({ ...ruleForm })
     emit('update:form', tableData)
-    changeItem()
+    // changeItem()
   }
   resetForm(ruleFormRef)
 }
