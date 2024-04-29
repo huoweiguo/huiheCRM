@@ -57,12 +57,12 @@ ruleForm.num5 = props.form.constructionCost || 0
 ruleForm.num6 = props.form.promotionExpenses || 0
 ruleForm.num7 = props.form.operatingExpenseRatio || 0
 
-watch(
-  () => props.form.promotionExpenses,
-  newVal => {
-    ruleForm.num6 = newVal || 0
-  }
-)
+// watch(
+//   () => props.form.promotionExpenses,
+//   newVal => {
+//     ruleForm.num6 = newVal || 0
+//   }
+// )
 
 watchEffect(() => {
   console.log('计算2')

@@ -104,7 +104,7 @@ const save = (ruleFormRef: FormInstance | undefined) => {
 
 const delrow = (index: number) => {
   tableData.value.splice(index, 1)
-  changeItem()
+  // changeItem()
 }
 
 const resetForm = (ruleFormRef: FormInstance | undefined) => {
@@ -112,14 +112,14 @@ const resetForm = (ruleFormRef: FormInstance | undefined) => {
   ruleFormRef.resetFields()
 }
 
-const changeItem = () => {
-  // 计算总推广费用
-  let promotionExpensesValue = 0
-  tableData.value.forEach((item: any) => {
-    promotionExpensesValue += Number(item.paidAmount)
-  })
+// const changeItem = () => {
+//   // 计算总推广费用
+//   let promotionExpensesValue = 0
+//   tableData.value.forEach((item: any) => {
+//     promotionExpensesValue += Number(item.paidAmount)
+//   })
 
-  promotionExpensesValue = parseFloat(promotionExpensesValue.toFixed(2)) || 0
-  emit('changeItem', 'promotionExpenses', promotionExpensesValue)
-}
+//   promotionExpensesValue = parseFloat(promotionExpensesValue.toFixed(2)) || 0
+//   emit('changeItem', 'promotionExpenses', promotionExpensesValue)
+// }
 </script>
