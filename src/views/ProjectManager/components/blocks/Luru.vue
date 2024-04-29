@@ -360,8 +360,6 @@ const changeTable = (current: number) => {
 // 计算
 const calculate = (row: itemType) => {
   // 如果后端返回了未税成本单价则直接使用未税成本单价
-  console.log('名称', row.name)
-  console.log('未税成本单价', row.unitPriceExcludingTax)
 
   if (row.unitPriceExcludingTax) {
     return {
