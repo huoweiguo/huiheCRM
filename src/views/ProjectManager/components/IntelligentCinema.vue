@@ -43,6 +43,9 @@
         <el-form-item label="服务费开票金额" prop="serviceAmount">
           <el-input v-model="ruleForm.serviceAmount" placeholder="请输入服务费开票金额" @input="JS_serviceAmount" />
         </el-form-item>
+        <el-form-item label="开票成本" prop="invoiceCost">
+          <el-input v-model="ruleForm.invoiceCost" placeholder="请输入开票成本" />
+        </el-form-item>
       </div>
 
       <!--推荐-->
@@ -171,6 +174,7 @@ const ruleForm = ref({
   productAmount: '',
   serviceRate: '',
   serviceAmount: '',
+  invoiceCost: '',
   promotionExpenses: '',
   //
   taxFreePrice: '',
