@@ -47,6 +47,9 @@
       <el-form-item label="服务费开票金额">
         <span>{{ ruleForm.serviceAmount?.toString() || '--' }}</span>
       </el-form-item>
+      <el-form-item label="开票成本">
+        <span>{{ ruleForm.invoiceCost?.toString() || '--' }}</span>
+      </el-form-item>
       <el-form-item label="去税面价">
         <span>{{ ruleForm.taxFreePrice?.toString() || '--' }}</span>
       </el-form-item>
@@ -233,6 +236,7 @@ interface RuleFormItem {
   productAmount: string
   serviceRate: string
   serviceAmount: string
+  invoiceCost:string
   taxFreePrice: string
   promotionalPaymentsImage: string
   operatingExpenseRatio: string
