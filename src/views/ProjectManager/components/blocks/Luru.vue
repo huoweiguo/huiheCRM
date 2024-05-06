@@ -3,7 +3,7 @@
     <div class="cinema">
       <el-form-item label="产品录入">
         <div style="width: 100%">
-          <el-button type="primary" class="mb20" @click="addProduct">产品录入</el-button>
+          <el-button type="primary" class="mb20" @click="addProduct" v-if="!disabled">产品录入</el-button>
           <el-row>
             <el-col :span="6">
               税金合计总计:

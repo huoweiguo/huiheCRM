@@ -112,6 +112,9 @@
       <!--产品录入-->
       <Luru v-model:form="ruleForm.product" :disabled="true"></Luru>
 
+      <!--附件-->
+      <Fujian v-model:form="ruleForm.annex" :disabled="true"></Fujian>
+
       <!-- 其他税费 -->
       <el-form-item label="其他税费 ">
         <el-table :data="ruleForm.cost" border style="width: 100%">
@@ -213,6 +216,7 @@ import { useProgramStore } from '@/store/program'
 import { commonStore } from '@/store/common'
 
 import Luru from './blocks/Luru.vue'
+import Fujian from './blocks/Fujian.vue'
 import Shui from './blocks/Shui.vue'
 import Shangwu from './blocks/Shangwu.vue'
 import { ElMessage } from 'element-plus'
@@ -234,6 +238,7 @@ interface RuleFormItem {
   operatingExpenseRatio: string
   saleGroupName: string
   constructionCost: string
+  annex:[]
   employee: [
     {
       type: number

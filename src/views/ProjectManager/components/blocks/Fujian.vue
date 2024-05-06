@@ -2,7 +2,7 @@
   <div>
     <div class="cinema">
       <el-form-item label="附件模块">
-        <el-button type="primary" icon="plus" @click="visible = true">添加</el-button>
+        <el-button type="primary" icon="plus" @click="visible = true" v-if="!disabled">添加</el-button>
       </el-form-item>
       <div class="mb20 pl140">
         <el-table :data="tableData" border style="width: 100%">
@@ -14,7 +14,7 @@
           <el-table-column prop="annexDesc" label="附件描述" />
           <el-table-column prop="remark" label="备注" />
           <el-table-column prop="createTime" label="记录时间" />
-          <el-table-column label="操作" fixed="right">
+          <el-table-column label="操作" fixed="right" v-if="!disabled">
             <template #default="scope">
               <el-button type="primary" link size="small" @click="delrow(scope.$index)">删除</el-button>
             </template>
@@ -82,7 +82,7 @@ interface RuleUpload {
 }
 
 const emit = defineEmits(['update:form'])
-const props = defineProps(['form'])
+const props = defineProps(['form', 'disabled'])
 const router = useRouter()
 const ruleFormRef = ref<FormInstance>()
 const visible = ref(false)
@@ -107,6 +107,7 @@ tableData.value = props.form.map((v: any) => {
 
 const delrow = (index: number) => {
   tableData.value.splice(index, 1)
+  emit('update:form', tableData)
 }
 
 function isEmpty(obj: Record<string, string>): boolean {
