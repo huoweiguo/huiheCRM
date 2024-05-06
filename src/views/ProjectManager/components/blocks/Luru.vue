@@ -361,7 +361,8 @@ const changeTable = (current: number) => {
 const calculate = (row: itemType) => {
   // 如果后端返回了未税成本单价则直接使用未税成本单价
 
-  if (row.unitPriceExcludingTax) {
+  // if (row.unitPriceExcludingTax) {
+  if (false) {
     return {
       // 税金合计=含税成本单价/1.13*0.13*数量
       totalTaxes: (row.unitPriceIncludingTax / 1.13) * 0.13 * (row.productNum || 1),
