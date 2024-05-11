@@ -76,6 +76,8 @@
     </template>
   </template>
 
+  <slot name="item" />
+
   <div>
     <!-- 对公返点进项税税额可抵(专票) -->
     <el-form-item label="对公返点进项税税额可抵(专票)">

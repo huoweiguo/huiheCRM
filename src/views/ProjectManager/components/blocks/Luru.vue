@@ -252,7 +252,8 @@ const addProduct = () => {
         unitPriceIncludingTax: item.unitPriceIncludingTax,
         unitPriceExcludingTax: item.unitPriceExcludingTax,
         quantitySoldOut: item.quantitySoldOut,
-        remark: item.remark
+        remark: item.remark,
+        productNum: item.productNum
       }
     })
   )
@@ -313,7 +314,7 @@ const onSelect = () => {
     let row = {
       ...item,
       productId: item.id,
-      productNum: 1
+      productNum: item.productNum || 1
     }
     row = Object.assign(row, calculate(item))
     return row
