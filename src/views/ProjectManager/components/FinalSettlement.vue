@@ -47,9 +47,6 @@
       <el-form-item label="服务费开票金额">
         <span>{{ ruleForm.serviceAmount?.toString() || '--' }}</span>
       </el-form-item>
-      <el-form-item label="开票成本">
-        <span>{{ ruleForm.commission.invoiceCost?.toString() || '--' }}</span>
-      </el-form-item>
       <el-form-item label="去税面价">
         <span>{{ ruleForm.taxFreePrice?.toString() || '--' }}</span>
       </el-form-item>
@@ -136,6 +133,9 @@
         </el-form-item>
         <el-form-item label="毛利率">
           <el-input v-model="ruleForm.commission.grossProfitRate" disabled />
+        </el-form-item>
+        <el-form-item label="开票成本">
+          <el-input v-model="ruleForm.commission.invoiceCost" disabled />
         </el-form-item>
         <el-form-item label="施工成本">
           <el-input v-model="ruleForm.commission.constructionCost" disabled />
@@ -241,7 +241,7 @@ interface RuleFormItem {
   operatingExpenseRatio: string
   saleGroupName: string
   constructionCost: string
-  annex:[]
+  annex: []
   employee: [
     {
       type: number
