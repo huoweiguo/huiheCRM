@@ -389,7 +389,7 @@ const calculate = (row: itemType) => {
     unitPriceExcludingTax: row.unitPriceIncludingTax / 1.13,
 
     // 未税成本总价=未税成本单价*数量
-    totalCostExcludingTax: (row.unitPriceIncludingTax / 1.13) * (row.productNum || 1),
+    totalCostExcludingTax: parseFloat(((row.unitPriceIncludingTax / 1.13) * (row.productNum || 1)).toFixed(2)),
 
     // 含税成本总价=含税成本单价*数量
     totalCostIncludingTax: row.unitPriceIncludingTax * (row.productNum || 1),
