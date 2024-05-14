@@ -198,7 +198,7 @@ watchEffect(() => {
   if (props.form.category == 1) {
     num =
       parseFloat(props.form.constructionCost || 0) +
-      parseFloat(props.form.promotionExpenses || 0) +
+      parseFloat(props.form.promotionExpensesB || 0) +
       parseFloat(props.form.yunyingfeiyong || 0) +
       parseFloat(qita.toString()) +
       parseFloat((ruleForm.num2 || 0).toFixed(6)) +
@@ -212,11 +212,11 @@ watchEffect(() => {
   }
 
   // 灯具
-  // 成本总计 = 施工成本+总推广费+运营费用+其他成本+商务提成+灯具销售提成+灯具项目经理提成+未税成本总价+开票成本
+  // 成本总计 = 施工成本+总推广费B+运营费用+其他成本+商务提成+灯具销售提成+灯具项目经理提成+未税成本总价+开票成本
   if (props.form.category == 2) {
     num =
       parseFloat(props.form.constructionCost || 0) +
-      parseFloat(props.form.promotionExpenses || 0) +
+      parseFloat(props.form.promotionExpensesB || 0) +
       parseFloat(props.form.yunyingfeiyong || 0) +
       parseFloat(qita.toString()) +
       parseFloat((ruleForm.num2 || 0).toFixed(6)) +

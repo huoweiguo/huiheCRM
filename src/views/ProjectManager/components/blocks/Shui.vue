@@ -14,8 +14,11 @@
   <el-form-item label="施工成本">
     <el-input v-model="ruleForm.num5" :disabled="disabled" @input="iptChange('constructionCost', $event)" />
   </el-form-item>
-  <el-form-item label="总推广费">
-    <el-input v-model="ruleForm.num6" :disabled="disabled" @input="iptChange('promotionExpenses', $event)" />
+  <el-form-item label="总推广费A">
+    <el-input v-model="ruleForm.num6" :disabled="disabled" @input="iptChange('promotionExpensesA', $event)" />
+  </el-form-item>
+  <el-form-item label="总推广费B">
+    <el-input v-model="ruleForm.num61" :disabled="disabled" @input="iptChange('promotionExpensesB', $event)" />
   </el-form-item>
   <el-form-item label="运营费用率(%)">
     <el-input v-model="ruleForm.num7" :disabled="disabled" @input="limitIpt($event, 'num7')" />
@@ -38,7 +41,8 @@ const ruleForm = reactive({
   num5: 0,
   num6: 0,
   num7: 0,
-  num8: 0
+  num8: 0,
+  num61: 0
 })
 
 const iptChange = (key: String, value: string | number) => {
@@ -54,7 +58,8 @@ const limitIpt = (value: string, key: 'num7') => {
 // 初始化
 ruleForm.num2 = props.form.taxFreePrice || 0
 ruleForm.num5 = props.form.constructionCost || 0
-ruleForm.num6 = props.form.promotionExpenses || 0
+ruleForm.num6 = props.form.promotionExpensesA || 0
+ruleForm.num61 = props.form.promotionExpensesB || 0
 ruleForm.num7 = props.form.operatingExpenseRatio || 0
 
 // watch(

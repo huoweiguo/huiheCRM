@@ -140,8 +140,11 @@
         <el-form-item label="施工成本">
           <el-input v-model="ruleForm.commission.constructionCost" disabled />
         </el-form-item>
-        <el-form-item label="推广费用">
-          <el-input v-model="ruleForm.commission.promotionExpenses" disabled />
+        <el-form-item label="推广费用A">
+          <el-input v-model="ruleForm.commission.promotionExpensesA" disabled />
+        </el-form-item>
+        <el-form-item label="推广费用B">
+          <el-input v-model="ruleForm.commission.promotionExpensesB" disabled />
         </el-form-item>
         <el-form-item label="深化提成费用" v-if="props.category == 1">
           <el-input v-model="ruleForm.commission.deepenExpense" disabled />

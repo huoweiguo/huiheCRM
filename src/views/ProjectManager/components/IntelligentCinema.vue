@@ -178,7 +178,8 @@ const ruleForm = ref({
   serviceRate: '',
   serviceAmount: '',
   invoiceCost: '',
-  promotionExpenses: '',
+  promotionExpensesA: '',
+  promotionExpensesB: '',
   //
   taxFreePrice: '',
   promotionalPaymentsImage: '',
