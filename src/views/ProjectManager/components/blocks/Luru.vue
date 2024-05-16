@@ -11,7 +11,7 @@
             </el-col>
             <el-col :span="6">
               未税成本总价总计:
-              <span>{{ tableData.reduce((pre, cur) => pre + cur.totalCostExcludingTax, 0) }}</span>
+              <span>{{ tableData.reduce((pre, cur) => pre + cur.totalCostExcludingTax, 0).toFixed(2) }}</span>
             </el-col>
             <el-col :span="6">
               含税成本总价总计:
